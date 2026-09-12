@@ -196,6 +196,7 @@ const ogImage = `${url}/og.png`;
     .toggle-btn:hover:not(.active) {
       border-color: var(--accent); color: var(--accent); background: var(--accent-bg);
     }
+    .toggle-btn:focus { outline: none; }
     .toggle-btn:active { transform: scale(0.97); }
     .toggle-btn.active {
       background: var(--accent);
@@ -292,20 +293,28 @@ const ogImage = `${url}/og.png`;
     /* ── FOOTER ── */
     .footer {
       max-width: 840px; margin: 0 auto;
-      padding: 20px 16px 32px;
+      padding: 28px 16px 40px;
       display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 10px;
+      flex-wrap: wrap; gap: 12px;
       border-top: 1px solid var(--border);
       font-size: 0.71rem; color: var(--text-3);
     }
     .footer a { color: var(--text-3); text-decoration: none; }
     .footer a:hover { color: var(--accent); }
     .qontab-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      background: var(--surface); border: 1px solid var(--border-2);
-      border-radius: 7px; padding: 6px 11px; font-weight: 600; transition: all 0.15s;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      transition: background 0.15s, transform 0.1s;
+      box-shadow: 0 2px 8px rgba(91,81,232,0.28);
     }
-    .qontab-badge:hover { border-color: var(--accent); color: var(--accent); }
+    .qontab-badge:hover { background: #4a41cc; transform: translateY(-1px); color: #fff; }
   </style>
 </head>
 <body>
@@ -383,6 +392,12 @@ const ogImage = `${url}/og.png`;
         </div>
 
         <div class="field">
+          <div class="field-label"><i class="fa-solid fa-chart-bar"></i> Company tenant annual turnover (MUR)</div>
+          <input type="number" id="turnover" value="0" min="0" step="500000"/>
+          <div class="field-hint">Leave 0 if unknown — TDS exempt if turnover &lt; Rs 6M (MRA §2.6)</div>
+        </div>
+
+        <div class="field">
           <div class="field-label"><i class="fa-solid fa-users"></i> Tax category</div>
           <div class="toggle-group">
             <button class="toggle-btn active" id="btn-catA" onclick="setCategory('A')">
@@ -414,6 +429,11 @@ const ogImage = `${url}/og.png`;
         <div id="modeBanner" class="mode-banner societe">
           <i class="fa-solid fa-circle-check"></i>
           <span id="bannerText">Company lease — TDS 7.5%</span>
+        </div>
+
+        <div id="exemptBanner" style="display:none;padding:9px 12px;border-radius:var(--rs);font-size:0.78rem;font-weight:600;margin-bottom:14px;background:rgba(26,143,94,0.08);color:#1a8f5e;border:1px solid rgba(26,143,94,0.22)">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <span id="exemptText"></span>
         </div>
 
         <div class="rblock b-accent">
@@ -596,30 +616,52 @@ function set(id, val, cls) {
 function update() {
   const loyer       = parseFloat(document.getElementById('loyer').value) || 0;
   const otherIncome = parseFloat(document.getElementById('otherIncome').value) || 0;
+  const turnover    = parseFloat(document.getElementById('turnover').value) || 0;
   const splitPct    = parseInt(document.getElementById('splitPct').value) || 50;
   const tdsRate     = ownerType === 'resident' ? 0.075 : 0.10;
   const tpct        = tdsRate * 100;
 
-  // Banner
+  // ── Exemption checks (MRA §2.6) ──
+  // 1. Company turnover < Rs 6M → exempt (unless construction, not tracked here)
+  // 2. TDS amount < Rs 500 → exempt
+  const tdsRaw = calcTDS(loyer, tdsRate, mode, splitPct); // monthly TDS before exemption
+  const exemptTurnover = mode !== 'perso' && turnover > 0 && turnover < 6000000;
+  const exemptMinTax   = mode !== 'perso' && tdsRaw > 0 && tdsRaw < 500;
+  const isExempt = exemptTurnover || exemptMinTax;
+
+  // Show/hide exempt banner
+  const exemptBanner = document.getElementById('exemptBanner');
+  const exemptText   = document.getElementById('exemptText');
+  if (isExempt) {
+    exemptBanner.style.display = 'flex';
+    exemptBanner.style.gap = '8px';
+    exemptBanner.style.alignItems = 'center';
+    if (exemptTurnover) {
+      exemptText.textContent = `TDS exempt — company turnover Rs ${turnover.toLocaleString('fr-FR')} < Rs 6M (MRA §2.6.ii)`;
+    } else {
+      exemptText.textContent = `TDS exempt — calculated TDS Rs ${Math.round(tdsRaw).toLocaleString('fr-FR')} < Rs 500 minimum (MRA §2.1)`;
+    }
+  } else {
+    exemptBanner.style.display = 'none';
+  }
+
+  // Effective TDS (zero if exempt)
+  const tdsAmount  = isExempt ? 0 : tdsRaw;
+  const annualTDS  = tdsAmount * 12;
+  const netMonthly = loyer - tdsAmount;
   const banner = document.getElementById('modeBanner');
   const bannerText = document.getElementById('bannerText');
   if (mode === 'societe') {
     banner.className = 'mode-banner societe';
-    bannerText.textContent = `Company lease — TDS ${tpct}%`;
+    bannerText.textContent = isExempt ? `Company lease — TDS exempt` : `Company lease — TDS ${tpct}%`;
   } else if (mode === 'perso') {
     banner.className = 'mode-banner perso';
     bannerText.textContent = 'Individual lease — No TDS';
   } else {
     banner.className = 'mode-banner societe';
-    bannerText.textContent = `Mixed — ${splitPct}% company (TDS ${tpct}%) · ${100-splitPct}% individual`;
+    bannerText.textContent = isExempt ? `Mixed — TDS exempt` : `Mixed — ${splitPct}% company (TDS ${tpct}%) · ${100-splitPct}% individual`;
   }
-
   document.getElementById('r-tds-rate').textContent = tpct + '%';
-
-  const hasTDS = mode !== 'perso';
-  const tdsAmount = calcTDS(loyer, tdsRate, mode, splitPct);
-  const annualTDS = tdsAmount * 12;
-  const netMonthly = loyer - tdsAmount;
 
   // Split row visibility
   const rowSplit = document.getElementById('row-split');
