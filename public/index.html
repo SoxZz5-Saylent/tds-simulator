@@ -351,6 +351,12 @@
           </div>
         </div>
 
+        <div class="field" id="field-turnover">
+          <div class="field-label"><i class="fa-solid fa-chart-bar"></i> Company tenant turnover / yr (MUR)</div>
+          <input type="number" id="turnover" value="0" min="0" step="500000"/>
+          <div class="field-hint">TDS exempt if &lt; Rs 6M — leave 0 if unknown (MRA §2.6)</div>
+        </div>
+
         <div class="field">
           <div class="field-label"><i class="fa-solid fa-house"></i> Owner residency</div>
           <div class="toggle-group">
@@ -370,12 +376,6 @@
           <div class="field-label"><i class="fa-solid fa-briefcase"></i> Other annual income (MUR)</div>
           <input type="number" id="otherIncome" value="0" min="0" step="50000"/>
           <div class="field-hint">Salary, business — excluding this rental</div>
-        </div>
-
-        <div class="field">
-          <div class="field-label"><i class="fa-solid fa-chart-bar"></i> Company tenant turnover / yr (MUR)</div>
-          <input type="number" id="turnover" value="0" min="0" step="500000"/>
-          <div class="field-hint">TDS exempt if &lt; Rs 6M — leave 0 if unknown (MRA §2.6)</div>
         </div>
 
         <div class="field">
@@ -523,6 +523,7 @@ function setMode(m) {
     if (btn) { btn.classList.toggle('active', m === x); }
   });
   document.getElementById('field-split').style.display = (m === 'mixte') ? 'block' : 'none';
+  document.getElementById('field-turnover').style.display = (m === 'perso') ? 'none' : 'block';
 }
 function onSplitChange() {
   var v = parseInt(document.getElementById('splitPct').value);
