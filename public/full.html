@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Full TDS Assessment — Mauritius MRA 2025 · Qontab</title>
+  <meta name="description" content="Full TDS obligations calculator for Mauritius — all payment categories covered: rent, contractors, consultants, management fees, commissions and more."/>
+  <link rel="canonical" href="https://tds.qontab.com/full.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://tds.qontab.com/full.html"/>
+  <meta property="og:title" content="Full TDS Assessment — Mauritius MRA 2025"/>
+  <meta property="og:image" content="https://tds.qontab.com/og.png"/>
+  <meta property="og:site_name" content="Qontab"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:image" content="https://tds.qontab.com/og.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+  <style>
+    :root {
+      --bg:       #f7f8fb;
+      --surface:  #ffffff;
+      --border:   #e3e6f0;
+      --border-2: #b8e8e6;
+      --mint:     #00b6af;
+      --mint-bg:  rgba(0,182,175,0.07);
+      --mint-bd:  rgba(0,182,175,0.25);
+      --mint-deep:#00847f;
+      --red:      #d0404f;
+      --green:    #1a8f5e;
+      --text:     #1a1d2e;
+      --text-2:   #52577a;
+      --text-3:   #9097b8;
+      --r:        12px;
+      --rs:       8px;
+      --sh:       0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+    }
+
+    /* TOPBAR */
+    .topbar {
+      background: var(--surface); border-bottom: 1px solid #d0f0ee;
+      padding: 12px 20px; display: flex; align-items: center;
+      justify-content: space-between; gap: 12px;
+      position: sticky; top: 0; z-index: 10;
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; }
+    .topbar-icon {
+      width: 32px; height: 32px; background: var(--mint-bg);
+      border: 1px solid var(--mint-bd); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--mint); font-size: 0.8rem; flex-shrink: 0;
+    }
+    .topbar-title { font-size: 0.9rem; font-weight: 700; letter-spacing: -0.01em; }
+    .topbar-sub {
+      font-size: 0.72rem; font-weight: 600; color: var(--mint); margin-top: 1px;
+    }
+    .topbar-sub a { color: inherit; text-decoration: none; }
+    .topbar-sub a:hover { color: var(--mint-deep); }
+    .mra-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 0.72rem; font-weight: 500; color: var(--text-2);
+      text-decoration: none; background: var(--bg);
+      border: 1px solid var(--border); border-radius: 7px;
+      padding: 7px 11px; transition: all 0.15s; white-space: nowrap;
+    }
+    .mra-btn:hover { border-color: var(--mint); color: var(--mint); }
+
+    /* STEPPER */
+    .stepper-wrap {
+      max-width: 640px; margin: 0 auto; padding: 24px 16px 0;
+    }
+    .stepper {
+      display: flex; align-items: center; gap: 0; margin-bottom: 28px;
+    }
+    .step {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 0.72rem; font-weight: 600; color: var(--text-3);
+    }
+    .step.active { color: var(--mint); }
+    .step.done   { color: var(--green); }
+    .step-num {
+      width: 24px; height: 24px; border-radius: 99px;
+      background: var(--border); color: var(--text-3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; font-weight: 700; flex-shrink: 0;
+    }
+    .step.active .step-num { background: var(--mint); color: #fff; }
+    .step.done   .step-num { background: var(--green); color: #fff; }
+    .step-line { flex: 1; height: 2px; background: var(--border); margin: 0 6px; }
+    .step.done + .step-line, .step.active + .step-line { background: var(--mint-bd); }
+
+    /* PAGE */
+    .page { max-width: 640px; margin: 0 auto; padding: 0 16px 64px; }
+
+    /* CARD */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 22px; box-shadow: var(--sh); margin-bottom: 12px;
+    }
+    .card-title {
+      font-size: 0.67rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--text-3); margin-bottom: 18px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .card-head {
+      font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+    .card-sub { font-size: 0.82rem; color: var(--text-2); margin-bottom: 20px; line-height: 1.5; }
+
+    /* FIELD */
+    .field { margin-bottom: 16px; }
+    .field:last-child { margin-bottom: 0; }
+    .field-label { font-size: 0.78rem; font-weight: 600; color: var(--text); margin-bottom: 7px; display: flex; align-items: center; gap: 6px; }
+    .field-label i { color: var(--text-3); font-size: 0.72rem; }
+    .field-hint { font-size: 0.68rem; color: var(--text-3); margin-top: 5px; line-height: 1.5; }
+
+    input.num-input, input[type=text], select {
+      width: 100%; background: var(--bg);
+      border: 1.5px solid var(--border-2); border-radius: var(--rs);
+      color: var(--text); font-family: 'Inter', sans-serif;
+      font-size: 1rem; font-weight: 600; padding: 11px 14px; outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s; min-height: 48px;
+    }
+    input:focus, select:focus { border-color: var(--mint); box-shadow: 0 0 0 3px var(--mint-bg); }
+    select { cursor: pointer; }
+
+    .section-sep { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+    /* TOGGLE */
+    .toggle-group { display: flex; gap: 6px; flex-wrap: wrap; }
+    .toggle-btn {
+      flex: 1; min-width: 0; min-height: 42px; padding: 8px 10px;
+      border-radius: var(--rs); border: 1.5px solid var(--border-2);
+      background: var(--bg); color: var(--text-2);
+      font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 500;
+      cursor: pointer; outline: none;
+      transition: border-color 0.15s, background 0.15s, color 0.15s, box-shadow 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      white-space: nowrap;
+    }
+    .toggle-btn:hover:not(.active) { border-color: var(--mint); color: var(--mint); background: var(--mint-bg); }
+    .toggle-btn.active {
+      background: var(--mint); color: #fff; border-color: var(--mint);
+      font-weight: 600; box-shadow: 0 2px 8px rgba(0,182,175,0.28);
+    }
+    .toggle-btn.active small { color: rgba(255,255,255,0.75); }
+
+    /* CATEGORY GRID */
+    .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 480px) { .cat-grid { grid-template-columns: 1fr; } }
+
+    .cat-card {
+      border: 1.5px solid var(--border-2); border-radius: var(--rs);
+      background: var(--bg); padding: 12px 14px; cursor: pointer;
+      transition: all 0.15s; display: flex; flex-direction: column; gap: 4px;
+      user-select: none;
+    }
+    .cat-card:hover { border-color: var(--mint); background: var(--mint-bg); }
+    .cat-card.selected {
+      border-color: var(--mint); background: var(--mint-bg);
+      box-shadow: 0 0 0 2px rgba(0,182,175,0.15);
+    }
+    .cat-card-top { display: flex; align-items: center; justify-content: space-between; }
+    .cat-icon { color: var(--mint); font-size: 0.9rem; }
+    .cat-check {
+      width: 18px; height: 18px; border-radius: 4px;
+      border: 1.5px solid var(--border-2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; color: transparent; flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .cat-card.selected .cat-check {
+      background: var(--mint); border-color: var(--mint); color: #fff;
+    }
+    .cat-name { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+    .cat-rate { font-size: 0.7rem; color: var(--mint); font-weight: 600; }
+    .cat-desc { font-size: 0.69rem; color: var(--text-3); line-height: 1.4; }
+
+    /* AMOUNT ROWS */
+    .amt-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+    }
+    .amt-row:last-child { margin-bottom: 0; }
+    .amt-icon { color: var(--mint); font-size: 0.85rem; width: 20px; flex-shrink: 0; }
+    .amt-label { flex: 1; min-width: 0; }
+    .amt-label-text { font-size: 0.8rem; font-weight: 600; color: var(--text); }
+    .amt-label-rate { font-size: 0.68rem; color: var(--mint); }
+    .amt-input {
+      width: 160px; flex-shrink: 0;
+      background: var(--bg); border: 1.5px solid var(--border-2); border-radius: var(--rs);
+      color: var(--text); font-family: 'Inter', sans-serif;
+      font-size: 0.9rem; font-weight: 700; padding: 9px 12px; outline: none;
+      transition: border-color 0.15s; text-align: right;
+    }
+    .amt-input:focus { border-color: var(--mint); box-shadow: 0 0 0 2px var(--mint-bg); }
+
+    /* RESULTS */
+    .result-table { width: 100%; border-collapse: collapse; }
+    .result-table th {
+      font-size: 0.67rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-3);
+      padding: 0 0 10px; text-align: left; border-bottom: 1px solid var(--border);
+    }
+    .result-table th:last-child { text-align: right; }
+    .result-table td {
+      padding: 10px 0; font-size: 0.82rem;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+    .result-table tr:last-child td { border-bottom: none; }
+    .result-table .cat-col { color: var(--text-2); display: flex; align-items: center; gap: 7px; }
+    .result-table .rate-col { color: var(--text-3); font-size: 0.75rem; }
+    .result-table .base-col { font-weight: 500; }
+    .result-table .tds-col { font-weight: 700; color: var(--red); text-align: right; }
+    .result-table .tds-col.exempt { color: var(--green); }
+    .total-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 16px; background: var(--mint-bg);
+      border: 1px solid var(--mint-bd); border-radius: var(--rs); margin-top: 14px;
+    }
+    .total-label { font-size: 0.82rem; font-weight: 600; color: var(--text-2); }
+    .total-value { font-size: 1.2rem; font-weight: 700; color: var(--mint); }
+
+    .remit-box {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--rs); padding: 12px 14px; margin-top: 10px;
+      font-size: 0.78rem; color: var(--text-2); line-height: 1.6;
+    }
+    .remit-box strong { color: var(--text); }
+
+    /* EXEMPT banner */
+    .exempt-banner {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 12px; border-radius: var(--rs);
+      font-size: 0.78rem; font-weight: 600; margin-bottom: 12px;
+      background: rgba(26,143,94,0.08); color: var(--green);
+      border: 1px solid rgba(26,143,94,0.22);
+    }
+
+    /* NAV BUTTONS */
+    .nav-row { display: flex; gap: 10px; margin-top: 6px; }
+    .btn-primary {
+      flex: 1; padding: 14px; background: var(--mint); color: #fff;
+      border: none; border-radius: var(--rs); font-family: 'Inter', sans-serif;
+      font-size: 0.95rem; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background 0.15s; box-shadow: 0 2px 8px rgba(0,182,175,0.28);
+    }
+    .btn-primary:hover { background: var(--mint-deep); }
+    .btn-secondary {
+      padding: 14px 20px; background: none; color: var(--text-2);
+      border: 1.5px solid var(--border); border-radius: var(--rs);
+      font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; transition: all 0.15s;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .btn-secondary:hover { border-color: var(--mint); color: var(--mint); }
+
+    /* FOOTER */
+    .footer {
+      background: var(--surface); border-top: 1px solid #d0f0ee;
+      padding: 18px 20px; margin-top: 20px;
+    }
+    .footer-inner {
+      max-width: 640px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px; font-size: 0.71rem; color: var(--text-3);
+    }
+    .footer-inner a { color: var(--text-3); text-decoration: none; }
+    .footer-inner a:hover { color: var(--mint); }
+
+    /* Views */
+    .view { display: none; }
+    .view.active { display: block; }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-brand">
+    <span class="topbar-icon"><i class="fa-solid fa-table-list"></i></span>
+    <div>
+      <div class="topbar-title">Full TDS Assessment</div>
+      <div class="topbar-sub">
+        <a href="/"><i class="fa-solid fa-arrow-left"></i></a>
+        &nbsp;<a href="https://qontab.com" target="_blank" rel="noopener"><i class="fa-solid fa-chart-column"></i> Qontab</a>
+      </div>
+    </div>
+  </div>
+  <a class="mra-btn" href="https://www.mra.mu/download/TDSGuide.pdf" target="_blank" rel="noopener">
+    <i class="fa-solid fa-file-lines"></i> MRA Guide
+    <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem"></i>
+  </a>
+</header>
+
+<!-- STEPPER -->
+<div class="stepper-wrap">
+  <div class="stepper" id="stepper">
+    <div class="step active" id="st-1"><div class="step-num">1</div> Context</div>
+    <div class="step-line"></div>
+    <div class="step" id="st-2"><div class="step-num">2</div> Categories</div>
+    <div class="step-line"></div>
+    <div class="step" id="st-3"><div class="step-num">3</div> Amounts</div>
+    <div class="step-line"></div>
+    <div class="step" id="st-4"><div class="step-num">4</div> Results</div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- STEP 1: CONTEXT -->
+  <div class="view active" id="view-1">
+    <div class="card">
+      <div class="card-title"><i class="fa-solid fa-user-tie"></i> Step 1 of 4</div>
+      <div class="card-head">Your context</div>
+      <div class="card-sub">A few details to apply the correct TDS rules and exemptions.</div>
+
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-building"></i> Your role</div>
+        <div class="toggle-group">
+          <button class="toggle-btn active" id="btn-payer" onclick="setRole('payer')">
+            <i class="fa-solid fa-money-bill-transfer"></i> Payer
+          </button>
+          <button class="toggle-btn" id="btn-payee" onclick="setRole('payee')">
+            <i class="fa-solid fa-hand-holding-dollar"></i> Payee
+          </button>
+          <button class="toggle-btn" id="btn-both" onclick="setRole('both')">
+            <i class="fa-solid fa-arrows-left-right"></i> Both
+          </button>
+        </div>
+        <div class="field-hint">Payer = you deduct TDS before paying. Payee = TDS is deducted from your income.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-building-columns"></i> Entity type</div>
+        <div class="toggle-group">
+          <button class="toggle-btn active" id="btn-company" onclick="setEntity('company')">
+            <i class="fa-solid fa-building"></i> Company
+          </button>
+          <button class="toggle-btn" id="btn-individual" onclick="setEntity('individual')">
+            <i class="fa-solid fa-person"></i> Individual
+          </button>
+        </div>
+        <div class="field-hint">Individuals are generally not required to deduct TDS (exception: construction contracts).</div>
+      </div>
+
+      <div class="field" id="field-turnover-ctx">
+        <div class="field-label"><i class="fa-solid fa-chart-bar"></i> Annual turnover (MUR)</div>
+        <input type="text" inputmode="numeric" id="ctx-turnover" value="0" class="num-input" autocomplete="off" spellcheck="false"/>
+        <div class="field-hint">TDS exempt if turnover &lt; Rs 6M — except construction contracts (MRA §2.6.ii)</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-flag"></i> Tax residency</div>
+        <div class="toggle-group">
+          <button class="toggle-btn active" id="btn-res" onclick="setResidency('resident')">
+            <i class="fa-solid fa-flag"></i> Resident
+          </button>
+          <button class="toggle-btn" id="btn-nonres" onclick="setResidency('nonresident')">
+            <i class="fa-solid fa-earth-africa"></i> Non-resident
+          </button>
+        </div>
+        <div class="field-hint">Affects TDS rate on rent, royalties, management fees and non-resident services.</div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn-primary" onclick="goTo(2)">
+          Next — Select categories <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: CATEGORIES -->
+  <div class="view" id="view-2">
+    <div class="card">
+      <div class="card-title"><i class="fa-solid fa-list-check"></i> Step 2 of 4</div>
+      <div class="card-head">Which payments apply?</div>
+      <div class="card-sub">Select all TDS categories that apply to your situation. Rates shown for <span id="cat-res-label">resident</span>.</div>
+
+      <div class="cat-grid" id="cat-grid">
+        <!-- Populated by JS -->
+      </div>
+
+      <div id="exemption-warning" style="display:none" class="exempt-banner" style="margin-top:14px">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span id="exemption-text"></span>
+      </div>
+
+      <div class="nav-row" style="margin-top:16px">
+        <button class="btn-secondary" onclick="goTo(1)"><i class="fa-solid fa-arrow-left"></i> Back</button>
+        <button class="btn-primary" id="btn-next-2" onclick="goTo(3)">
+          Next — Enter amounts <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: AMOUNTS -->
+  <div class="view" id="view-3">
+    <div class="card">
+      <div class="card-title"><i class="fa-solid fa-coins"></i> Step 3 of 4</div>
+      <div class="card-head">Payment amounts</div>
+      <div class="card-sub">Enter the monthly or annual gross amount for each selected category.</div>
+
+      <div class="field">
+        <div class="field-label"><i class="fa-regular fa-calendar"></i> Period</div>
+        <div class="toggle-group">
+          <button class="toggle-btn active" id="btn-monthly" onclick="setPeriod('monthly')">Monthly</button>
+          <button class="toggle-btn" id="btn-annual" onclick="setPeriod('annual')">Annual</button>
+        </div>
+      </div>
+
+      <hr class="section-sep"/>
+      <div id="amt-fields"><!-- populated by JS --></div>
+
+      <div class="nav-row" style="margin-top:16px">
+        <button class="btn-secondary" onclick="goTo(2)"><i class="fa-solid fa-arrow-left"></i> Back</button>
+        <button class="btn-primary" onclick="goTo(4)">
+          Calculate TDS <i class="fa-solid fa-chart-pie"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4: RESULTS -->
+  <div class="view" id="view-4">
+    <div class="card">
+      <div class="card-title"><i class="fa-solid fa-chart-pie"></i> Step 4 of 4</div>
+      <div class="card-head">Your TDS summary</div>
+      <div class="card-sub" id="results-sub">Based on your inputs.</div>
+
+      <table class="result-table">
+        <thead>
+          <tr>
+            <th style="width:40%">Category</th>
+            <th>Rate</th>
+            <th>Base / yr</th>
+            <th>TDS / yr</th>
+          </tr>
+        </thead>
+        <tbody id="result-rows"></tbody>
+      </table>
+
+      <div class="total-row">
+        <span class="total-label">Total TDS to remit / yr</span>
+        <span class="total-value" id="total-tds">—</span>
+      </div>
+
+      <div class="remit-box">
+        <strong>Remittance deadline:</strong> 20th of the month following payment (May & November: 2 business days before end of June & December).<br/>
+        <strong>Late penalty:</strong> 10% of unpaid TDS + 1%/month interest.
+      </div>
+    </div>
+
+    <!-- Breakdown card -->
+    <div class="card" id="breakdown-card">
+      <div class="card-title"><i class="fa-solid fa-calendar-days"></i> Monthly breakdown</div>
+      <div id="monthly-rows"></div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-secondary" onclick="goTo(3)"><i class="fa-solid fa-arrow-left"></i> Edit amounts</button>
+      <button class="btn-primary" onclick="window.location='/'">
+        <i class="fa-solid fa-house"></i> Back to home
+      </button>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span>Based on <a href="https://www.mra.mu" target="_blank" rel="noopener">MRA TDS Guide 2025</a> · Rental §5 · For informational purposes only</span>
+    <span>by <a href="https://qontab.com" target="_blank" rel="noopener" style="color:var(--mint);font-weight:600">Qontab</a></span>
+  </div>
+</footer>
+
+<script>
+var role = 'payer', entity = 'company', residency = 'resident', period = 'monthly';
+var selected = {};
+
+// TDS categories (MRA Guide 2025)
+var CATS = [
+  { id: 'rent',        icon: 'fa-house',                name: 'Rent',               rate_r: 7.5, rate_nr: 10,  section: '§5',  desc: 'Immovable property rental' },
+  { id: 'contractor',  icon: 'fa-helmet-safety',        name: 'Contractors',        rate_r: 0.75,rate_nr: 0.75,section: '§7',  desc: 'Payments to contractors & sub-contractors' },
+  { id: 'services',    icon: 'fa-briefcase',            name: 'Services',           rate_r: 5,   rate_nr: 5,   section: '§6',  desc: 'Architects, engineers, accountants, lawyers…' },
+  { id: 'consultant',  icon: 'fa-magnifying-glass-chart',name: 'Consultants',       rate_r: 3,   rate_nr: 3,   section: '§8',  desc: 'Business & management consultants' },
+  { id: 'commission',  icon: 'fa-handshake',            name: 'Commission',         rate_r: 3,   rate_nr: 3,   section: '§2',  desc: 'Commissions payable by companies' },
+  { id: 'mgmt',        icon: 'fa-sitemap',              name: 'Management fees',    rate_r: 5,   rate_nr: 10,  section: '§2',  desc: 'Management fees to resident or non-resident' },
+  { id: 'security',    icon: 'fa-shield-halved',        name: 'Security / Cleaning',rate_r: 3,   rate_nr: 3,   section: '§2',  desc: 'Security, cleaning, pest management' },
+  { id: 'nonres_svc',  icon: 'fa-earth-africa',         name: 'Non-resident services',rate_r:10, rate_nr: 10,  section: '§2',  desc: 'Services rendered in Mauritius by non-residents' },
+];
+
+function setRole(r) {
+  role = r;
+  ['payer','payee','both'].forEach(function(x) {
+    document.getElementById('btn-'+x).classList.toggle('active', r === x);
+  });
+}
+function setEntity(e) {
+  entity = e;
+  ['company','individual'].forEach(function(x) {
+    document.getElementById('btn-'+x).classList.toggle('active', e === x);
+  });
+  document.getElementById('field-turnover-ctx').style.display = (e === 'company') ? 'block' : 'none';
+}
+function setResidency(r) {
+  residency = r;
+  ['res','nonres'].forEach(function(x) {
+    var val = x === 'res' ? 'resident' : 'nonresident';
+    document.getElementById('btn-'+x).classList.toggle('active', r === val);
+  });
+  // Update cat rates display
+  renderCats();
+  document.getElementById('cat-res-label').textContent = (r === 'resident') ? 'resident' : 'non-resident';
+}
+function setPeriod(p) {
+  period = p;
+  ['monthly','annual'].forEach(function(x) {
+    document.getElementById('btn-'+x).classList.toggle('active', p === x);
+  });
+}
+
+function renderCats() {
+  var grid = document.getElementById('cat-grid');
+  var html = '';
+  CATS.forEach(function(c) {
+    var rate = (residency === 'resident') ? c.rate_r : c.rate_nr;
+    var sel = selected[c.id] ? 'selected' : '';
+    html += '<div class="cat-card ' + sel + '" onclick="toggleCat(\'' + c.id + '\')" id="catcard-' + c.id + '">';
+    html += '  <div class="cat-card-top">';
+    html += '    <i class="fa-solid ' + c.icon + ' cat-icon"></i>';
+    html += '    <div class="cat-check"><i class="fa-solid fa-check"></i></div>';
+    html += '  </div>';
+    html += '  <div class="cat-name">' + c.name + '</div>';
+    html += '  <div class="cat-rate">' + rate + '% · ' + c.section + '</div>';
+    html += '  <div class="cat-desc">' + c.desc + '</div>';
+    html += '</div>';
+  });
+  grid.innerHTML = html;
+  updateExemptionWarning();
+}
+
+function toggleCat(id) {
+  selected[id] = !selected[id];
+  var card = document.getElementById('catcard-' + id);
+  card.classList.toggle('selected', !!selected[id]);
+  updateExemptionWarning();
+}
+
+function updateExemptionWarning() {
+  var turnover = parseNumById('ctx-turnover');
+  var warn = document.getElementById('exemption-warning');
+  var txt  = document.getElementById('exemption-text');
+  if (entity === 'company' && turnover > 0 && turnover < 6000000) {
+    warn.style.display = 'flex'; warn.style.gap = '8px'; warn.style.alignItems = 'center';
+    txt.textContent = 'Turnover Rs ' + Math.round(turnover).toLocaleString('fr-FR') + ' < Rs 6M — TDS generally exempt (MRA §2.6.ii, exc. construction)';
+  } else if (entity === 'individual') {
+    warn.style.display = 'flex'; warn.style.gap = '8px'; warn.style.alignItems = 'center';
+    txt.textContent = 'Individuals are generally not required to deduct TDS (except construction contracts).';
+  } else {
+    warn.style.display = 'none';
+  }
+}
+
+function renderAmtFields() {
+  var div = document.getElementById('amt-fields');
+  var html = '';
+  var hasSel = false;
+  CATS.forEach(function(c) {
+    if (!selected[c.id]) return;
+    hasSel = true;
+    var rate = (residency === 'resident') ? c.rate_r : c.rate_nr;
+    html += '<div class="amt-row">';
+    html += '  <i class="fa-solid ' + c.icon + ' amt-icon"></i>';
+    html += '  <div class="amt-label">';
+    html += '    <div class="amt-label-text">' + c.name + '</div>';
+    html += '    <div class="amt-label-rate">' + rate + '%</div>';
+    html += '  </div>';
+    html += '  <input type="text" inputmode="numeric" class="amt-input" id="amt-' + c.id + '" value="0" autocomplete="off" placeholder="0"/>';
+    html += '</div>';
+  });
+  if (!hasSel) {
+    html = '<p style="font-size:0.82rem;color:var(--text-3);padding:12px 0">No categories selected — go back and choose at least one.</p>';
+  }
+  div.innerHTML = html;
+
+  // init formatting on amount inputs
+  CATS.forEach(function(c) {
+    if (!selected[c.id]) return;
+    initNumInputEl(document.getElementById('amt-' + c.id), 0);
+  });
+}
+
+function computeResults() {
+  var rows = [];
+  var totalTDS = 0;
+  CATS.forEach(function(c) {
+    if (!selected[c.id]) return;
+    var rate = (residency === 'resident') ? c.rate_r : c.rate_nr;
+    var amtEl = document.getElementById('amt-' + c.id);
+    var monthly = amtEl ? (parseFloat(amtEl.value.replace(/\s/g,'')) || 0) : 0;
+    var annual  = period === 'monthly' ? monthly * 12 : monthly;
+    var tds     = annual * rate / 100;
+
+    // Exemption: TDS < 500 → 0
+    var exempt  = (tds > 0 && tds < 500);
+    if (exempt) tds = 0;
+
+    rows.push({ cat: c, rate: rate, base: annual, tds: tds, exempt: exempt });
+    totalTDS += tds;
+  });
+  return { rows: rows, totalTDS: totalTDS };
+}
+
+function renderResults() {
+  var r = computeResults();
+  var tbody = document.getElementById('result-rows');
+  var html  = '';
+  r.rows.forEach(function(row) {
+    var tdsCls = row.exempt ? 'tds-col exempt' : 'tds-col';
+    var tdsStr = row.exempt ? 'Exempt (< Rs 500)' : fmtRs(row.tds);
+    html += '<tr>';
+    html += '  <td class="cat-col"><i class="fa-solid ' + row.cat.icon + '" style="color:var(--mint);font-size:0.78rem"></i> ' + row.cat.name + '</td>';
+    html += '  <td class="rate-col">' + row.rate + '%</td>';
+    html += '  <td class="base-col">' + fmtRs(row.base) + '</td>';
+    html += '  <td class="' + tdsCls + '">' + tdsStr + '</td>';
+    html += '</tr>';
+  });
+  tbody.innerHTML = html;
+  document.getElementById('total-tds').textContent = fmtRs(r.totalTDS) + ' / yr';
+  document.getElementById('results-sub').textContent =
+    r.rows.length + ' categor' + (r.rows.length === 1 ? 'y' : 'ies') + ' · ' +
+    (residency === 'resident' ? 'Resident' : 'Non-resident') + ' · ' +
+    (period === 'monthly' ? 'based on monthly amounts' : 'based on annual amounts');
+
+  // Monthly breakdown
+  var mHtml = '';
+  r.rows.forEach(function(row) {
+    var monthly = row.tds / 12;
+    if (monthly <= 0) return;
+    mHtml += '<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.05);font-size:0.82rem">';
+    mHtml += '  <span style="color:var(--text-2)">' + row.cat.name + '</span>';
+    mHtml += '  <span style="font-weight:600;color:var(--red)">' + fmtRs(monthly) + ' / mo</span>';
+    mHtml += '</div>';
+  });
+  if (r.totalTDS > 0) {
+    mHtml += '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;font-size:0.88rem;font-weight:700">';
+    mHtml += '  <span style="color:var(--text)">Total / month</span>';
+    mHtml += '  <span style="color:var(--mint)">' + fmtRs(r.totalTDS / 12) + '</span>';
+    mHtml += '</div>';
+  } else {
+    mHtml = '<p style="font-size:0.8rem;color:var(--text-3);padding:8px 0">No TDS applicable based on your inputs.</p>';
+  }
+  document.getElementById('monthly-rows').innerHTML = mHtml;
+}
+
+function goTo(step) {
+  if (step === 3) renderAmtFields();
+  if (step === 4) renderResults();
+  [1,2,3,4].forEach(function(s) {
+    document.getElementById('view-'+s).classList.toggle('active', s === step);
+    var st = document.getElementById('st-'+s);
+    st.classList.remove('active','done');
+    if (s === step)      st.classList.add('active');
+    else if (s < step)   st.classList.add('done');
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function fmtRs(n) {
+  return 'Rs\u00a0' + Math.round(n).toLocaleString('fr-FR');
+}
+
+// Number input formatting
+function parseNumById(id) {
+  var el = document.getElementById(id);
+  return el ? (parseFloat(el.value.replace(/\s/g,'').replace(/\u202f/g,'')) || 0) : 0;
+}
+function fmtInput(n) { return n ? Math.round(n).toLocaleString('fr-FR') : '0'; }
+function initNumInputEl(el, defaultVal) {
+  if (!el) return;
+  el.value = fmtInput(defaultVal);
+  el.addEventListener('focus', function() {
+    this.value = this.value.replace(/\s/g,'').replace(/\u202f/g,'');
+    this.select();
+  });
+  el.addEventListener('input', function() {
+    this.value = this.value.replace(/[^0-9]/g,'');
+  });
+  el.addEventListener('blur', function() {
+    var n = parseFloat(this.value) || 0;
+    this.value = fmtInput(n || defaultVal);
+  });
+}
+
+// Init
+renderCats();
+initNumInputEl(document.getElementById('ctx-turnover'), 0);
+</script>
+</body>
+</html>
