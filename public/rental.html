@@ -408,7 +408,12 @@
           <div class="field-label"><i class="fa-solid fa-chart-bar"></i> Company tenant turnover / yr (MUR)</div>
           <input type="text" inputmode="numeric" id="turnover" value="0"
             class="num-input" autocomplete="off" spellcheck="false"/>
-          <div class="field-hint">TDS exempt if &lt; Rs 6M — leave 0 if unknown (MRA §2.6)</div>
+          <div class="field-hint">
+            Exemption §2.6.ii — if the <strong>company tenant</strong>'s annual turnover &lt; Rs 6M,
+            they are not required to deduct TDS (except construction contracts).
+            Leave 0 if unknown. Note: the owner (payee) can separately request exemption
+            via MRA Director-General directive (§2.6.i).
+          </div>
         </div>
 
         <div class="field">
@@ -703,8 +708,8 @@ function update() {
   if (isExempt) {
     eb.style.display = 'flex';
     et.textContent = exemptTurnover
-      ? 'TDS exempt — turnover Rs\u00a0' + Math.round(turnover).toLocaleString('fr-FR') + ' < Rs\u00a06M (MRA §2.6.ii)'
-      : 'TDS exempt — TDS Rs\u00a0' + Math.round(tdsRaw).toLocaleString('fr-FR') + ' < Rs\u00a0500 minimum (MRA §2.1)';
+      ? 'TDS exempt (§2.6.ii) — company tenant turnover Rs\u00a0' + Math.round(turnover).toLocaleString('fr-FR') + ' < Rs\u00a06M: tenant not required to deduct TDS'
+      : 'TDS exempt (§2.1) — calculated TDS Rs\u00a0' + Math.round(tdsRaw).toLocaleString('fr-FR') + ' < Rs\u00a0500 minimum threshold';
   } else {
     eb.style.display = 'none';
   }
