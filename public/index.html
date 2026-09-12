@@ -1,40 +1,20 @@
----
-const title = "TDS Simulator — Mauritius Rental Tax Calculator";
-const description = "Calculate Tax Deduction at Source (TDS) on rental income in Mauritius. Compare company vs individual lease — owner fiscal impact, MRA credit, net cash flow. Free, instant, based on MRA TDS Guide 2025.";
-const url = "https://tds.qontab.com";
-const ogImage = `${url}/og.png`;
----
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>{title}</title>
-  <meta name="description" content={description}/>
+  <title>TDS Simulator — Mauritius Rental Tax Calculator</title>
+  <meta name="description" content="Calculate Tax Deduction at Source (TDS) on rental income in Mauritius. Compare company vs individual lease — owner fiscal impact, MRA credit, net cash flow. Free, instant, based on MRA TDS Guide 2025."/>
   <meta name="keywords" content="TDS Mauritius, Tax Deduction at Source, MRA, rental tax Mauritius, simulateur TDS Maurice, bail société Maurice, impôt loyer île Maurice"/>
-  <link rel="canonical" href={url}/>
+  <link rel="canonical" href="https://tds.qontab.com"/>
   <meta property="og:type" content="website"/>
-  <meta property="og:url" content={url}/>
-  <meta property="og:title" content={title}/>
-  <meta property="og:description" content={description}/>
-  <meta property="og:image" content={ogImage}/>
+  <meta property="og:url" content="https://tds.qontab.com"/>
+  <meta property="og:title" content="TDS Simulator — Mauritius Rental Tax Calculator"/>
+  <meta property="og:description" content="Calculate Tax Deduction at Source (TDS) on rental income in Mauritius. Compare company vs individual lease, owner fiscal impact, MRA credit, net cash flow."/>
   <meta property="og:locale" content="en_MU"/>
   <meta property="og:site_name" content="Qontab"/>
   <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content={title}/>
-  <meta name="twitter:description" content={description}/>
-  <meta name="twitter:image" content={ogImage}/>
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": title,
-    "url": url,
-    "description": description,
-    "applicationCategory": "FinanceApplication",
-    "operatingSystem": "Any",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "MUR" },
-    "publisher": { "@type": "Organization", "name": "Qontab", "url": "https://qontab.com" }
-  })}></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"TDS Simulator — Mauritius Rental Tax","url":"https://tds.qontab.com","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"MUR"},"publisher":{"@type":"Organization","name":"Qontab","url":"https://qontab.com"}}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
@@ -49,19 +29,18 @@ const ogImage = `${url}/og.png`;
       --accent:    #5b51e8;
       --accent-bg: rgba(91,81,232,0.07);
       --accent-bd: rgba(91,81,232,0.2);
-      --teal:      #0a9e87;
-      --teal-bg:   rgba(10,158,135,0.07);
-      --teal-bd:   rgba(10,158,135,0.2);
+      --mint:      #00b6af;
+      --mint-bg:   rgba(0,182,175,0.07);
+      --mint-bd:   rgba(0,182,175,0.25);
       --red:       #d0404f;
       --green:     #1a8f5e;
       --text:      #1a1d2e;
       --text-2:    #52577a;
       --text-3:    #9097b8;
-      --r:         14px;
-      --rs:        9px;
+      --r:         12px;
+      --rs:        8px;
       --sh:        0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-size: 16px; }
     body {
@@ -73,24 +52,18 @@ const ogImage = `${url}/og.png`;
       overflow-x: hidden;
     }
 
-    /* ── TOPBAR ── */
+    /* TOPBAR */
     .topbar {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 13px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 13px 20px; display: flex; align-items: center;
+      justify-content: space-between; gap: 12px;
+      position: sticky; top: 0; z-index: 10;
     }
     .topbar-brand { display: flex; align-items: center; gap: 9px; }
     .topbar-icon {
-      width: 32px; height: 32px;
-      background: var(--accent-bg); border: 1px solid var(--accent-bd);
-      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; background: var(--accent-bg);
+      border: 1px solid var(--accent-bd); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
       color: var(--accent); font-size: 0.8rem; flex-shrink: 0;
     }
     .topbar-title { font-size: 0.9rem; font-weight: 700; letter-spacing: -0.01em; }
@@ -104,50 +77,41 @@ const ogImage = `${url}/og.png`;
     }
     .mra-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* ── VIEWS ── */
-    .page { max-width: 840px; margin: 0 auto; padding: 24px 16px 64px; }
+    /* PAGE */
+    .page { max-width: 840px; margin: 0 auto; padding: 24px 16px 48px; }
 
-    /* Two views: simulator and results */
+    /* VIEWS */
     .view { display: none; }
     .view.active { display: block; }
-
-    /* On desktop — both always visible, side by side */
     @media (min-width: 720px) {
       .view { display: block !important; }
       .desktop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
       .full { grid-column: 1 / -1; }
-      .back-btn { display: none !important; }
-      .calc-btn { display: none !important; }
+      .back-btn, .calc-btn { display: none !important; }
     }
 
-    /* ── BACK BUTTON ── */
+    /* BACK BTN */
     .back-btn {
       display: inline-flex; align-items: center; gap: 7px;
       font-size: 0.8rem; font-weight: 600; color: var(--text-2);
-      background: none; border: none; cursor: pointer;
-      padding: 0; margin-bottom: 16px; font-family: 'Inter', sans-serif;
-      transition: color 0.15s;
+      background: none; border: none; cursor: pointer; padding: 0;
+      margin-bottom: 16px; font-family: 'Inter', sans-serif; transition: color 0.15s;
     }
     .back-btn:hover { color: var(--accent); }
 
-    /* ── CARD ── */
+    /* CARD */
     .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 20px;
-      box-shadow: var(--sh);
-      margin-bottom: 12px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 20px; box-shadow: var(--sh); margin-bottom: 12px;
     }
     .card:last-child { margin-bottom: 0; }
     .card-title {
-      font-size: 0.67rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.1em;
-      color: var(--text-3); margin-bottom: 18px;
+      font-size: 0.67rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--text-3); margin-bottom: 18px;
       display: flex; align-items: center; gap: 6px;
     }
 
-    /* ── FIELD ── */
+    /* FIELD */
     .field { margin-bottom: 16px; }
     .field:last-child { margin-bottom: 0; }
     .field-label {
@@ -161,99 +125,85 @@ const ogImage = `${url}/og.png`;
       width: 100%; background: var(--bg);
       border: 1.5px solid var(--border-2); border-radius: var(--rs);
       color: var(--text); font-family: 'Inter', sans-serif;
-      font-size: 1.15rem; font-weight: 700;
-      padding: 12px 14px; outline: none;
+      font-size: 1.15rem; font-weight: 700; padding: 12px 14px; outline: none;
       transition: border-color 0.15s, box-shadow 0.15s;
       -moz-appearance: textfield; min-height: 50px;
     }
     input[type=number]::-webkit-inner-spin-button { display: none; }
-    input[type=number]:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(91,81,232,0.1);
-    }
+    input[type=number]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
 
     .section-sep { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
     .section-label {
-      font-size: 0.65rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.1em;
-      color: var(--text-3); margin-bottom: 12px;
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--text-3); margin-bottom: 12px;
       display: flex; align-items: center; gap: 6px;
     }
 
-    /* ── TOGGLE ── */
+    /* TOGGLES */
     .toggle-group { display: flex; gap: 6px; flex-wrap: wrap; }
     .toggle-btn {
       flex: 1; min-width: 0; min-height: 44px; padding: 8px 10px;
       border-radius: var(--rs); border: 1.5px solid var(--border-2);
       background: var(--bg); color: var(--text-2);
       font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 500;
-      cursor: pointer;
-      transition: border-color 0.18s ease, background 0.18s ease,
-                  color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
+      cursor: pointer; outline: none;
+      transition: border-color 0.15s, background 0.15s, color 0.15s, box-shadow 0.15s;
       display: flex; align-items: center; justify-content: center; gap: 5px;
       white-space: nowrap;
     }
-    .toggle-btn:hover:not(.active) {
-      border-color: var(--accent); color: var(--accent); background: var(--accent-bg);
-    }
-    .toggle-btn:focus { outline: none; }
+    .toggle-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
     .toggle-btn:active { transform: scale(0.97); }
     .toggle-btn.active {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
-      font-weight: 600;
+      background: var(--accent); color: #fff;
+      border-color: var(--accent); font-weight: 600;
       box-shadow: 0 2px 8px rgba(91,81,232,0.28);
     }
-    .toggle-btn.active.teal {
-      background: var(--teal);
-      color: #fff;
-      border-color: var(--teal);
-      box-shadow: 0 2px 8px rgba(10,158,135,0.28);
+    .toggle-btn.active.mint {
+      background: var(--mint); color: #fff;
+      border-color: var(--mint);
+      box-shadow: 0 2px 8px rgba(0,182,175,0.28);
     }
-    /* Fix small/opacity inside active button */
-    .toggle-btn.active small,
-    .toggle-btn.active .pill-red,
-    .toggle-btn.active .pill-green { color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.15); }
+    .toggle-btn.active small { color: rgba(255,255,255,0.7); opacity: 1; }
     .pill { font-size: 0.6rem; font-weight: 700; padding: 1px 6px; border-radius: 99px; }
     .pill-red   { background: rgba(208,64,79,0.1);  color: var(--red); }
     .pill-green { background: rgba(26,143,94,0.1);  color: var(--green); }
+    .toggle-btn.active .pill-red,
+    .toggle-btn.active .pill-green { background: rgba(255,255,255,0.2); color: #fff; }
 
-    /* ── CALCULATE BUTTON ── */
+    /* CALC BTN */
     .calc-btn {
-      width: 100%; padding: 14px;
-      background: var(--accent); color: #fff;
-      border: none; border-radius: var(--rs);
-      font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 600;
-      cursor: pointer; margin-top: 6px;
+      width: 100%; padding: 14px; background: var(--accent); color: #fff;
+      border: none; border-radius: var(--rs); font-family: 'Inter', sans-serif;
+      font-size: 0.95rem; font-weight: 600; cursor: pointer; margin-top: 6px;
       display: flex; align-items: center; justify-content: center; gap: 8px;
       transition: background 0.15s;
     }
     .calc-btn:hover { background: #4a41cc; }
 
-    /* ── MODE BANNER ── */
-    .mode-banner {
-      display: flex; align-items: center; gap: 7px;
+    /* BANNERS */
+    .banner {
+      display: flex; align-items: center; gap: 8px;
       padding: 9px 12px; border-radius: var(--rs);
-      font-size: 0.78rem; font-weight: 600; margin-bottom: 14px;
+      font-size: 0.78rem; font-weight: 600; margin-bottom: 12px;
     }
-    .mode-banner.societe { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-bd); }
-    .mode-banner.perso   { background: var(--teal-bg);   color: var(--teal);   border: 1px solid var(--teal-bd); }
+    .banner.accent { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-bd); }
+    .banner.mint   { background: var(--mint-bg);   color: var(--mint);   border: 1px solid var(--mint-bd); }
+    .banner.green  { background: rgba(26,143,94,0.08); color: var(--green); border: 1px solid rgba(26,143,94,0.22); }
 
-    /* ── RESULT BLOCKS ── */
+    /* RESULT BLOCKS */
     .rblock { border-radius: var(--rs); padding: 13px 14px; margin-bottom: 10px; }
     .rblock:last-child { margin-bottom: 0; }
     .rblock.b-accent { background: var(--accent-bg); border: 1px solid var(--accent-bd); }
-    .rblock.b-teal   { background: var(--teal-bg);   border: 1px solid var(--teal-bd); }
+    .rblock.b-mint   { background: var(--mint-bg);   border: 1px solid var(--mint-bd); }
     .rblock.b-amber  { background: rgba(196,125,16,0.06); border: 1px solid rgba(196,125,16,0.18); }
 
     .block-title {
-      font-size: 0.66rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.08em;
-      margin-bottom: 10px; display: flex; align-items: center; gap: 5px;
+      font-size: 0.66rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 5px;
     }
     .block-title.c-accent { color: var(--accent); }
-    .block-title.c-teal   { color: var(--teal); }
+    .block-title.c-mint   { color: var(--mint); }
     .block-title.c-amber  { color: #c47d10; }
 
     .rrow {
@@ -261,21 +211,19 @@ const ogImage = `${url}/og.png`;
       gap: 8px; padding: 5px 0; font-size: 0.82rem;
     }
     .rrow + .rrow { border-top: 1px solid rgba(0,0,0,0.05); }
-    .rrow.strong .lbl,
-    .rrow.strong .val { font-weight: 700; }
+    .rrow.strong .lbl, .rrow.strong .val { font-weight: 700; }
     .rrow .lbl { color: var(--text-2); flex: 1; min-width: 0; }
     .rrow .sub { font-size: 0.66rem; color: var(--text-3); display: block; margin-top: 1px; }
     .rrow .val { font-weight: 600; white-space: nowrap; color: var(--text); flex-shrink: 0; }
     .rrow.indent .lbl { padding-left: 12px; color: var(--text-3); font-size: 0.77rem; }
     .rrow.indent .val { font-size: 0.77rem; }
-
     .v-red   { color: var(--red)    !important; }
     .v-green { color: var(--green)  !important; }
     .v-muted { color: var(--text-3) !important; }
 
-    /* ── COMPARE ── */
+    /* COMPARE */
     .compare-cols { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
-    @media (min-width: 560px) {
+    @media (min-width: 520px) {
       .compare-cols { flex-direction: row; }
       .compare-cols > * { flex: 1; min-width: 0; }
     }
@@ -290,31 +238,33 @@ const ogImage = `${url}/og.png`;
     .note a { color: var(--text-3); }
     .note a:hover { color: var(--accent); }
 
-    /* ── FOOTER ── */
+    /* FOOTER */
     .footer {
+      background: #060709;
+      border-top: 1px solid #1c2024;
+      padding: 28px 20px 32px;
+      margin-top: 40px;
+    }
+    .footer-inner {
       max-width: 840px; margin: 0 auto;
-      padding: 28px 16px 40px;
       display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 12px;
-      border-top: 1px solid var(--border);
-      font-size: 0.71rem; color: var(--text-3);
+      flex-wrap: wrap; gap: 14px;
     }
-    .footer a { color: var(--text-3); text-decoration: none; }
-    .footer a:hover { color: var(--accent); }
-    .qontab-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 16px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
+    .footer-left { font-size: 0.75rem; color: #75716a; line-height: 1.6; }
+    .footer-left a { color: #a8a49e; text-decoration: none; transition: color 0.15s; }
+    .footer-left a:hover { color: #00b6af; }
+    .qontab-btn {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: #00b6af; color: #001615;
+      border: none; border-radius: 8px;
+      padding: 11px 18px; font-family: 'Inter', sans-serif;
+      font-size: 0.85rem; font-weight: 700; letter-spacing: -0.01em;
+      text-decoration: none;
       transition: background 0.15s, transform 0.1s;
-      box-shadow: 0 2px 8px rgba(91,81,232,0.28);
+      box-shadow: 0 2px 12px rgba(0,182,175,0.35);
     }
-    .qontab-badge:hover { background: #4a41cc; transform: translateY(-1px); color: #fff; }
+    .qontab-btn:hover { background: #00dad1; transform: translateY(-1px); }
+    .qontab-btn i { font-size: 0.85rem; }
   </style>
 </head>
 <body>
@@ -328,21 +278,24 @@ const ogImage = `${url}/og.png`;
     </div>
   </div>
   <a class="mra-btn" href="https://www.mra.mu/download/TDSGuide.pdf" target="_blank" rel="noopener">
-    <i class="fa-solid fa-file-lines"></i> MRA Guide <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem"></i>
+    <i class="fa-solid fa-file-lines"></i> MRA Guide
+    <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem"></i>
   </a>
 </header>
 
 <div class="page">
   <div class="desktop-grid">
 
-    <!-- ── VIEW 1 : SIMULATOR ── -->
+    <!-- SIMULATOR -->
     <div class="view active" id="view-sim">
       <div class="card">
         <div class="card-title"><i class="fa-solid fa-sliders"></i> Simulator</div>
 
         <div class="field">
           <div class="field-label"><i class="fa-solid fa-coins"></i> Monthly gross rent (MUR)</div>
-          <input type="number" id="loyer" value="60000" min="0" step="1000" onfocus="if(this.value==='60000'){this.value='';this.select()}" onblur="if(this.value===''){this.value='60000'}"/>
+          <input type="number" id="loyer" value="60000" min="0" step="1000"
+            onfocus="if(this.value==='60000'){this.value='';}"
+            onblur="if(this.value===''){this.value='60000'}"/>
         </div>
 
         <div class="field">
@@ -361,12 +314,17 @@ const ogImage = `${url}/og.png`;
         </div>
 
         <div class="field" id="field-split" style="display:none">
-          <div class="field-label"><i class="fa-solid fa-sliders"></i> Company share <span id="split-label" style="margin-left:4px;color:var(--accent);font-weight:700">50%</span></div>
-          <input type="range" id="splitPct" min="0" max="100" step="5" value="50" oninput="onSplitChange()" style="width:100%;accent-color:var(--accent);cursor:pointer;margin-top:2px"/>
-          <div style="display:flex;justify-content:space-between;font-size:0.68rem;color:var(--text-3);margin-top:5px">
-            <span>0% — No TDS</span>
-            <span id="split-desc">50% company · 50% individual</span>
-            <span>100% — Full TDS</span>
+          <div class="field-label">
+            <i class="fa-solid fa-sliders"></i> Company share
+            <span id="split-label" style="color:var(--accent);font-weight:700;margin-left:4px">50%</span>
+          </div>
+          <input type="range" id="splitPct" min="0" max="100" step="5" value="50"
+            oninput="onSplitChange()"
+            style="width:100%;accent-color:var(--accent);cursor:pointer;margin-top:2px"/>
+          <div style="display:flex;justify-content:space-between;font-size:0.68rem;color:var(--text-3);margin-top:4px">
+            <span>0% No TDS</span>
+            <span id="split-desc">50% co · 50% indiv</span>
+            <span>100% Full TDS</span>
           </div>
         </div>
 
@@ -374,10 +332,10 @@ const ogImage = `${url}/og.png`;
           <div class="field-label"><i class="fa-solid fa-house"></i> Owner residency</div>
           <div class="toggle-group">
             <button class="toggle-btn active" id="btn-resident" onclick="setOwner('resident')">
-              <i class="fa-solid fa-flag"></i> Resident <small style="font-size:0.68rem;opacity:0.6">7.5%</small>
+              <i class="fa-solid fa-flag"></i> Resident <small>7.5%</small>
             </button>
             <button class="toggle-btn" id="btn-nonresident" onclick="setOwner('nonresident')">
-              <i class="fa-solid fa-earth-africa"></i> Non-resident <small style="font-size:0.68rem;opacity:0.6">10%</small>
+              <i class="fa-solid fa-earth-africa"></i> Non-resident <small>10%</small>
             </button>
           </div>
         </div>
@@ -392,33 +350,32 @@ const ogImage = `${url}/og.png`;
         </div>
 
         <div class="field">
-          <div class="field-label"><i class="fa-solid fa-chart-bar"></i> Company tenant annual turnover (MUR)</div>
+          <div class="field-label"><i class="fa-solid fa-chart-bar"></i> Company tenant turnover / yr (MUR)</div>
           <input type="number" id="turnover" value="0" min="0" step="500000"/>
-          <div class="field-hint">Leave 0 if unknown — TDS exempt if turnover &lt; Rs 6M (MRA §2.6)</div>
+          <div class="field-hint">TDS exempt if &lt; Rs 6M — leave 0 if unknown (MRA §2.6)</div>
         </div>
 
         <div class="field">
           <div class="field-label"><i class="fa-solid fa-users"></i> Tax category</div>
           <div class="toggle-group">
             <button class="toggle-btn active" id="btn-catA" onclick="setCategory('A')">
-              <i class="fa-solid fa-user"></i> Cat. A <small style="font-size:0.68rem;opacity:0.6">Rs 390k</small>
+              <i class="fa-solid fa-user"></i> Cat. A <small>Rs 390k</small>
             </button>
             <button class="toggle-btn" id="btn-catB" onclick="setCategory('B')">
-              <i class="fa-solid fa-user-plus"></i> Cat. B <small style="font-size:0.68rem;opacity:0.6">Rs 500k+</small>
+              <i class="fa-solid fa-user-plus"></i> Cat. B <small>Rs 500k+</small>
             </button>
           </div>
-          <div class="field-hint">Cat. A = single · Cat. B = with dependents (estimate)</div>
+          <div class="field-hint">Cat. A = single · Cat. B = with dependents</div>
         </div>
 
-        <button class="calc-btn" onclick="showResults()">
+        <button class="calc-btn" id="calc-btn" onclick="showResults()">
           <i class="fa-solid fa-chart-pie"></i> See Results
         </button>
       </div>
     </div>
 
-    <!-- ── VIEW 2 : RESULTS ── -->
+    <!-- RESULTS -->
     <div class="view" id="view-results">
-
       <button class="back-btn" onclick="showSim()">
         <i class="fa-solid fa-arrow-left"></i> Edit parameters
       </button>
@@ -426,12 +383,11 @@ const ogImage = `${url}/og.png`;
       <div class="card">
         <div class="card-title"><i class="fa-solid fa-chart-pie"></i> Results</div>
 
-        <div id="modeBanner" class="mode-banner societe">
+        <div id="modeBanner" class="banner accent">
           <i class="fa-solid fa-circle-check"></i>
           <span id="bannerText">Company lease — TDS 7.5%</span>
         </div>
-
-        <div id="exemptBanner" style="display:none;padding:9px 12px;border-radius:var(--rs);font-size:0.78rem;font-weight:600;margin-bottom:14px;background:rgba(26,143,94,0.08);color:#1a8f5e;border:1px solid rgba(26,143,94,0.22)">
+        <div id="exemptBanner" class="banner green" style="display:none">
           <i class="fa-solid fa-circle-exclamation"></i>
           <span id="exemptText"></span>
         </div>
@@ -454,8 +410,8 @@ const ogImage = `${url}/og.png`;
           <div class="rrow strong"><span class="lbl">Net to owner</span><span class="val v-green" id="r-net">—</span></div>
         </div>
 
-        <div class="rblock b-teal">
-          <div class="block-title c-teal"><i class="fa-solid fa-key"></i> Owner — annual</div>
+        <div class="rblock b-mint">
+          <div class="block-title c-mint"><i class="fa-solid fa-key"></i> Owner — annual</div>
           <div class="rrow"><span class="lbl">Rental / yr</span><span class="val" id="r-rental-annual">—</span></div>
           <div class="rrow"><span class="lbl">Other income / yr</span><span class="val v-muted" id="r-other-income">—</span></div>
           <div class="rrow strong"><span class="lbl">Total income</span><span class="val" id="r-total-income">—</span></div>
@@ -470,10 +426,8 @@ const ogImage = `${url}/og.png`;
         </div>
       </div>
 
-      <!-- COMPARE -->
       <div class="card full">
         <div class="card-title"><i class="fa-solid fa-scale-balanced"></i> Company vs Individual</div>
-
         <div class="compare-cols">
           <div class="rblock b-accent" style="flex:1;min-width:0">
             <div class="block-title c-accent"><i class="fa-solid fa-building"></i> Company lease</div>
@@ -482,15 +436,14 @@ const ogImage = `${url}/og.png`;
             <div class="rrow"><span class="lbl">Net tax / yr</span><span class="val" id="c-tax-soc">—</span></div>
             <div class="rrow strong"><span class="lbl">Cash-in / yr</span><span class="val v-green" id="c-cash-soc">—</span></div>
           </div>
-          <div class="rblock b-teal" style="flex:1;min-width:0">
-            <div class="block-title c-teal"><i class="fa-solid fa-person"></i> Individual lease</div>
+          <div class="rblock b-mint" style="flex:1;min-width:0">
+            <div class="block-title c-mint"><i class="fa-solid fa-person"></i> Individual lease</div>
             <div class="rrow"><span class="lbl">Monthly to owner</span><span class="val" id="c-net-per">—</span></div>
             <div class="rrow"><span class="lbl">TDS → MRA / yr</span><span class="val v-muted" id="c-tds-per">—</span></div>
             <div class="rrow"><span class="lbl">Net tax / yr</span><span class="val" id="c-tax-per">—</span></div>
             <div class="rrow strong"><span class="lbl">Cash-in / yr</span><span class="val v-green" id="c-cash-per">—</span></div>
           </div>
         </div>
-
         <div class="rblock b-amber">
           <div class="block-title c-amber"><i class="fa-solid fa-arrow-right-arrow-left"></i> Differential</div>
           <div class="rrow">
@@ -499,31 +452,34 @@ const ogImage = `${url}/og.png`;
           </div>
           <div class="rrow">
             <span class="lbl">Tenant gross cost</span>
-            <span class="val v-muted">Identical — TDS is tax routing, not an extra charge</span>
+            <span class="val v-muted">Identical — TDS is tax routing, not extra charge</span>
           </div>
         </div>
-
         <p class="note">
           <strong>Model:</strong> Rs 390k exemption (Cat. A) · Rs 500k (Cat. B, estimate) · 15% flat · +5% solidarity above Rs 3M.
-          TDS not applicable if tenant turnover &lt; Rs 6M or tax &lt; Rs 500.
+          TDS exempt if company turnover &lt; Rs 6M (exc. construction) or calculated TDS &lt; Rs 500.
           Source: <a href="https://www.mra.mu/download/TDSGuide.pdf" target="_blank" rel="noopener">MRA TDS Guide 2025</a>.
         </p>
       </div>
+    </div>
 
-    </div><!-- /view-results -->
-
-  </div><!-- /desktop-grid -->
-</div><!-- /page -->
+  </div>
+</div>
 
 <footer class="footer">
-  <span>Based on <a href="https://www.mra.mu" target="_blank" rel="noopener">MRA</a> data · For informational purposes only.</span>
-  <a class="qontab-badge" href="https://qontab.com" target="_blank" rel="noopener">
-    <i class="fa-solid fa-chart-column"></i> Qontab
-  </a>
+  <div class="footer-inner">
+    <div class="footer-left">
+      Based on <a href="https://www.mra.mu" target="_blank" rel="noopener">MRA TDS Guide 2025</a> ·
+      For informational purposes only · Not tax advice
+    </div>
+    <a class="qontab-btn" href="https://qontab.com" target="_blank" rel="noopener">
+      <i class="fa-solid fa-chart-column"></i> Qontab — AI Accountancy
+    </a>
+  </div>
 </footer>
 
-<script is:inline>
-let mode = 'societe', ownerType = 'resident', taxCategory = 'A';
+<script>
+var mode = 'societe', ownerType = 'resident', taxCategory = 'A';
 
 function showResults() {
   update();
@@ -537,171 +493,155 @@ function showSim() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function mauritiusTax(income, category) {
-  if (income <= 0) return 0;
-  const exempt = category === 'B' ? 500000 : 390000;
-  let tax = Math.max(0, income - exempt) * 0.15;
-  if (income > 3000000) tax += (income - 3000000) * 0.05;
-  return Math.max(0, tax);
-}
-
 function setMode(m) {
   mode = m;
-  ['societe','perso','mixte'].forEach(x => {
-    const btn = document.getElementById('btn-'+x);
-    if (btn) btn.classList.toggle('active', m === x);
+  ['societe','perso','mixte'].forEach(function(x) {
+    var btn = document.getElementById('btn-'+x);
+    if (btn) { btn.classList.toggle('active', m === x); }
   });
-  // Show/hide split slider
-  const splitField = document.getElementById('field-split');
-  if (splitField) splitField.style.display = (m === 'mixte') ? 'block' : 'none';
+  document.getElementById('field-split').style.display = (m === 'mixte') ? 'block' : 'none';
 }
-
 function onSplitChange() {
-  const v = parseInt(document.getElementById('splitPct').value);
+  var v = parseInt(document.getElementById('splitPct').value);
   document.getElementById('split-label').textContent = v + '%';
-  const indv = 100 - v;
-  document.getElementById('split-desc').textContent =
-    v + '% company · ' + indv + '% individual';
+  document.getElementById('split-desc').textContent = v + '% co · ' + (100-v) + '% indiv';
 }
-
 function setOwner(o) {
   ownerType = o;
-  ['resident','nonresident'].forEach(x => {
-    const btn = document.getElementById('btn-'+x);
+  ['resident','nonresident'].forEach(function(x) {
+    var btn = document.getElementById('btn-'+x);
     btn.classList.toggle('active', o === x);
-    btn.classList.toggle('teal', o === x && x === 'nonresident');
+    btn.classList.toggle('mint', o === x && x === 'nonresident');
   });
 }
 function setCategory(c) {
   taxCategory = c;
-  ['A','B'].forEach(x =>
-    document.getElementById('btn-cat'+x).classList.toggle('active', c === x));
+  ['A','B'].forEach(function(x) {
+    document.getElementById('btn-cat'+x).classList.toggle('active', c === x);
+  });
 }
 
-function fmt(n, suffix='') {
+function mauritiusTax(income, category) {
+  if (income <= 0) return 0;
+  var exempt = category === 'B' ? 500000 : 390000;
+  var tax = Math.max(0, income - exempt) * 0.15;
+  if (income > 3000000) tax += (income - 3000000) * 0.05;
+  return Math.max(0, tax);
+}
+function fmt(n, suffix) {
+  suffix = suffix || '';
   return (n < 0 ? '− ' : '') + 'Rs\u00a0' + Math.abs(Math.round(n)).toLocaleString('fr-FR') + suffix;
 }
 function pct(n) { return (Math.round(n * 10) / 10) + '%'; }
 
-// Returns TDS for a given loyer based on mode + split
-function calcTDS(loyer, tdsRate, mode, splitPct) {
-  if (mode === 'perso')   return 0;
-  if (mode === 'societe') return loyer * tdsRate;
-  // mixte: only the company portion triggers TDS
+function calcTDS(loyer, tdsRate, m, splitPct) {
+  if (m === 'perso')   return 0;
+  if (m === 'societe') return loyer * tdsRate;
   return loyer * (splitPct / 100) * tdsRate;
 }
-
-function calcScenario(loyer, tdsRate, hasTDS, splitPct, otherIncome, category) {
-  const annualRent = loyer * 12;
-  // For compare we use fixed hasTDS bool; for main calc we use mode
-  const companyShare = hasTDS === true ? 1 : hasTDS === false ? 0 : splitPct / 100;
-  const annualTDS   = annualRent * companyShare * tdsRate;
-  const netMonthly  = loyer - loyer * companyShare * tdsRate;
-  const taxWith     = mauritiusTax(otherIncome + annualRent, category);
-  const taxWithout  = mauritiusTax(otherIncome, category);
-  const rentalTax   = Math.max(0, taxWith - taxWithout);
-  const netTax      = Math.max(0, rentalTax - annualTDS);
-  const annualCash  = annualRent - rentalTax;
-  const effRate     = annualRent > 0 ? rentalTax / annualRent : 0;
-  return { annualRent, annualTDS, netMonthly, taxWith, rentalTax, netTax, annualCash, effRate };
+function calcScenario(loyer, tdsRate, companyShare, otherIncome, category) {
+  var annualRent = loyer * 12;
+  var annualTDS  = annualRent * companyShare * tdsRate;
+  var netMonthly = loyer - loyer * companyShare * tdsRate;
+  var taxWith    = mauritiusTax(otherIncome + annualRent, category);
+  var taxWithout = mauritiusTax(otherIncome, category);
+  var rentalTax  = Math.max(0, taxWith - taxWithout);
+  var netTax     = Math.max(0, rentalTax - annualTDS);
+  var annualCash = annualRent - rentalTax;
+  var effRate    = annualRent > 0 ? rentalTax / annualRent : 0;
+  return { annualRent: annualRent, annualTDS: annualTDS, netMonthly: netMonthly,
+           taxWith: taxWith, rentalTax: rentalTax, netTax: netTax,
+           annualCash: annualCash, effRate: effRate };
 }
-
 function set(id, val, cls) {
-  const el = document.getElementById(id);
+  var el = document.getElementById(id);
   if (!el) return;
   el.textContent = val;
   if (cls !== undefined) el.className = 'val' + (cls ? ' ' + cls : '');
 }
 
 function update() {
-  const loyer       = parseFloat(document.getElementById('loyer').value) || 0;
-  const otherIncome = parseFloat(document.getElementById('otherIncome').value) || 0;
-  const turnover    = parseFloat(document.getElementById('turnover').value) || 0;
-  const splitPct    = parseInt(document.getElementById('splitPct').value) || 50;
-  const tdsRate     = ownerType === 'resident' ? 0.075 : 0.10;
-  const tpct        = tdsRate * 100;
+  var loyer       = parseFloat(document.getElementById('loyer').value) || 0;
+  var otherIncome = parseFloat(document.getElementById('otherIncome').value) || 0;
+  var turnover    = parseFloat(document.getElementById('turnover').value) || 0;
+  var splitPct    = parseInt(document.getElementById('splitPct').value) || 50;
+  var tdsRate     = ownerType === 'resident' ? 0.075 : 0.10;
+  var tpct        = tdsRate * 100;
 
-  // ── Exemption checks (MRA §2.6) ──
-  // 1. Company turnover < Rs 6M → exempt (unless construction, not tracked here)
-  // 2. TDS amount < Rs 500 → exempt
-  const tdsRaw = calcTDS(loyer, tdsRate, mode, splitPct); // monthly TDS before exemption
-  const exemptTurnover = mode !== 'perso' && turnover > 0 && turnover < 6000000;
-  const exemptMinTax   = mode !== 'perso' && tdsRaw > 0 && tdsRaw < 500;
-  const isExempt = exemptTurnover || exemptMinTax;
+  // Exemption checks
+  var tdsRaw          = calcTDS(loyer, tdsRate, mode, splitPct);
+  var exemptTurnover  = mode !== 'perso' && turnover > 0 && turnover < 6000000;
+  var exemptMinTax    = mode !== 'perso' && tdsRaw > 0 && tdsRaw < 500;
+  var isExempt        = exemptTurnover || exemptMinTax;
+  var tdsAmount       = isExempt ? 0 : tdsRaw;
+  var annualTDS       = tdsAmount * 12;
+  var netMonthly      = loyer - tdsAmount;
 
-  // Show/hide exempt banner
-  const exemptBanner = document.getElementById('exemptBanner');
-  const exemptText   = document.getElementById('exemptText');
+  // Exempt banner
+  var eb = document.getElementById('exemptBanner');
+  var et = document.getElementById('exemptText');
   if (isExempt) {
-    exemptBanner.style.display = 'flex';
-    exemptBanner.style.gap = '8px';
-    exemptBanner.style.alignItems = 'center';
-    if (exemptTurnover) {
-      exemptText.textContent = `TDS exempt — company turnover Rs ${turnover.toLocaleString('fr-FR')} < Rs 6M (MRA §2.6.ii)`;
-    } else {
-      exemptText.textContent = `TDS exempt — calculated TDS Rs ${Math.round(tdsRaw).toLocaleString('fr-FR')} < Rs 500 minimum (MRA §2.1)`;
-    }
+    eb.style.display = 'flex';
+    et.textContent = exemptTurnover
+      ? 'TDS exempt — turnover Rs\u00a0' + Math.round(turnover).toLocaleString('fr-FR') + ' < Rs\u00a06M (MRA §2.6.ii)'
+      : 'TDS exempt — TDS Rs\u00a0' + Math.round(tdsRaw).toLocaleString('fr-FR') + ' < Rs\u00a0500 minimum (MRA §2.1)';
   } else {
-    exemptBanner.style.display = 'none';
+    eb.style.display = 'none';
   }
 
-  // Effective TDS (zero if exempt)
-  const tdsAmount  = isExempt ? 0 : tdsRaw;
-  const annualTDS  = tdsAmount * 12;
-  const netMonthly = loyer - tdsAmount;
-  const banner = document.getElementById('modeBanner');
-  const bannerText = document.getElementById('bannerText');
+  // Mode banner
+  var banner = document.getElementById('modeBanner');
+  var bannerText = document.getElementById('bannerText');
   if (mode === 'societe') {
-    banner.className = 'mode-banner societe';
-    bannerText.textContent = isExempt ? `Company lease — TDS exempt` : `Company lease — TDS ${tpct}%`;
+    banner.className = 'banner accent';
+    bannerText.textContent = isExempt ? 'Company lease — TDS exempt' : 'Company lease — TDS ' + tpct + '%';
   } else if (mode === 'perso') {
-    banner.className = 'mode-banner perso';
+    banner.className = 'banner mint';
     bannerText.textContent = 'Individual lease — No TDS';
   } else {
-    banner.className = 'mode-banner societe';
-    bannerText.textContent = isExempt ? `Mixed — TDS exempt` : `Mixed — ${splitPct}% company (TDS ${tpct}%) · ${100-splitPct}% individual`;
+    banner.className = 'banner accent';
+    bannerText.textContent = isExempt
+      ? 'Mixed — TDS exempt'
+      : 'Mixed — ' + splitPct + '% company (TDS ' + tpct + '%) · ' + (100-splitPct) + '% individual';
   }
   document.getElementById('r-tds-rate').textContent = tpct + '%';
 
-  // Split row visibility
-  const rowSplit = document.getElementById('row-split');
-  if (rowSplit) rowSplit.style.display = mode === 'mixte' ? 'flex' : 'none';
+  // Split row
+  var rowSplit = document.getElementById('row-split');
+  rowSplit.style.display = mode === 'mixte' ? 'flex' : 'none';
   if (mode === 'mixte') {
     document.getElementById('r-split-pct').textContent = splitPct + '%';
     set('r-split-amt', fmt(loyer * splitPct / 100));
   }
 
-  // Tenant
   set('r-brut', fmt(loyer));
   set('r-tds',    tdsAmount > 0 ? '− ' + fmt(tdsAmount) : 'Rs\u00a00', tdsAmount > 0 ? 'v-red' : 'v-muted');
   set('r-remise', tdsAmount > 0 ? fmt(tdsAmount) : 'Rs\u00a00', tdsAmount > 0 ? 'v-red' : 'v-muted');
   set('r-net', fmt(netMonthly), 'v-green');
-  ['row-tds','row-remise'].forEach(id =>
-    document.getElementById(id).style.opacity = tdsAmount > 0 ? '1' : '0.35');
+  document.getElementById('row-tds').style.opacity = tdsAmount > 0 ? '1' : '0.35';
+  document.getElementById('row-remise').style.opacity = tdsAmount > 0 ? '1' : '0.35';
 
-  // Owner annual — use actual annualTDS
-  const annualRent = loyer * 12;
-  const taxWith    = mauritiusTax(otherIncome + annualRent, taxCategory);
-  const taxWithout = mauritiusTax(otherIncome, taxCategory);
-  const rentalTax  = Math.max(0, taxWith - taxWithout);
-  const netTax     = Math.max(0, rentalTax - annualTDS);
-  const annualCash = annualRent - rentalTax;
-  const effRate    = annualRent > 0 ? rentalTax / annualRent : 0;
+  var annualRent = loyer * 12;
+  var taxWith    = mauritiusTax(otherIncome + annualRent, taxCategory);
+  var taxWithout = mauritiusTax(otherIncome, taxCategory);
+  var rentalTax  = Math.max(0, taxWith - taxWithout);
+  var netTax     = Math.max(0, rentalTax - annualTDS);
+  var annualCash = annualRent - rentalTax;
+  var effRate    = annualRent > 0 ? rentalTax / annualRent : 0;
 
   set('r-rental-annual', fmt(annualRent, '\u00a0/ yr'));
   set('r-other-income',  fmt(otherIncome, '\u00a0/ yr'), 'v-muted');
   set('r-total-income',  fmt(otherIncome + annualRent, '\u00a0/ yr'));
   set('r-tax-total',     fmt(taxWith, '\u00a0/ yr'), 'v-red');
   set('r-tax-rental',    fmt(rentalTax, '\u00a0/ yr'), 'v-red');
-  set('r-credit',  annualTDS > 0 ? '+ ' + fmt(annualTDS, '\u00a0/ yr') : 'Rs\u00a00', annualTDS > 0 ? 'v-green' : 'v-muted');
+  set('r-credit',        annualTDS > 0 ? '+ ' + fmt(annualTDS, '\u00a0/ yr') : 'Rs\u00a00', annualTDS > 0 ? 'v-green' : 'v-muted');
   set('r-nettax',        fmt(netTax, '\u00a0/ yr'));
   set('r-effrate',       pct(effRate * 100) + ' on rental', 'v-muted');
   set('r-cashowner',     fmt(annualCash, '\u00a0/ yr'), 'v-green');
   document.getElementById('row-credit').style.opacity = annualTDS > 0 ? '1' : '0.35';
 
-  // Compare — always pure company vs pure individual
-  const sc = calcScenario(loyer, tdsRate, true,  splitPct, otherIncome, taxCategory);
-  const sp = calcScenario(loyer, tdsRate, false, splitPct, otherIncome, taxCategory);
+  var sc = calcScenario(loyer, tdsRate, 1,      otherIncome, taxCategory);
+  var sp = calcScenario(loyer, tdsRate, 0,      otherIncome, taxCategory);
 
   set('c-net-soc',  fmt(sc.netMonthly, '\u00a0/ mo'));
   set('c-tds-soc',  fmt(sc.annualTDS,  '\u00a0/ yr'), 'v-red');
@@ -712,8 +652,8 @@ function update() {
   set('c-tax-per',  fmt(sp.netTax,     '\u00a0/ yr'));
   set('c-cash-per', fmt(sp.annualCash, '\u00a0/ yr'), 'v-green');
 
-  const diff = sc.annualCash - sp.annualCash;
-  const diffEl = document.getElementById('diff-owner');
+  var diff = sc.annualCash - sp.annualCash;
+  var diffEl = document.getElementById('diff-owner');
   if (Math.abs(diff) < 50) {
     diffEl.textContent = 'Identical — timing differs only';
     diffEl.className = 'val v-muted';
@@ -721,7 +661,7 @@ function update() {
     diffEl.textContent = (diff >= 0 ? '+' : '') + fmt(diff) + (diff >= 0 ? ' (company)' : ' (individual)');
     diffEl.className = 'val ' + (diff >= 0 ? 'v-green' : 'v-red');
   }
+}
 </script>
-
 </body>
 </html>
