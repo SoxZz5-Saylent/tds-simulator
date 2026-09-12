@@ -76,27 +76,44 @@
 
     /* STEPPER */
     .stepper-wrap {
-      max-width: 640px; margin: 0 auto; padding: 24px 16px 0;
+      max-width: 640px; margin: 0 auto; padding: 20px 16px 0;
     }
     .stepper {
-      display: flex; align-items: center; gap: 0; margin-bottom: 28px;
+      display: flex; align-items: center; gap: 0; margin-bottom: 24px;
     }
     .step {
       display: flex; align-items: center; gap: 6px;
       font-size: 0.72rem; font-weight: 600; color: var(--text-3);
+      flex-shrink: 0;
     }
     .step.active { color: var(--mint); }
     .step.done   { color: var(--green); }
     .step-num {
-      width: 24px; height: 24px; border-radius: 99px;
+      width: 26px; height: 26px; border-radius: 99px;
       background: var(--border); color: var(--text-3);
       display: flex; align-items: center; justify-content: center;
       font-size: 0.65rem; font-weight: 700; flex-shrink: 0;
+      transition: background 0.2s, color 0.2s;
     }
     .step.active .step-num { background: var(--mint); color: #fff; }
     .step.done   .step-num { background: var(--green); color: #fff; }
-    .step-line { flex: 1; height: 2px; background: var(--border); margin: 0 6px; }
-    .step.done + .step-line, .step.active + .step-line { background: var(--mint-bd); }
+    .step-label { transition: all 0.2s; }
+
+    /* Mobile: collapse non-active labels */
+    @media (max-width: 560px) {
+      .step-label { display: none; }
+      .step.active .step-label { display: inline; }
+      /* Active step gets flex: 1 to fill space */
+      .step.active { flex: 1; }
+    }
+
+    .step-line {
+      flex: 1; height: 2px; background: var(--border); margin: 0 4px;
+      transition: background 0.2s; min-width: 6px;
+    }
+    .step.done ~ .step-line { background: var(--mint-bd); }
+    /* Line after done step */
+    .step-line.done { background: var(--mint-bd); }
 
     /* PAGE */
     .page { max-width: 640px; margin: 0 auto; padding: 0 16px 64px; }
@@ -314,15 +331,15 @@
 <!-- STEPPER -->
 <div class="stepper-wrap">
   <div class="stepper" id="stepper">
-    <div class="step active" id="st-1"><div class="step-num">1</div> Context</div>
-    <div class="step-line"></div>
-    <div class="step" id="st-2"><div class="step-num">2</div> Categories</div>
-    <div class="step-line"></div>
-    <div class="step" id="st-3"><div class="step-num">3</div> Amounts</div>
-    <div class="step-line"></div>
-    <div class="step" id="st-4"><div class="step-num">4</div> Results</div>
-    <div class="step-line"></div>
-    <div class="step" id="st-5"><div class="step-num">5</div> Documents</div>
+    <div class="step active" id="st-1"><div class="step-num" id="sn-1">1</div> <span class="step-label">Context</span></div>
+    <div class="step-line" id="sl-1"></div>
+    <div class="step" id="st-2"><div class="step-num" id="sn-2">2</div> <span class="step-label">Categories</span></div>
+    <div class="step-line" id="sl-2"></div>
+    <div class="step" id="st-3"><div class="step-num" id="sn-3">3</div> <span class="step-label">Amounts</span></div>
+    <div class="step-line" id="sl-3"></div>
+    <div class="step" id="st-4"><div class="step-num" id="sn-4">4</div> <span class="step-label">Results</span></div>
+    <div class="step-line" id="sl-4"></div>
+    <div class="step" id="st-5"><div class="step-num" id="sn-5">5</div> <span class="step-label">Documents</span></div>
   </div>
 </div>
 
@@ -783,11 +800,18 @@ function goTo(step) {
     var v = document.getElementById('view-'+s);
     if (v) v.classList.toggle('active', s === step);
     var st = document.getElementById('st-'+s);
+    var sn = document.getElementById('sn-'+s);
+    var sl = document.getElementById('sl-'+s);
     if (st) {
       st.classList.remove('active','done');
-      if (s === step)      st.classList.add('active');
-      else if (s < step)   st.classList.add('done');
+      if (s === step)    st.classList.add('active');
+      else if (s < step) st.classList.add('done');
     }
+    if (sn) {
+      if (s < step) sn.innerHTML = '<i class="fa-solid fa-check" style="font-size:0.6rem"></i>';
+      else          sn.textContent = String(s);
+    }
+    if (sl) sl.classList.toggle('done', s < step);
   });
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
