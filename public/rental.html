@@ -603,11 +603,13 @@ function showResults() {
   document.getElementById('view-sim').classList.remove('active');
   document.getElementById('view-results').classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  lsSave();
 }
 function showSim() {
   document.getElementById('view-results').classList.remove('active');
   document.getElementById('view-sim').classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  lsSave();
 }
 
 function setMode(m) {
@@ -789,6 +791,7 @@ function lsSave() {
   try {
     var state = {
       ts: Date.now(),
+      view: document.getElementById('view-results').classList.contains('active') ? 'results' : 'sim',
       loyer: document.getElementById('loyer').value,
       otherIncome: document.getElementById('otherIncome').value,
       turnover: document.getElementById('turnover').value,
@@ -806,16 +809,16 @@ function lsLoad() {
     var s = JSON.parse(raw);
     if (Date.now() - s.ts > LS_TTL) { localStorage.removeItem(LS_KEY_RENTAL); return; }
 
-    // Restore inputs
     if (s.loyer)       { document.getElementById('loyer').value = s.loyer; }
     if (s.otherIncome) { document.getElementById('otherIncome').value = s.otherIncome; }
     if (s.turnover)    { document.getElementById('turnover').value = s.turnover; }
     if (s.splitPct)    { document.getElementById('splitPct').value = s.splitPct; onSplitChange(); }
-
-    // Restore toggles
     if (s.mode)        setMode(s.mode);
     if (s.ownerType)   setOwner(s.ownerType);
     if (s.taxCategory) setCategory(s.taxCategory);
+
+    // Restore view
+    if (s.view === 'results') setTimeout(function() { showResults(); }, 0);
   } catch(e) {}
 }
 

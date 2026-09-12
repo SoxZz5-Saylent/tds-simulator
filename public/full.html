@@ -794,8 +794,10 @@ function renderResults() {
 }
 
 function goTo(step) {
+  window._currentStep = step;
   if (step === 3) renderAmtFields();
   if (step === 4) renderResults();
+  lsSaveFull();
   [1,2,3,4,5].forEach(function(s) {
     var v = document.getElementById('view-'+s);
     if (v) v.classList.toggle('active', s === step);
@@ -1173,6 +1175,7 @@ function lsSaveFull() {
     });
     var state = {
       ts: Date.now(),
+      step: window._currentStep || 1,
       role: role, entity: entity, residency: residency, period: period,
       turnover: document.getElementById('ctx-turnover').value,
       selected: selected,
@@ -1199,6 +1202,11 @@ function lsLoadFull() {
 
     // Restore amounts after fields rendered (done lazily in renderAmtFields)
     window._savedAmounts = s.amounts || {};
+
+    // Restore step — go directly to where user was
+    if (s.step && s.step > 1) {
+      setTimeout(function() { goTo(s.step); }, 0);
+    }
   } catch(e) {}
 }
 
