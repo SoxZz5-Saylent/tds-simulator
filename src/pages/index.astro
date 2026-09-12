@@ -1,0 +1,738 @@
+---
+const title = "TDS Simulator — Mauritius Rental Tax Calculator";
+const description = "Calculate Tax Deduction at Source (TDS) on rental income in Mauritius. Compare company vs individual lease — owner fiscal impact, MRA credit, net cash flow. Free, instant, based on MRA TDS Guide 2025.";
+const url = "https://tds.qontab.com";
+const ogImage = `${url}/og.png`;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{title}</title>
+  <meta name="description" content={description}/>
+  <meta name="keywords" content="TDS Mauritius, Tax Deduction at Source, MRA, rental tax Mauritius, simulateur TDS Maurice, bail société Maurice, impôt loyer île Maurice"/>
+  <link rel="canonical" href={url}/>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content={url}/>
+  <meta property="og:title" content={title}/>
+  <meta property="og:description" content={description}/>
+  <meta property="og:image" content={ogImage}/>
+  <meta property="og:locale" content="en_MU"/>
+  <meta property="og:site_name" content="Qontab"/>
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content={title}/>
+  <meta name="twitter:description" content={description}/>
+  <meta name="twitter:image" content={ogImage}/>
+
+  <!-- Schema.org structured data -->
+  <script type="application/ld+json">
+  {JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "TDS Simulator — Mauritius Rental Tax",
+    "url": url,
+    "description": description,
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "MUR" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Qontab",
+      "url": "https://qontab.com"
+    }
+  })}
+  </script>
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+  <style>
+    :root {
+      --bg:         #f8f9fc;
+      --surface:    #ffffff;
+      --surface2:   #f1f3f8;
+      --border:     #e2e5f0;
+      --border-2:   #cdd2e8;
+      --accent:     #5b51e8;
+      --accent-bg:  rgba(91,81,232,0.07);
+      --accent-bdr: rgba(91,81,232,0.22);
+      --teal:       #0a9e87;
+      --teal-bg:    rgba(10,158,135,0.07);
+      --teal-bdr:   rgba(10,158,135,0.22);
+      --red:        #d94f5c;
+      --red-bg:     rgba(217,79,92,0.06);
+      --red-bdr:    rgba(217,79,92,0.2);
+      --amber:      #c47d10;
+      --amber-bg:   rgba(196,125,16,0.07);
+      --amber-bdr:  rgba(196,125,16,0.2);
+      --green:      #1a8f5e;
+      --text:       #1a1d2e;
+      --text-2:     #525775;
+      --text-3:     #9097b8;
+      --r:          14px;
+      --rs:         9px;
+      --shadow:     0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 15px; scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+      padding: 36px 16px 64px;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      max-width: 960px;
+      margin: 0 auto 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .h-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-bdr);
+      border-radius: 99px;
+      padding: 3px 10px;
+      margin-bottom: 8px;
+    }
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .header p {
+      margin-top: 6px;
+      font-size: 0.82rem;
+      color: var(--text-2);
+      line-height: 1.55;
+      max-width: 520px;
+    }
+    .mra-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.73rem;
+      font-weight: 500;
+      color: var(--text-2);
+      text-decoration: none;
+      background: var(--surface);
+      border: 1px solid var(--border-2);
+      border-radius: 8px;
+      padding: 8px 13px;
+      transition: all 0.15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+      box-shadow: var(--shadow);
+    }
+    .mra-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── LAYOUT ── */
+    .wrap { max-width: 960px; margin: 0 auto; }
+
+    /* Summary strip */
+    .summary-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 560px) { .summary-strip { grid-template-columns: 1fr; } }
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+    }
+    .kpi-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-3);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 6px;
+    }
+    .kpi-value {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .kpi-sub { font-size: 0.72rem; color: var(--text-3); margin-top: 3px; }
+
+    /* Main grid */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 680px) { .main-grid { grid-template-columns: 1fr; } }
+    .full { grid-column: 1 / -1; }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-3);
+      margin-bottom: 18px;
+    }
+
+    /* ── FIELD ── */
+    .field { margin-bottom: 16px; }
+    .field:last-child { margin-bottom: 0; }
+    .field-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 7px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .field-label i { color: var(--text-3); font-size: 0.72rem; }
+    .field-hint { font-size: 0.68rem; color: var(--text-3); margin-top: 4px; line-height: 1.5; }
+
+    input[type=number] {
+      width: 100%;
+      background: var(--bg);
+      border: 1.5px solid var(--border-2);
+      border-radius: var(--rs);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      -moz-appearance: textfield;
+      min-height: 48px;
+    }
+    input[type=number]::-webkit-inner-spin-button { display: none; }
+    input[type=number]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(91,81,232,0.1);
+    }
+
+    /* ── SECTION SEP ── */
+    .section-sep { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+    .section-label {
+      font-size: 0.65rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--text-3); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    /* ── TOGGLE ── */
+    .toggle-group { display: flex; gap: 6px; }
+    .toggle-btn {
+      flex: 1;
+      min-height: 44px;
+      padding: 8px 10px;
+      border-radius: var(--rs);
+      border: 1.5px solid var(--border-2);
+      background: var(--bg);
+      color: var(--text-2);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .toggle-btn:hover:not(.active) {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-bg);
+    }
+    .toggle-btn.active {
+      background: var(--accent-bg);
+      color: var(--accent);
+      border-color: var(--accent-bdr);
+      font-weight: 600;
+    }
+    .toggle-btn.active.teal {
+      background: var(--teal-bg);
+      color: var(--teal);
+      border-color: var(--teal-bdr);
+    }
+    .pill {
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 99px;
+      letter-spacing: 0.03em;
+    }
+    .pill-red   { background: rgba(217,79,92,0.1);  color: var(--red); }
+    .pill-green { background: rgba(26,143,94,0.1);  color: var(--green); }
+
+    /* ── MODE BANNER ── */
+    .mode-banner {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 13px; border-radius: var(--rs);
+      font-size: 0.8rem; font-weight: 600; margin-bottom: 16px;
+      transition: all 0.2s;
+    }
+    .mode-banner.societe {
+      background: var(--accent-bg);
+      color: var(--accent);
+      border: 1px solid var(--accent-bdr);
+    }
+    .mode-banner.perso {
+      background: var(--teal-bg);
+      color: var(--teal);
+      border: 1px solid var(--teal-bdr);
+    }
+
+    /* ── RESULT BLOCKS ── */
+    .rblock {
+      border-radius: var(--rs);
+      padding: 14px 15px;
+      margin-bottom: 10px;
+    }
+    .rblock:last-child { margin-bottom: 0; }
+    .rblock.b-accent { background: var(--accent-bg); border: 1px solid var(--accent-bdr); }
+    .rblock.b-teal   { background: var(--teal-bg);   border: 1px solid var(--teal-bdr); }
+    .rblock.b-amber  { background: var(--amber-bg);  border: 1px solid var(--amber-bdr); }
+    .rblock.b-neutral{ background: var(--surface2);  border: 1px solid var(--border); }
+
+    .block-title {
+      font-size: 0.67rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 11px; display: flex; align-items: center; gap: 6px;
+    }
+    .block-title.c-accent { color: var(--accent); }
+    .block-title.c-teal   { color: var(--teal); }
+    .block-title.c-amber  { color: var(--amber); }
+
+    .rrow {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      padding: 5px 0;
+      font-size: 0.83rem;
+    }
+    .rrow + .rrow { border-top: 1px solid rgba(0,0,0,0.05); }
+    .rrow.strong .lbl,
+    .rrow.strong .val { font-weight: 700; font-size: 0.88rem; }
+    .rrow .lbl { color: var(--text-2); }
+    .rrow .sub { font-size: 0.67rem; color: var(--text-3); display: block; margin-top: 1px; }
+    .rrow .val { font-weight: 600; white-space: nowrap; }
+    .rrow.indent .lbl { padding-left: 14px; color: var(--text-3); font-size: 0.78rem; }
+    .rrow.indent .val { font-size: 0.78rem; }
+
+    .v-accent { color: var(--accent); }
+    .v-teal   { color: var(--teal); }
+    .v-red    { color: var(--red); }
+    .v-green  { color: var(--green); }
+    .v-amber  { color: var(--amber); }
+    .v-muted  { color: var(--text-3); }
+    .v-text   { color: var(--text); }
+    /* ── COMPARE ── */
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    @media (max-width: 640px) { .compare-grid { grid-template-columns: 1fr; } }
+
+    /* ── NOTE ── */
+    .note {
+      font-size: 0.72rem;
+      color: var(--text-3);
+      line-height: 1.65;
+      margin-top: 14px;
+      border-left: 2px solid var(--border-2);
+      padding-left: 12px;
+    }
+    .note strong { color: var(--text-2); }
+    .note a { color: var(--text-3); text-decoration: underline; }
+    .note a:hover { color: var(--accent); }
+
+    /* ── FOOTER ── */
+    .footer {
+      max-width: 960px;
+      margin: 40px auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 0.72rem;
+      color: var(--text-3);
+    }
+    .footer a { color: var(--text-3); text-decoration: none; }
+    .footer a:hover { color: var(--accent); }
+    .qontab-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--surface);
+      border: 1px solid var(--border-2);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-weight: 600;
+      transition: all 0.15s;
+    }
+    .qontab-badge:hover { border-color: var(--accent); color: var(--accent); }
+
+    .div-row { border: none; border-top: 1px dashed var(--border-2); margin: 5px 0; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div>
+    <div class="h-badge"><i class="fa-solid fa-landmark"></i> MRA 2025</div>
+    <h1>TDS Rental Simulator</h1>
+    <p>Estimate Tax Deduction at Source on rental income in Mauritius — company vs individual tenant, owner fiscal impact and net cash flow.</p>
+  </div>
+  <a class="mra-btn" href="https://www.mra.mu/download/TDSGuide.pdf" target="_blank" rel="noopener">
+    <i class="fa-solid fa-file-lines"></i> MRA TDS Guide 2025 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.62rem"></i>
+  </a>
+</header>
+
+<div class="wrap">
+
+  <!-- KPI STRIP -->
+  <div class="summary-strip">
+    <div class="kpi">
+      <div class="kpi-label"><i class="fa-solid fa-arrow-down-to-bracket"></i> Net paid to owner / mo</div>
+      <div class="kpi-value v-accent" id="kpi-net">—</div>
+      <div class="kpi-sub" id="kpi-mode">Company lease · TDS 7.5%</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><i class="fa-solid fa-circle-dollar-to-slot"></i> Owner annual cash-in</div>
+      <div class="kpi-value v-green" id="kpi-cash">—</div>
+      <div class="kpi-sub">After tax (approx.)</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><i class="fa-solid fa-percent"></i> Effective rate on rental</div>
+      <div class="kpi-value v-amber" id="kpi-rate">—</div>
+      <div class="kpi-sub">Marginal attribution</div>
+    </div>
+  </div>
+
+  <div class="main-grid">
+
+    <!-- INPUTS -->
+    <div class="card">
+      <div class="card-title"><i class="fa-solid fa-sliders"></i> Parameters</div>
+
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-coins"></i> Monthly gross rent (MUR)</div>
+        <input type="number" id="loyer" value="125000" min="0" step="1000"/>
+      </div>
+
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-building-user"></i> Tenant type</div>
+        <div class="toggle-group">
+          <button class="toggle-btn active" id="btn-societe" onclick="setMode('societe')">
+            <i class="fa-solid fa-building"></i> Company <span class="pill pill-red">TDS</span>
+          </button>
+          <button class="toggle-btn" id="btn-perso" onclick="setMode('perso')">
+            <i class="fa-solid fa-person"></i> Individual <span class="pill pill-green">No TDS</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-house"></i> Owner residency</div>
+        <div class="toggle-group">
+          <button class="toggle-btn active" id="btn-resident" onclick="setOwner('resident')">
+            <i class="fa-solid fa-flag"></i> Resident <small style="font-size:0.68rem;opacity:0.7;">7.5%</small>
+          </button>
+          <button class="toggle-btn" id="btn-nonresident" onclick="setOwner('nonresident')">
+            <i class="fa-solid fa-earth-africa"></i> Non-resident <small style="font-size:0.68rem;opacity:0.7;">10%</small>
+          </button>
+        </div>
+      </div>
+
+      <hr class="section-sep"/>
+      <div class="section-label"><i class="fa-solid fa-user-tie"></i> Owner fiscal profile</div>
+
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-briefcase"></i> Other annual income (MUR)</div>
+        <input type="number" id="otherIncome" value="0" min="0" step="50000"/>
+        <div class="field-hint">Salary, business, other — excluding this rental</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-users"></i> Tax category</div>
+        <div class="toggle-group">
+          <button class="toggle-btn active" id="btn-catA" onclick="setCategory('A')">
+            <i class="fa-solid fa-user"></i> Cat. A <small style="font-size:0.68rem;opacity:0.7;">Rs 390k</small>
+          </button>
+          <button class="toggle-btn" id="btn-catB" onclick="setCategory('B')">
+            <i class="fa-solid fa-user-plus"></i> Cat. B <small style="font-size:0.68rem;opacity:0.7;">Rs 500k+</small>
+          </button>
+        </div>
+        <div class="field-hint">Cat. A = single / no dependent · Cat. B = with dependents (estimate)</div>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="card">
+      <div class="card-title"><i class="fa-solid fa-chart-pie"></i> Results</div>
+
+      <div id="modeBanner" class="mode-banner societe">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="bannerText">Company lease — TDS 7.5% applicable</span>
+      </div>
+
+      <div class="rblock b-accent">
+        <div class="block-title c-accent"><i class="fa-solid fa-building"></i> Tenant — monthly cash flow</div>
+        <div class="rrow"><span class="lbl">Gross rent</span><span class="val v-text" id="r-brut">—</span></div>
+        <div class="rrow" id="row-tds">
+          <span class="lbl">TDS withheld <span class="sub" id="r-tds-rate">7.5%</span></span>
+          <span class="val v-red" id="r-tds">—</span>
+        </div>
+        <div class="rrow" id="row-remise">
+          <span class="lbl">→ Remitted to MRA <span class="sub">before 20th</span></span>
+          <span class="val v-red" id="r-remise">—</span>
+        </div>
+        <div class="rrow strong">
+          <span class="lbl">Net paid to owner</span>
+          <span class="val v-green" id="r-net">—</span>
+        </div>
+      </div>
+
+      <div class="rblock b-teal">
+        <div class="block-title c-teal"><i class="fa-solid fa-key"></i> Owner — annual fiscal</div>
+        <div class="rrow"><span class="lbl">Rental income / yr</span><span class="val v-text" id="r-rental-annual">—</span></div>
+        <div class="rrow"><span class="lbl">Other income / yr</span><span class="val v-muted" id="r-other-income">—</span></div>
+        <div class="rrow strong"><span class="lbl">Total income</span><span class="val v-text" id="r-total-income">—</span></div>
+        <hr class="div-row"/>
+        <div class="rrow"><span class="lbl">Tax on total <span class="sub">MRA approx.</span></span><span class="val v-red" id="r-tax-total">—</span></div>
+        <div class="rrow indent"><span class="lbl"><i class="fa-solid fa-arrow-right" style="font-size:0.6rem"></i> Marginal on rental</span><span class="val v-red" id="r-tax-rental">—</span></div>
+        <div class="rrow" id="row-credit"><span class="lbl">TDS credit (advance)</span><span class="val v-green" id="r-credit">—</span></div>
+        <div class="rrow strong"><span class="lbl">Net tax to settle</span><span class="val v-text" id="r-nettax">—</span></div>
+        <div class="rrow indent"><span class="lbl">Effective rate on rental</span><span class="val v-muted" id="r-effrate">—</span></div>
+        <hr class="div-row"/>
+        <div class="rrow strong"><span class="lbl">Owner net cash-in / yr</span><span class="val v-green" id="r-cashowner">—</span></div>
+      </div>
+    </div>
+
+    <!-- COMPARISON -->
+    <div class="card full">
+      <div class="card-title"><i class="fa-solid fa-scale-balanced"></i> Comparison — Company vs Individual</div>
+
+      <div class="compare-grid">
+        <div class="rblock b-accent">
+          <div class="block-title c-accent"><i class="fa-solid fa-building"></i> Company lease</div>
+          <div class="rrow"><span class="lbl">Monthly to owner</span><span class="val v-text" id="c-net-soc">—</span></div>
+          <div class="rrow"><span class="lbl">Annual TDS → MRA</span><span class="val v-red" id="c-tds-soc">—</span></div>
+          <div class="rrow"><span class="lbl">Net tax to settle</span><span class="val v-text" id="c-tax-soc">—</span></div>
+          <div class="rrow strong"><span class="lbl">Annual cash-in</span><span class="val v-green" id="c-cash-soc">—</span></div>
+        </div>
+        <div class="rblock b-teal">
+          <div class="block-title c-teal"><i class="fa-solid fa-person"></i> Individual lease</div>
+          <div class="rrow"><span class="lbl">Monthly to owner</span><span class="val v-text" id="c-net-per">—</span></div>
+          <div class="rrow"><span class="lbl">Annual TDS → MRA</span><span class="val v-muted" id="c-tds-per">—</span></div>
+          <div class="rrow"><span class="lbl">Net tax to settle</span><span class="val v-text" id="c-tax-per">—</span></div>
+          <div class="rrow strong"><span class="lbl">Annual cash-in</span><span class="val v-green" id="c-cash-per">—</span></div>
+        </div>
+      </div>
+
+      <div class="rblock b-amber">
+        <div class="block-title c-amber"><i class="fa-solid fa-arrow-right-arrow-left"></i> Differential (annual cash-in)</div>
+        <div class="rrow">
+          <span class="lbl">Cash-in advantage<span class="sub">TDS = tax advance · recoverable if TDS &gt; tax due</span></span>
+          <span class="val" id="diff-owner">—</span>
+        </div>
+        <div class="rrow">
+          <span class="lbl">Tenant gross cost</span>
+          <span class="val v-muted">Identical — TDS is tax routing, not an extra charge</span>
+        </div>
+      </div>
+
+      <p class="note">
+        <strong>Approximate model:</strong> Rs 390,000 personal exemption (Cat. A) · Rs 500,000 (Cat. B estimate) ·
+        15% flat rate · +5% solidarity levy above Rs 3,000,000 · marginal attribution = tax(rental + other) − tax(other only).<br/>
+        TDS does not apply if tenant turnover &lt; Rs 6M, or if calculated tax &lt; Rs 500.
+        Always consult a tax advisor for exact filings.
+        Source: <a href="https://www.mra.mu/download/TDSGuide.pdf" target="_blank" rel="noopener">MRA TDS Guide 2025</a>.
+      </p>
+    </div>
+
+  </div><!-- /.main-grid -->
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <span>Built with data from the <a href="https://www.mra.mu" target="_blank" rel="noopener">Mauritius Revenue Authority</a> · For informational purposes only.</span>
+    <a class="qontab-badge" href="https://qontab.com" target="_blank" rel="noopener">
+      <i class="fa-solid fa-chart-column"></i> Qontab
+    </a>
+  </footer>
+
+</div><!-- /.wrap -->
+
+<script>
+let mode = 'societe', ownerType = 'resident', taxCategory = 'A';
+
+function mauritiusTax(income, category) {
+  if (income <= 0) return 0;
+  const exempt = category === 'B' ? 500000 : 390000;
+  const taxable = Math.max(0, income - exempt);
+  let tax = taxable * 0.15;
+  if (income > 3000000) tax += (income - 3000000) * 0.05;
+  return Math.max(0, tax);
+}
+
+function setMode(m) {
+  mode = m;
+  ['societe','perso'].forEach(x =>
+    document.getElementById('btn-'+x).classList.toggle('active', m === x));
+  update();
+}
+function setOwner(o) {
+  ownerType = o;
+  ['resident','nonresident'].forEach(x => {
+    const btn = document.getElementById('btn-'+x);
+    btn.classList.toggle('active', o === x);
+    btn.classList.toggle('teal', o === x && x === 'nonresident');
+  });
+  update();
+}
+function setCategory(c) {
+  taxCategory = c;
+  ['A','B'].forEach(x =>
+    document.getElementById('btn-cat'+x).classList.toggle('active', c === x));
+  update();
+}
+
+function fmt(n, suffix='') {
+  const abs = Math.abs(Math.round(n));
+  return (n < 0 ? '− ' : '') + 'Rs\u00a0' + abs.toLocaleString('fr-FR') + suffix;
+}
+function pct(n) { return (Math.round(n * 10) / 10) + '%'; }
+
+function calcScenario(loyer, tdsRate, hasTDS, otherIncome, category) {
+  const annualRent  = loyer * 12;
+  const annualTDS   = hasTDS ? annualRent * tdsRate : 0;
+  const netMonthly  = loyer - (hasTDS ? loyer * tdsRate : 0);
+  const taxWith     = mauritiusTax(otherIncome + annualRent, category);
+  const taxWithout  = mauritiusTax(otherIncome, category);
+  const rentalTax   = Math.max(0, taxWith - taxWithout);
+  const netTax      = Math.max(0, rentalTax - annualTDS);
+  const annualCash  = annualRent - rentalTax;
+  const effRate     = annualRent > 0 ? rentalTax / annualRent : 0;
+  return { annualRent, annualTDS, netMonthly, taxWith, rentalTax, netTax, annualCash, effRate };
+}
+
+function update() {
+  const loyer       = parseFloat(document.getElementById('loyer').value) || 0;
+  const otherIncome = parseFloat(document.getElementById('otherIncome').value) || 0;
+  const tdsRate     = ownerType === 'resident' ? 0.075 : 0.10;
+  const hasTDS      = mode === 'societe';
+  const tpct        = tdsRate * 100;
+
+  document.getElementById('r-tds-rate').textContent = tpct + '%';
+
+  const banner = document.getElementById('modeBanner');
+  const bannerText = document.getElementById('bannerText');
+  banner.className = 'mode-banner ' + (hasTDS ? 'societe' : 'perso');
+  bannerText.textContent = hasTDS
+    ? `Company lease — TDS ${tpct}% applicable`
+    : 'Individual lease — No TDS';
+
+  const s = calcScenario(loyer, tdsRate, hasTDS, otherIncome, taxCategory);
+
+  // KPIs
+  document.getElementById('kpi-net').textContent   = fmt(s.netMonthly);
+  document.getElementById('kpi-mode').textContent  = hasTDS
+    ? `Company lease · TDS ${tpct}%` : 'Individual lease · No TDS';
+  document.getElementById('kpi-cash').textContent  = fmt(s.annualCash, '\u00a0/ yr');
+  document.getElementById('kpi-rate').textContent  = pct(s.effRate * 100);
+
+  // Tenant
+  document.getElementById('r-brut').textContent    = fmt(loyer);
+  document.getElementById('r-tds').textContent     = hasTDS ? '− ' + fmt(loyer * tdsRate) : 'Rs\u00a00';
+  document.getElementById('r-remise').textContent  = hasTDS ? fmt(loyer * tdsRate) : 'Rs\u00a00';
+  document.getElementById('r-net').textContent     = fmt(s.netMonthly);
+  ['row-tds','row-remise'].forEach(id =>
+    document.getElementById(id).style.opacity = hasTDS ? '1' : '0.35');
+
+  // Owner annual
+  document.getElementById('r-rental-annual').textContent = fmt(s.annualRent, '\u00a0/ yr');
+  document.getElementById('r-other-income').textContent  = fmt(otherIncome, '\u00a0/ yr');
+  document.getElementById('r-total-income').textContent  = fmt(otherIncome + s.annualRent, '\u00a0/ yr');
+  document.getElementById('r-tax-total').textContent     = fmt(s.taxWith, '\u00a0/ yr');
+  document.getElementById('r-tax-rental').textContent    = fmt(s.rentalTax, '\u00a0/ yr');
+  document.getElementById('r-credit').textContent        = hasTDS ? '+ ' + fmt(s.annualTDS, '\u00a0/ yr') : 'Rs\u00a00';
+  document.getElementById('r-nettax').textContent        = fmt(s.netTax, '\u00a0/ yr');
+  document.getElementById('r-effrate').textContent       = pct(s.effRate * 100) + ' on rental';
+  document.getElementById('r-cashowner').textContent     = fmt(s.annualCash, '\u00a0/ yr');
+  document.getElementById('row-credit').style.opacity = hasTDS ? '1' : '0.35';
+
+  // Comparison
+  const sc = calcScenario(loyer, tdsRate, true,  otherIncome, taxCategory);
+  const sp = calcScenario(loyer, tdsRate, false, otherIncome, taxCategory);
+
+  document.getElementById('c-net-soc').textContent  = fmt(sc.netMonthly, '\u00a0/ mo');
+  document.getElementById('c-tds-soc').textContent  = fmt(sc.annualTDS,  '\u00a0/ yr');
+  document.getElementById('c-tax-soc').textContent  = fmt(sc.netTax,     '\u00a0/ yr');
+  document.getElementById('c-cash-soc').textContent = fmt(sc.annualCash, '\u00a0/ yr');
+  document.getElementById('c-net-per').textContent  = fmt(sp.netMonthly, '\u00a0/ mo');
+  document.getElementById('c-tds-per').textContent  = 'Rs\u00a00';
+  document.getElementById('c-tax-per').textContent  = fmt(sp.netTax,     '\u00a0/ yr');
+  document.getElementById('c-cash-per').textContent = fmt(sp.annualCash, '\u00a0/ yr');
+
+  const diff = sc.annualCash - sp.annualCash;
+  const diffEl = document.getElementById('diff-owner');
+  if (Math.abs(diff) < 50) {
+    diffEl.textContent = 'Identical final cash-in — timing differs (TDS smooths monthly vs annual)';
+    diffEl.className = 'val v-muted';
+  } else {
+    diffEl.textContent = (diff >= 0 ? '+' : '') + fmt(diff) + (diff >= 0 ? ' (company lease)' : ' (individual lease)');
+    diffEl.className = 'val ' + (diff >= 0 ? 'v-green' : 'v-red');
+  }
+}
+
+update();
+['loyer','otherIncome'].forEach(id =>
+  document.getElementById(id).addEventListener('input', update));
+</script>
+
+</body>
+</html>
