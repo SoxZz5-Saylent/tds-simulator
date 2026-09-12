@@ -321,6 +321,8 @@
     <div class="step" id="st-3"><div class="step-num">3</div> Amounts</div>
     <div class="step-line"></div>
     <div class="step" id="st-4"><div class="step-num">4</div> Results</div>
+    <div class="step-line"></div>
+    <div class="step" id="st-5"><div class="step-num">5</div> Documents</div>
   </div>
 </div>
 
@@ -479,8 +481,108 @@
 
     <div class="nav-row">
       <button class="btn-secondary" onclick="goTo(3)"><i class="fa-solid fa-arrow-left"></i> Edit amounts</button>
+      <button class="btn-primary" onclick="goTo(5)">
+        <i class="fa-solid fa-file-lines"></i> Generate documents
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP 5: DOCUMENTS -->
+  <div class="view" id="view-5">
+    <div class="card">
+      <div class="card-title"><i class="fa-solid fa-file-lines"></i> Step 5 of 5 — Official Documents</div>
+      <div class="card-head">Annex 1 &amp; Annex 2</div>
+      <div class="card-sub">
+        Fill in the payer and payee details to generate the MRA-prescribed documents
+        (Eighth &amp; Ninth Schedule, Income Tax Regulations).
+      </div>
+
+      <hr class="section-sep"/>
+      <div class="section-label"><i class="fa-solid fa-building"></i> Payer (you)</div>
+
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-signature"></i> Full name / Company name</div>
+        <input type="text" id="p-name" placeholder="e.g. Acme Ltd" autocomplete="organization"/>
+      </div>
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-hashtag"></i> Tax Account Number (TAN)</div>
+        <input type="text" id="p-tan" placeholder="e.g. C12345678"/>
+      </div>
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-registered"></i> Business Registration Number (BRN)</div>
+        <input type="text" id="p-brn" placeholder="e.g. C12345678"/>
+      </div>
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-user-tie"></i> Signatory name (BLOCK LETTERS)</div>
+        <input type="text" id="p-signatory" placeholder="e.g. JEAN DUPONT" style="text-transform:uppercase"/>
+      </div>
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-id-badge"></i> Capacity</div>
+        <input type="text" id="p-capacity" placeholder="e.g. Director, Manager"/>
+      </div>
+
+      <hr class="section-sep"/>
+      <div class="section-label"><i class="fa-solid fa-user"></i> Payee (recipient)</div>
+
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-user"></i> Surname</div>
+        <input type="text" id="py-surname" placeholder="e.g. MARTIN" style="text-transform:uppercase"/>
+      </div>
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-user"></i> Other names</div>
+        <input type="text" id="py-firstname" placeholder="e.g. Sophie"/>
+      </div>
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-id-card"></i> National Identity Card Number (NIC)</div>
+        <input type="text" id="py-nic" placeholder="e.g. B1234567890123"/>
+        <div class="field-hint">If NIC not available, enter residential address</div>
+      </div>
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-hashtag"></i> Tax Account Number (TAN) — optional</div>
+        <input type="text" id="py-tan" placeholder="Optional"/>
+      </div>
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-registered"></i> BRN — optional</div>
+        <input type="text" id="py-brn" placeholder="Optional"/>
+      </div>
+
+      <hr class="section-sep"/>
+      <div class="section-label"><i class="fa-solid fa-calendar"></i> Income year</div>
+      <div class="field">
+        <div class="field-label"><i class="fa-solid fa-calendar-days"></i> Income year ended 30 June</div>
+        <select id="income-year">
+          <option value="2025">2025</option>
+          <option value="2024">2024</option>
+          <option value="2026">2026</option>
+        </select>
+      </div>
+
+      <hr class="section-sep"/>
+      <div class="section-label"><i class="fa-solid fa-file-export"></i> Generate</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px">
+        <button class="btn-primary" onclick="genAnnex1()">
+          <i class="fa-solid fa-file-pdf"></i> Annex 1 PDF
+        </button>
+        <button class="btn-primary" onclick="genAnnex2()">
+          <i class="fa-solid fa-file-pdf"></i> Annex 2 PDF
+        </button>
+      </div>
+      <button class="btn-secondary" style="width:100%" onclick="genCSV()">
+        <i class="fa-solid fa-file-csv"></i> Export CSV (e-filing)
+      </button>
+
+      <div id="doc-notice" style="display:none;margin-top:14px;padding:10px 12px;background:var(--mint-bg);border:1px solid var(--mint-bd);border-radius:var(--rs);font-size:0.76rem;color:var(--text-2);line-height:1.6">
+        <strong style="color:var(--mint)"><i class="fa-solid fa-circle-check"></i> Document generated.</strong>
+        Print in duplicate (Annex 1). Sign and retain one copy, give one to the payee.
+        Submit Annex 2 via <a href="https://eservices.mra.mu" target="_blank" rel="noopener" style="color:var(--mint)">MRA e-Services</a> by <strong>15 August</strong>.
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-secondary" onclick="goTo(4)"><i class="fa-solid fa-arrow-left"></i> Back to results</button>
       <button class="btn-primary" onclick="window.location='/'">
-        <i class="fa-solid fa-house"></i> Back to home
+        <i class="fa-solid fa-house"></i> Home
       </button>
     </div>
   </div>
@@ -677,12 +779,15 @@ function renderResults() {
 function goTo(step) {
   if (step === 3) renderAmtFields();
   if (step === 4) renderResults();
-  [1,2,3,4].forEach(function(s) {
-    document.getElementById('view-'+s).classList.toggle('active', s === step);
+  [1,2,3,4,5].forEach(function(s) {
+    var v = document.getElementById('view-'+s);
+    if (v) v.classList.toggle('active', s === step);
     var st = document.getElementById('st-'+s);
-    st.classList.remove('active','done');
-    if (s === step)      st.classList.add('active');
-    else if (s < step)   st.classList.add('done');
+    if (st) {
+      st.classList.remove('active','done');
+      if (s === step)      st.classList.add('active');
+      else if (s < step)   st.classList.add('done');
+    }
   });
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -713,6 +818,325 @@ function initNumInputEl(el, defaultVal) {
   });
 }
 
+// ── Step 5: jsPDF document generation ──
+function getDocData() {
+  var r = computeResults();
+  var year = document.getElementById('income-year').value;
+  var today = new Date().toLocaleDateString('en-GB');
+  return {
+    year: year,
+    today: today,
+    payer: {
+      name:      document.getElementById('p-name').value.trim() || '_______________',
+      tan:       document.getElementById('p-tan').value.trim()  || '_______________',
+      brn:       document.getElementById('p-brn').value.trim()  || '_______________',
+      signatory: (document.getElementById('p-signatory').value.trim() || '_______________').toUpperCase(),
+      capacity:  document.getElementById('p-capacity').value.trim() || '_______________',
+    },
+    payee: {
+      surname:   (document.getElementById('py-surname').value.trim()   || '_______________').toUpperCase(),
+      firstname:  document.getElementById('py-firstname').value.trim() || '_______________',
+      nic:        document.getElementById('py-nic').value.trim()       || '_______________',
+      tan:        document.getElementById('py-tan').value.trim()       || '',
+      brn:        document.getElementById('py-brn').value.trim()       || '',
+    },
+    rows: r.rows,
+    totalTDS: r.totalTDS,
+  };
+}
+
+function fmtRsPdf(n) {
+  return 'Rs ' + Math.round(n).toLocaleString('en-US').replace(/,/g, ' ');
+}
+
+function loadJsPDF(cb) {
+  if (window.jspdf) { cb(); return; }
+  var s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  s.onload = function() { cb(); };
+  document.head.appendChild(s);
+}
+
+function drawHeader(doc, title, subtitle) {
+  // Header bar
+  doc.setFillColor(0, 182, 175);
+  doc.rect(0, 0, 210, 18, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(11); doc.setFont('helvetica', 'bold');
+  doc.text('MAURITIUS REVENUE AUTHORITY — TDS DOCUMENTATION', 14, 8);
+  doc.setFontSize(8); doc.setFont('helvetica', 'normal');
+  doc.text('tds.qontab.com · For informational purposes only · Verify with a tax advisor', 14, 13.5);
+
+  // Title block
+  doc.setTextColor(26, 29, 46);
+  doc.setFontSize(13); doc.setFont('helvetica', 'bold');
+  doc.text(title, 14, 28);
+  doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+  doc.setTextColor(82, 87, 122);
+  doc.text(subtitle, 14, 34);
+
+  // Thin mint line
+  doc.setDrawColor(0, 182, 175); doc.setLineWidth(0.5);
+  doc.line(14, 37, 196, 37);
+}
+
+function drawField(doc, label, value, x, y, w) {
+  doc.setFontSize(7.5); doc.setFont('helvetica', 'bold'); doc.setTextColor(82,87,122);
+  doc.text(label, x, y);
+  doc.setFont('helvetica', 'normal'); doc.setTextColor(26,29,46);
+  doc.setFontSize(9);
+  doc.text(value, x, y + 5);
+  doc.setDrawColor(203,208,232); doc.setLineWidth(0.3);
+  doc.line(x, y + 6.5, x + (w || 80), y + 6.5);
+}
+
+function genAnnex1() {
+  loadJsPDF(function() {
+    var d = getDocData();
+    var doc = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4' });
+
+    drawHeader(doc,
+      'ANNEX 1 — EIGHTH SCHEDULE · Regulation 22B(1)',
+      'Statement of Income Received for Income Year Ended 30 June ' + d.year +
+      '  |  To be given in duplicate to payee by 15 August');
+
+    var y = 44;
+
+    // Section 1 — Payer
+    doc.setFillColor(245, 247, 251);
+    doc.roundedRect(14, y, 182, 32, 2, 2, 'F');
+    doc.setFontSize(8); doc.setFont('helvetica', 'bold'); doc.setTextColor(0,182,175);
+    doc.text('1. PAYER', 17, y+6);
+    drawField(doc, 'Name', d.payer.name,       17, y+10, 80);
+    drawField(doc, 'TAN',  d.payer.tan,        105, y+10, 40);
+    drawField(doc, 'BRN',  d.payer.brn,        155, y+10, 40);
+    y += 37;
+
+    // Section 2 — Payee
+    doc.setFillColor(245, 247, 251);
+    doc.roundedRect(14, y, 182, 38, 2, 2, 'F');
+    doc.setFontSize(8); doc.setFont('helvetica', 'bold'); doc.setTextColor(0,182,175);
+    doc.text('2. PAYEE', 17, y+6);
+    drawField(doc, 'Surname',    d.payee.surname,    17, y+10, 55);
+    drawField(doc, 'Other names',d.payee.firstname,  80, y+10, 55);
+    drawField(doc, 'NIC / Address', d.payee.nic,     17, y+22, 80);
+    drawField(doc, 'TAN (if applicable)', d.payee.tan || '—', 105, y+22, 40);
+    drawField(doc, 'BRN (if applicable)', d.payee.brn || '—', 155, y+22, 40);
+    y += 44;
+
+    // Section 3 — Table
+    doc.setFontSize(8); doc.setFont('helvetica', 'bold'); doc.setTextColor(0,182,175);
+    doc.text('3. AMOUNT PAID / CREDITED AND TAX DEDUCTED', 14, y+5);
+    y += 9;
+
+    // Table header
+    doc.setFillColor(0, 182, 175);
+    doc.rect(14, y, 182, 7, 'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(7.5); doc.setFont('helvetica','bold');
+    doc.text('Nature of Payment', 16, y+4.8);
+    doc.text('Gross Amount (Rs)', 120, y+4.8);
+    doc.text('TDS Remitted (Rs)', 158, y+4.8);
+    y += 7;
+
+    var PAYMENT_CATS = [
+      'Royalties', 'Rent', 'Payments to contractor/subcontractor',
+      'Payments to architects, engineers, surveyors, etc.',
+      'Payments to attorneys / barristers / legal consultants',
+      'Payments to medical services providers',
+      'Payments for procurement of goods/services',
+      'Payments to non-resident for services in Mauritius',
+      'Management fees', 'Commission',
+      'Payments to consultants', 'Security / cleaning / pest services'
+    ];
+
+    // Map our categories to official labels
+    var catMap = {
+      rent: 'Rent', contractor: 'Payments to contractor/subcontractor',
+      services: 'Payments to architects, engineers, surveyors, etc.',
+      consultant: 'Payments to consultants', commission: 'Commission',
+      mgmt: 'Management fees', security: 'Security / cleaning / pest services',
+      nonres_svc: 'Payments to non-resident for services in Mauritius',
+    };
+
+    var rowData = {};
+    d.rows.forEach(function(r) { rowData[catMap[r.cat.id] || r.cat.name] = r; });
+
+    PAYMENT_CATS.forEach(function(cat, i) {
+      var even = i % 2 === 0;
+      doc.setFillColor(even ? 250 : 255, even ? 250 : 255, even ? 253 : 255);
+      doc.rect(14, y, 182, 7, 'F');
+      doc.setDrawColor(227, 230, 240); doc.setLineWidth(0.2);
+      doc.line(14, y+7, 196, y+7);
+
+      doc.setFontSize(7.5); doc.setFont('helvetica','normal'); doc.setTextColor(26,29,46);
+      // Checkbox
+      doc.setDrawColor(180,232,230); doc.rect(15, y+1.5, 4, 4);
+      var match = rowData[cat];
+      if (match) {
+        doc.setTextColor(0,182,175); doc.setFontSize(8); doc.setFont('helvetica','bold');
+        doc.text('✓', 15.8, y+5);
+        doc.setFont('helvetica','normal'); doc.setTextColor(26,29,46); doc.setFontSize(7.5);
+      }
+      doc.text(cat, 21, y+4.8);
+      doc.text(match ? fmtRsPdf(match.base) : '—', 120, y+4.8);
+      var tdsStr = match ? (match.exempt ? 'Exempt' : fmtRsPdf(match.tds)) : '—';
+      if (match && match.exempt) doc.setTextColor(26,143,94);
+      doc.text(tdsStr, 158, y+4.8);
+      doc.setTextColor(26,29,46);
+      y += 7;
+    });
+
+    // Total row
+    doc.setFillColor(0,182,175);
+    doc.rect(14, y, 182, 8, 'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(8.5); doc.setFont('helvetica','bold');
+    doc.text('TOTAL TDS TO REMIT', 16, y+5.2);
+    doc.text(fmtRsPdf(d.totalTDS), 158, y+5.2);
+    y += 14;
+
+    // Section 4 — Declaration
+    if (y > 240) { doc.addPage(); y = 20; }
+    doc.setFillColor(245, 247, 251);
+    doc.roundedRect(14, y, 182, 40, 2, 2, 'F');
+    doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(0,182,175);
+    doc.text('4. DECLARATION OF PAYER', 17, y+6);
+    doc.setFont('helvetica','normal'); doc.setTextColor(26,29,46); doc.setFontSize(8);
+    var decl = 'I, ' + d.payer.signatory + ', do hereby declare that the information I have given in this statement is true and correct.';
+    doc.text(doc.splitTextToSize(decl, 170), 17, y+13);
+    doc.setFontSize(7.5);
+    doc.text('Signature: ________________________', 17, y+26);
+    doc.text('Capacity: ' + d.payer.capacity, 110, y+26);
+    doc.text('Date: ' + d.today, 17, y+33);
+    doc.text('Seal:', 110, y+33);
+
+    // Footer
+    doc.setFontSize(7); doc.setTextColor(144,151,184);
+    doc.text('Generated by tds.qontab.com · ' + d.today + ' · Not a substitute for professional tax advice', 14, 290);
+
+    doc.save('Annex1_TDS_' + d.year + '.pdf');
+    document.getElementById('doc-notice').style.display = 'block';
+  });
+}
+
+function genAnnex2() {
+  loadJsPDF(function() {
+    var d = getDocData();
+    var doc = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4' });
+
+    drawHeader(doc,
+      'ANNEX 2 — NINTH SCHEDULE · Regulation 22B(2)',
+      'Statement of Amount Paid and Tax Deducted for Income Year Ended 30 June ' + d.year);
+
+    var y = 44;
+
+    // Section 1 — Payer ID
+    doc.setFillColor(245,247,251);
+    doc.roundedRect(14, y, 182, 28, 2, 2, 'F');
+    doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(0,182,175);
+    doc.text('1. IDENTIFICATION OF PAYER', 17, y+6);
+    drawField(doc, 'Full Name', d.payer.name,  17, y+10, 120);
+    drawField(doc, 'TAN', d.payer.tan,          17, y+20, 55);
+    drawField(doc, 'BRN', d.payer.brn,          80, y+20, 55);
+    y += 34;
+
+    // Section 2 — Declaration
+    doc.setFillColor(245,247,251);
+    doc.roundedRect(14, y, 182, 36, 2, 2, 'F');
+    doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(0,182,175);
+    doc.text('2. DECLARATION OF PAYER', 17, y+6);
+    doc.setFont('helvetica','normal'); doc.setTextColor(26,29,46); doc.setFontSize(8);
+    var decl2 = 'I, ' + d.payer.signatory + ', do hereby declare that the information given in the attached statement is complete, true and correct and that the tax deducted has been duly remitted to MRA.';
+    doc.text(doc.splitTextToSize(decl2, 170), 17, y+13);
+    doc.setFontSize(7.5);
+    doc.text('Signature: ________________________', 17, y+26);
+    doc.text('Capacity: ' + d.payer.capacity, 110, y+26);
+    doc.text('Date: ' + d.today, 17, y+32);
+    y += 42;
+
+    // Section 3 — Payee table
+    doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(0,182,175);
+    doc.text('3. STATEMENT SHOWING DETAILS OF PAYMENT MADE', 14, y+5);
+    y += 9;
+
+    // Table header
+    doc.setFillColor(0,182,175);
+    doc.rect(14, y, 182, 8, 'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(7); doc.setFont('helvetica','bold');
+    var cols = [14, 42, 72, 100, 120, 152, 178];
+    var heads = ['Surname','Other Names','NIC/Address','TAN','Nature','Gross (Rs)','TDS (Rs)'];
+    heads.forEach(function(h,i) { doc.text(h, cols[i]+1, y+5.2); });
+    y += 8;
+
+    d.rows.forEach(function(row, ri) {
+      var even = ri % 2 === 0;
+      doc.setFillColor(even ? 250 : 255, even ? 250 : 255, even ? 253 : 255);
+      doc.rect(14, y, 182, 8, 'F');
+      doc.setDrawColor(227,230,240); doc.setLineWidth(0.2);
+      doc.line(14, y+8, 196, y+8);
+      doc.setTextColor(26,29,46); doc.setFont('helvetica','normal'); doc.setFontSize(7);
+      var vals = [
+        d.payee.surname, d.payee.firstname, d.payee.nic,
+        d.payee.tan || '—', row.cat.name,
+        fmtRsPdf(row.base),
+        row.exempt ? 'Exempt' : fmtRsPdf(row.tds)
+      ];
+      if (row.exempt) doc.setTextColor(26,143,94);
+      vals.forEach(function(v,i) {
+        if (i < vals.length - 1) doc.setTextColor(26,29,46);
+        var maxW = cols[i+1] ? cols[i+1] - cols[i] - 2 : 20;
+        doc.text(String(v).substring(0, Math.floor(maxW / 1.8)), cols[i]+1, y+5);
+      });
+      doc.setTextColor(26,29,46);
+      y += 8;
+    });
+
+    // Total
+    doc.setFillColor(0,182,175);
+    doc.rect(14, y, 182, 8, 'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(8); doc.setFont('helvetica','bold');
+    doc.text('TOTAL', 14+1, y+5.2);
+    doc.text(fmtRsPdf(d.totalTDS), 178+1, y+5.2);
+
+    doc.setFontSize(7); doc.setTextColor(144,151,184);
+    doc.text('Generated by tds.qontab.com · ' + d.today + ' · Submit via MRA e-Services by 15 August', 14, 290);
+
+    doc.save('Annex2_TDS_' + d.year + '.pdf');
+    document.getElementById('doc-notice').style.display = 'block';
+  });
+}
+
+function genCSV() {
+  var d = getDocData();
+  var lines = [
+    'Annex 2 - TDS Return - Income Year Ended 30 June ' + d.year,
+    '',
+    'PAYER',
+    '"Name","TAN","BRN"',
+    '"' + d.payer.name + '","' + d.payer.tan + '","' + d.payer.brn + '"',
+    '',
+    'PAYEE DETAILS',
+    '"Surname","Other Names","NIC/Address","TAN","BRN"',
+    '"' + d.payee.surname + '","' + d.payee.firstname + '","' + d.payee.nic + '","' + (d.payee.tan||'') + '","' + (d.payee.brn||'') + '"',
+    '',
+    'PAYMENT DETAILS',
+    '"Nature of Payment","Rate (%)","Gross Amount (Rs)","TDS Remitted (Rs)","Exempt"',
+  ];
+  d.rows.forEach(function(r) {
+    lines.push('"' + r.cat.name + '","' + r.rate + '","' + Math.round(r.base) + '","' + Math.round(r.tds) + '","' + (r.exempt?'Yes':'No') + '"');
+  });
+  lines.push('');
+  lines.push('"TOTAL TDS","","","' + Math.round(d.totalTDS) + '",""');
+
+  var csv = lines.join('\n');
+  var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href = url; a.download = 'TDS_Annex2_' + d.year + '.csv';
+  a.click(); URL.revokeObjectURL(url);
+  document.getElementById('doc-notice').style.display = 'block';
+}
+
+// Update goTo to handle step 5 — already handled above, remove duplicate override
 // Init
 renderCats();
 initNumInputEl(document.getElementById('ctx-turnover'), 0);
