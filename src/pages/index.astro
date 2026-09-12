@@ -344,6 +344,19 @@ const ogImage = `${url}/og.png`;
             <button class="toggle-btn" id="btn-perso" onclick="setMode('perso')">
               <i class="fa-solid fa-person"></i> Individual <span class="pill pill-green">No TDS</span>
             </button>
+            <button class="toggle-btn" id="btn-mixte" onclick="setMode('mixte')">
+              <i class="fa-solid fa-shuffle"></i> Mixed
+            </button>
+          </div>
+        </div>
+
+        <div class="field" id="field-split" style="display:none">
+          <div class="field-label"><i class="fa-solid fa-sliders"></i> Company share <span id="split-label" style="margin-left:4px;color:var(--accent);font-weight:700">50%</span></div>
+          <input type="range" id="splitPct" min="0" max="100" step="5" value="50" oninput="onSplitChange()" style="width:100%;accent-color:var(--accent);cursor:pointer;margin-top:2px"/>
+          <div style="display:flex;justify-content:space-between;font-size:0.68rem;color:var(--text-3);margin-top:5px">
+            <span>0% — No TDS</span>
+            <span id="split-desc">50% company · 50% individual</span>
+            <span>100% — Full TDS</span>
           </div>
         </div>
 
@@ -405,6 +418,10 @@ const ogImage = `${url}/og.png`;
         <div class="rblock b-accent">
           <div class="block-title c-accent"><i class="fa-solid fa-building"></i> Tenant — monthly</div>
           <div class="rrow"><span class="lbl">Gross rent</span><span class="val" id="r-brut">—</span></div>
+          <div class="rrow" id="row-split" style="display:none">
+            <span class="lbl">Company portion <span class="sub" id="r-split-pct">50%</span></span>
+            <span class="val" id="r-split-amt">—</span>
+          </div>
           <div class="rrow" id="row-tds">
             <span class="lbl">TDS withheld <span class="sub" id="r-tds-rate">7.5%</span></span>
             <span class="val v-red" id="r-tds">—</span>
@@ -506,11 +523,26 @@ function mauritiusTax(income, category) {
   if (income > 3000000) tax += (income - 3000000) * 0.05;
   return Math.max(0, tax);
 }
+
 function setMode(m) {
   mode = m;
-  ['societe','perso'].forEach(x =>
-    document.getElementById('btn-'+x).classList.toggle('active', m === x));
+  ['societe','perso','mixte'].forEach(x => {
+    const btn = document.getElementById('btn-'+x);
+    if (btn) btn.classList.toggle('active', m === x);
+  });
+  // Show/hide split slider
+  const splitField = document.getElementById('field-split');
+  if (splitField) splitField.style.display = (m === 'mixte') ? 'block' : 'none';
 }
+
+function onSplitChange() {
+  const v = parseInt(document.getElementById('splitPct').value);
+  document.getElementById('split-label').textContent = v + '%';
+  const indv = 100 - v;
+  document.getElementById('split-desc').textContent =
+    v + '% company · ' + indv + '% individual';
+}
+
 function setOwner(o) {
   ownerType = o;
   ['resident','nonresident'].forEach(x => {
@@ -530,16 +562,26 @@ function fmt(n, suffix='') {
 }
 function pct(n) { return (Math.round(n * 10) / 10) + '%'; }
 
-function calcScenario(loyer, tdsRate, hasTDS, otherIncome, category) {
+// Returns TDS for a given loyer based on mode + split
+function calcTDS(loyer, tdsRate, mode, splitPct) {
+  if (mode === 'perso')   return 0;
+  if (mode === 'societe') return loyer * tdsRate;
+  // mixte: only the company portion triggers TDS
+  return loyer * (splitPct / 100) * tdsRate;
+}
+
+function calcScenario(loyer, tdsRate, hasTDS, splitPct, otherIncome, category) {
   const annualRent = loyer * 12;
-  const annualTDS  = hasTDS ? annualRent * tdsRate : 0;
-  const netMonthly = loyer - (hasTDS ? loyer * tdsRate : 0);
-  const taxWith    = mauritiusTax(otherIncome + annualRent, category);
-  const taxWithout = mauritiusTax(otherIncome, category);
-  const rentalTax  = Math.max(0, taxWith - taxWithout);
-  const netTax     = Math.max(0, rentalTax - annualTDS);
-  const annualCash = annualRent - rentalTax;
-  const effRate    = annualRent > 0 ? rentalTax / annualRent : 0;
+  // For compare we use fixed hasTDS bool; for main calc we use mode
+  const companyShare = hasTDS === true ? 1 : hasTDS === false ? 0 : splitPct / 100;
+  const annualTDS   = annualRent * companyShare * tdsRate;
+  const netMonthly  = loyer - loyer * companyShare * tdsRate;
+  const taxWith     = mauritiusTax(otherIncome + annualRent, category);
+  const taxWithout  = mauritiusTax(otherIncome, category);
+  const rentalTax   = Math.max(0, taxWith - taxWithout);
+  const netTax      = Math.max(0, rentalTax - annualTDS);
+  const annualCash  = annualRent - rentalTax;
+  const effRate     = annualRent > 0 ? rentalTax / annualRent : 0;
   return { annualRent, annualTDS, netMonthly, taxWith, rentalTax, netTax, annualCash, effRate };
 }
 
@@ -553,38 +595,70 @@ function set(id, val, cls) {
 function update() {
   const loyer       = parseFloat(document.getElementById('loyer').value) || 0;
   const otherIncome = parseFloat(document.getElementById('otherIncome').value) || 0;
+  const splitPct    = parseInt(document.getElementById('splitPct').value) || 50;
   const tdsRate     = ownerType === 'resident' ? 0.075 : 0.10;
-  const hasTDS      = mode === 'societe';
   const tpct        = tdsRate * 100;
 
-  document.getElementById('r-tds-rate').textContent = tpct + '%';
+  // Banner
   const banner = document.getElementById('modeBanner');
-  banner.className = 'mode-banner ' + (hasTDS ? 'societe' : 'perso');
-  document.getElementById('bannerText').textContent =
-    hasTDS ? `Company lease — TDS ${tpct}%` : 'Individual lease — No TDS';
+  const bannerText = document.getElementById('bannerText');
+  if (mode === 'societe') {
+    banner.className = 'mode-banner societe';
+    bannerText.textContent = `Company lease — TDS ${tpct}%`;
+  } else if (mode === 'perso') {
+    banner.className = 'mode-banner perso';
+    bannerText.textContent = 'Individual lease — No TDS';
+  } else {
+    banner.className = 'mode-banner societe';
+    bannerText.textContent = `Mixed — ${splitPct}% company (TDS ${tpct}%) · ${100-splitPct}% individual`;
+  }
 
-  const s = calcScenario(loyer, tdsRate, hasTDS, otherIncome, taxCategory);
+  document.getElementById('r-tds-rate').textContent = tpct + '%';
 
+  const hasTDS = mode !== 'perso';
+  const tdsAmount = calcTDS(loyer, tdsRate, mode, splitPct);
+  const annualTDS = tdsAmount * 12;
+  const netMonthly = loyer - tdsAmount;
+
+  // Split row visibility
+  const rowSplit = document.getElementById('row-split');
+  if (rowSplit) rowSplit.style.display = mode === 'mixte' ? 'flex' : 'none';
+  if (mode === 'mixte') {
+    document.getElementById('r-split-pct').textContent = splitPct + '%';
+    set('r-split-amt', fmt(loyer * splitPct / 100));
+  }
+
+  // Tenant
   set('r-brut', fmt(loyer));
-  set('r-tds',    hasTDS ? '− ' + fmt(loyer * tdsRate) : 'Rs\u00a00', hasTDS ? 'v-red' : 'v-muted');
-  set('r-remise', hasTDS ? fmt(loyer * tdsRate) : 'Rs\u00a00', hasTDS ? 'v-red' : 'v-muted');
-  set('r-net', fmt(s.netMonthly), 'v-green');
+  set('r-tds',    tdsAmount > 0 ? '− ' + fmt(tdsAmount) : 'Rs\u00a00', tdsAmount > 0 ? 'v-red' : 'v-muted');
+  set('r-remise', tdsAmount > 0 ? fmt(tdsAmount) : 'Rs\u00a00', tdsAmount > 0 ? 'v-red' : 'v-muted');
+  set('r-net', fmt(netMonthly), 'v-green');
   ['row-tds','row-remise'].forEach(id =>
-    document.getElementById(id).style.opacity = hasTDS ? '1' : '0.35');
+    document.getElementById(id).style.opacity = tdsAmount > 0 ? '1' : '0.35');
 
-  set('r-rental-annual', fmt(s.annualRent, '\u00a0/ yr'));
+  // Owner annual — use actual annualTDS
+  const annualRent = loyer * 12;
+  const taxWith    = mauritiusTax(otherIncome + annualRent, taxCategory);
+  const taxWithout = mauritiusTax(otherIncome, taxCategory);
+  const rentalTax  = Math.max(0, taxWith - taxWithout);
+  const netTax     = Math.max(0, rentalTax - annualTDS);
+  const annualCash = annualRent - rentalTax;
+  const effRate    = annualRent > 0 ? rentalTax / annualRent : 0;
+
+  set('r-rental-annual', fmt(annualRent, '\u00a0/ yr'));
   set('r-other-income',  fmt(otherIncome, '\u00a0/ yr'), 'v-muted');
-  set('r-total-income',  fmt(otherIncome + s.annualRent, '\u00a0/ yr'));
-  set('r-tax-total',     fmt(s.taxWith, '\u00a0/ yr'), 'v-red');
-  set('r-tax-rental',    fmt(s.rentalTax, '\u00a0/ yr'), 'v-red');
-  set('r-credit',  hasTDS ? '+ ' + fmt(s.annualTDS, '\u00a0/ yr') : 'Rs\u00a00', hasTDS ? 'v-green' : 'v-muted');
-  set('r-nettax',        fmt(s.netTax, '\u00a0/ yr'));
-  set('r-effrate',       pct(s.effRate * 100) + ' on rental', 'v-muted');
-  set('r-cashowner',     fmt(s.annualCash, '\u00a0/ yr'), 'v-green');
-  document.getElementById('row-credit').style.opacity = hasTDS ? '1' : '0.35';
+  set('r-total-income',  fmt(otherIncome + annualRent, '\u00a0/ yr'));
+  set('r-tax-total',     fmt(taxWith, '\u00a0/ yr'), 'v-red');
+  set('r-tax-rental',    fmt(rentalTax, '\u00a0/ yr'), 'v-red');
+  set('r-credit',  annualTDS > 0 ? '+ ' + fmt(annualTDS, '\u00a0/ yr') : 'Rs\u00a00', annualTDS > 0 ? 'v-green' : 'v-muted');
+  set('r-nettax',        fmt(netTax, '\u00a0/ yr'));
+  set('r-effrate',       pct(effRate * 100) + ' on rental', 'v-muted');
+  set('r-cashowner',     fmt(annualCash, '\u00a0/ yr'), 'v-green');
+  document.getElementById('row-credit').style.opacity = annualTDS > 0 ? '1' : '0.35';
 
-  const sc = calcScenario(loyer, tdsRate, true,  otherIncome, taxCategory);
-  const sp = calcScenario(loyer, tdsRate, false, otherIncome, taxCategory);
+  // Compare — always pure company vs pure individual
+  const sc = calcScenario(loyer, tdsRate, true,  splitPct, otherIncome, taxCategory);
+  const sp = calcScenario(loyer, tdsRate, false, splitPct, otherIncome, taxCategory);
 
   set('c-net-soc',  fmt(sc.netMonthly, '\u00a0/ mo'));
   set('c-tds-soc',  fmt(sc.annualTDS,  '\u00a0/ yr'), 'v-red');
@@ -604,7 +678,6 @@ function update() {
     diffEl.textContent = (diff >= 0 ? '+' : '') + fmt(diff) + (diff >= 0 ? ' (company)' : ' (individual)');
     diffEl.className = 'val ' + (diff >= 0 ? 'v-green' : 'v-red');
   }
-}
 </script>
 
 </body>
