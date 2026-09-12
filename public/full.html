@@ -188,21 +188,30 @@
 
     /* AMOUNT ROWS */
     .amt-row {
-      display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
     }
-    .amt-row:last-child { margin-bottom: 0; }
+    .amt-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .amt-row-top {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+    }
     .amt-icon { color: var(--mint); font-size: 0.85rem; width: 20px; flex-shrink: 0; }
-    .amt-label { flex: 1; min-width: 0; }
-    .amt-label-text { font-size: 0.8rem; font-weight: 600; color: var(--text); }
-    .amt-label-rate { font-size: 0.68rem; color: var(--mint); }
+    .amt-label-text { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+    .amt-label-rate {
+      font-size: 0.68rem; color: var(--mint); font-weight: 600;
+      background: var(--mint-bg); border: 1px solid var(--mint-bd);
+      border-radius: 99px; padding: 1px 7px; margin-left: 6px;
+    }
     .amt-input {
-      width: 160px; flex-shrink: 0;
+      width: 100%;
       background: var(--bg); border: 1.5px solid var(--border-2); border-radius: var(--rs);
       color: var(--text); font-family: 'Inter', sans-serif;
-      font-size: 0.9rem; font-weight: 700; padding: 9px 12px; outline: none;
-      transition: border-color 0.15s; text-align: right;
+      font-size: 1.05rem; font-weight: 700; padding: 10px 14px; outline: none;
+      transition: border-color 0.15s; text-align: left;
+      -moz-appearance: textfield;
     }
-    .amt-input:focus { border-color: var(--mint); box-shadow: 0 0 0 2px var(--mint-bg); }
+    .amt-input:focus { border-color: var(--mint); box-shadow: 0 0 0 3px var(--mint-bg); }
 
     /* RESULTS */
     .result-table { width: 100%; border-collapse: collapse; }
@@ -582,10 +591,10 @@ function renderAmtFields() {
     hasSel = true;
     var rate = (residency === 'resident') ? c.rate_r : c.rate_nr;
     html += '<div class="amt-row">';
-    html += '  <i class="fa-solid ' + c.icon + ' amt-icon"></i>';
-    html += '  <div class="amt-label">';
-    html += '    <div class="amt-label-text">' + c.name + '</div>';
-    html += '    <div class="amt-label-rate">' + rate + '%</div>';
+    html += '  <div class="amt-row-top">';
+    html += '    <i class="fa-solid ' + c.icon + ' amt-icon"></i>';
+    html += '    <span class="amt-label-text">' + c.name + '</span>';
+    html += '    <span class="amt-label-rate">' + rate + '%</span>';
     html += '  </div>';
     html += '  <input type="text" inputmode="numeric" class="amt-input" id="amt-' + c.id + '" value="0" autocomplete="off" placeholder="0"/>';
     html += '</div>';
