@@ -44,7 +44,6 @@ const ogImage = `${url}/og.png`;
     :root {
       --bg:        #f7f8fb;
       --surface:   #ffffff;
-      --surface2:  #f1f3f8;
       --border:    #e3e6f0;
       --border-2:  #cbd0e8;
       --accent:    #5b51e8;
@@ -74,11 +73,11 @@ const ogImage = `${url}/og.png`;
       overflow-x: hidden;
     }
 
-    /* ── TOP BAR ── */
+    /* ── TOPBAR ── */
     .topbar {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 14px 20px;
+      padding: 13px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -87,189 +86,85 @@ const ogImage = `${url}/og.png`;
       top: 0;
       z-index: 10;
     }
-    .topbar-brand {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-    }
+    .topbar-brand { display: flex; align-items: center; gap: 9px; }
     .topbar-icon {
       width: 32px; height: 32px;
-      background: var(--accent-bg);
-      border: 1px solid var(--accent-bd);
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--accent);
-      font-size: 0.8rem;
-      flex-shrink: 0;
+      background: var(--accent-bg); border: 1px solid var(--accent-bd);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      color: var(--accent); font-size: 0.8rem; flex-shrink: 0;
     }
-    .topbar-title {
-      font-size: 0.92rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-    }
-    .topbar-sub {
-      font-size: 0.68rem;
-      color: var(--text-3);
-      margin-top: 1px;
-    }
+    .topbar-title { font-size: 0.9rem; font-weight: 700; letter-spacing: -0.01em; }
+    .topbar-sub   { font-size: 0.67rem; color: var(--text-3); margin-top: 1px; }
     .mra-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.72rem;
-      font-weight: 500;
-      color: var(--text-2);
-      text-decoration: none;
-      background: var(--surface2);
-      border: 1px solid var(--border-2);
-      border-radius: 7px;
-      padding: 7px 11px;
-      transition: all 0.15s;
-      white-space: nowrap;
-      flex-shrink: 0;
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 0.72rem; font-weight: 500; color: var(--text-2);
+      text-decoration: none; background: var(--bg);
+      border: 1px solid var(--border-2); border-radius: 7px;
+      padding: 7px 11px; transition: all 0.15s; white-space: nowrap; flex-shrink: 0;
     }
     .mra-btn:hover { border-color: var(--accent); color: var(--accent); }
-    .mra-btn .ext { font-size: 0.6rem; }
 
-    /* ── KPI STRIP ── */
-    .kpi-strip {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-    .kpi {
-      background: var(--surface);
-      padding: 14px 16px;
-    }
-    .kpi-label {
-      font-size: 0.65rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-3);
-      margin-bottom: 5px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .kpi-value {
-      font-size: 1.15rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1;
-      color: var(--text);
-    }
-    .kpi-value.green { color: var(--green); }
-    .kpi-sub { font-size: 0.65rem; color: var(--text-3); margin-top: 3px; }
+    /* ── VIEWS ── */
+    .page { max-width: 840px; margin: 0 auto; padding: 24px 16px 64px; }
 
-    /* ── PAGE BODY ── */
-    .page-body {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px 16px 64px;
-    }
+    /* Two views: simulator and results */
+    .view { display: none; }
+    .view.active { display: block; }
 
-    /* ── TABS (mobile nav between panels) ── */
-    .tabs {
-      display: flex;
-      gap: 0;
-      margin-bottom: 16px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      overflow: hidden;
-    }
-    .tab-btn {
-      flex: 1;
-      padding: 11px 8px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--text-3);
-      background: none;
-      border: none;
-      border-right: 1px solid var(--border);
-      cursor: pointer;
-      transition: all 0.15s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-    }
-    .tab-btn:last-child { border-right: none; }
-    .tab-btn.active {
-      background: var(--accent-bg);
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    /* Panels — only show active on mobile */
-    .panel { display: none; }
-    .panel.active { display: block; }
+    /* On desktop — both always visible, side by side */
     @media (min-width: 720px) {
-      .tabs { display: none; }
-      .panel { display: block !important; }
-      .desktop-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 14px;
-      }
+      .view { display: block !important; }
+      .desktop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
       .full { grid-column: 1 / -1; }
+      .back-btn { display: none !important; }
+      .calc-btn { display: none !important; }
     }
+
+    /* ── BACK BUTTON ── */
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 0.8rem; font-weight: 600; color: var(--text-2);
+      background: none; border: none; cursor: pointer;
+      padding: 0; margin-bottom: 16px; font-family: 'Inter', sans-serif;
+      transition: color 0.15s;
+    }
+    .back-btn:hover { color: var(--accent); }
 
     /* ── CARD ── */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--r);
-      padding: 18px;
+      padding: 20px;
       box-shadow: var(--sh);
       margin-bottom: 12px;
     }
     .card:last-child { margin-bottom: 0; }
     .card-title {
-      font-size: 0.67rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-3);
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      font-size: 0.67rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--text-3); margin-bottom: 18px;
+      display: flex; align-items: center; gap: 6px;
     }
 
     /* ── FIELD ── */
-    .field { margin-bottom: 15px; }
+    .field { margin-bottom: 16px; }
     .field:last-child { margin-bottom: 0; }
     .field-label {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 7px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      font-size: 0.78rem; font-weight: 600; color: var(--text);
+      margin-bottom: 7px; display: flex; align-items: center; gap: 6px;
     }
     .field-label i { color: var(--text-3); font-size: 0.72rem; }
     .field-hint { font-size: 0.68rem; color: var(--text-3); margin-top: 5px; line-height: 1.5; }
 
     input[type=number] {
-      width: 100%;
-      background: var(--bg);
-      border: 1.5px solid var(--border-2);
-      border-radius: var(--rs);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 1.15rem;
-      font-weight: 700;
-      padding: 12px 14px;
-      outline: none;
+      width: 100%; background: var(--bg);
+      border: 1.5px solid var(--border-2); border-radius: var(--rs);
+      color: var(--text); font-family: 'Inter', sans-serif;
+      font-size: 1.15rem; font-weight: 700;
+      padding: 12px 14px; outline: none;
       transition: border-color 0.15s, box-shadow 0.15s;
-      -moz-appearance: textfield;
-      min-height: 50px;
+      -moz-appearance: textfield; min-height: 50px;
     }
     input[type=number]::-webkit-inner-spin-button { display: none; }
     input[type=number]:focus {
@@ -277,8 +172,7 @@ const ogImage = `${url}/og.png`;
       box-shadow: 0 0 0 3px rgba(91,81,232,0.1);
     }
 
-    /* ── SECTION SEP ── */
-    .section-sep { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+    .section-sep { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
     .section-label {
       font-size: 0.65rem; font-weight: 700;
       text-transform: uppercase; letter-spacing: 0.1em;
@@ -289,22 +183,12 @@ const ogImage = `${url}/og.png`;
     /* ── TOGGLE ── */
     .toggle-group { display: flex; gap: 6px; }
     .toggle-btn {
-      flex: 1;
-      min-height: 46px;
-      padding: 8px 8px;
-      border-radius: var(--rs);
-      border: 1.5px solid var(--border-2);
-      background: var(--bg);
-      color: var(--text-2);
-      font-family: 'Inter', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
+      flex: 1; min-height: 46px; padding: 8px 8px;
+      border-radius: var(--rs); border: 1.5px solid var(--border-2);
+      background: var(--bg); color: var(--text-2);
+      font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 500;
+      cursor: pointer; transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
     }
     .toggle-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
     .toggle-btn.active { background: var(--accent-bg); color: var(--accent); border-color: var(--accent-bd); font-weight: 600; }
@@ -312,6 +196,18 @@ const ogImage = `${url}/og.png`;
     .pill { font-size: 0.6rem; font-weight: 700; padding: 1px 6px; border-radius: 99px; }
     .pill-red   { background: rgba(208,64,79,0.1);  color: var(--red); }
     .pill-green { background: rgba(26,143,94,0.1);  color: var(--green); }
+
+    /* ── CALCULATE BUTTON ── */
+    .calc-btn {
+      width: 100%; padding: 14px;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: var(--rs);
+      font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; margin-top: 6px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background 0.15s;
+    }
+    .calc-btn:hover { background: #4a41cc; }
 
     /* ── MODE BANNER ── */
     .mode-banner {
@@ -323,11 +219,7 @@ const ogImage = `${url}/og.png`;
     .mode-banner.perso   { background: var(--teal-bg);   color: var(--teal);   border: 1px solid var(--teal-bd); }
 
     /* ── RESULT BLOCKS ── */
-    .rblock {
-      border-radius: var(--rs);
-      padding: 13px 14px;
-      margin-bottom: 10px;
-    }
+    .rblock { border-radius: var(--rs); padding: 13px 14px; margin-bottom: 10px; }
     .rblock:last-child { margin-bottom: 0; }
     .rblock.b-accent { background: var(--accent-bg); border: 1px solid var(--accent-bd); }
     .rblock.b-teal   { background: var(--teal-bg);   border: 1px solid var(--teal-bd); }
@@ -343,12 +235,8 @@ const ogImage = `${url}/og.png`;
     .block-title.c-amber  { color: #c47d10; }
 
     .rrow {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 8px;
-      padding: 5px 0;
-      font-size: 0.82rem;
+      display: flex; justify-content: space-between; align-items: baseline;
+      gap: 8px; padding: 5px 0; font-size: 0.82rem;
     }
     .rrow + .rrow { border-top: 1px solid rgba(0,0,0,0.05); }
     .rrow.strong .lbl,
@@ -359,27 +247,19 @@ const ogImage = `${url}/og.png`;
     .rrow.indent .lbl { padding-left: 12px; color: var(--text-3); font-size: 0.77rem; }
     .rrow.indent .val { font-size: 0.77rem; }
 
-    .v-red   { color: var(--red) !important; }
-    .v-green { color: var(--green) !important; }
+    .v-red   { color: var(--red)    !important; }
+    .v-green { color: var(--green)  !important; }
     .v-muted { color: var(--text-3) !important; }
 
-    /* Compare — stacked on mobile, side by side on desktop */
-    .compare-cols {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
+    /* ── COMPARE ── */
+    .compare-cols { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
     @media (min-width: 560px) {
-      .compare-cols {
-        flex-direction: row;
-      }
+      .compare-cols { flex-direction: row; }
       .compare-cols > * { flex: 1; min-width: 0; }
     }
 
     .div-row { border: none; border-top: 1px dashed var(--border-2); margin: 5px 0; }
 
-    /* ── NOTE ── */
     .note {
       font-size: 0.71rem; color: var(--text-3); line-height: 1.65;
       margin-top: 12px; border-left: 2px solid var(--border-2); padding-left: 11px;
@@ -390,35 +270,25 @@ const ogImage = `${url}/og.png`;
 
     /* ── FOOTER ── */
     .footer {
-      max-width: 900px;
-      margin: 0 auto;
+      max-width: 840px; margin: 0 auto;
       padding: 20px 16px 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px;
       border-top: 1px solid var(--border);
-      font-size: 0.71rem;
-      color: var(--text-3);
+      font-size: 0.71rem; color: var(--text-3);
     }
     .footer a { color: var(--text-3); text-decoration: none; }
     .footer a:hover { color: var(--accent); }
     .qontab-badge {
       display: inline-flex; align-items: center; gap: 5px;
-      background: var(--surface);
-      border: 1px solid var(--border-2);
-      border-radius: 7px;
-      padding: 6px 11px;
-      font-weight: 600;
-      transition: all 0.15s;
+      background: var(--surface); border: 1px solid var(--border-2);
+      border-radius: 7px; padding: 6px 11px; font-weight: 600; transition: all 0.15s;
     }
     .qontab-badge:hover { border-color: var(--accent); color: var(--accent); }
   </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
 <header class="topbar">
   <div class="topbar-brand">
     <span class="topbar-icon"><i class="fa-solid fa-landmark"></i></span>
@@ -428,52 +298,17 @@ const ogImage = `${url}/og.png`;
     </div>
   </div>
   <a class="mra-btn" href="https://www.mra.mu/download/TDSGuide.pdf" target="_blank" rel="noopener">
-    <i class="fa-solid fa-file-lines"></i> MRA Guide <i class="fa-solid fa-arrow-up-right-from-square ext"></i>
+    <i class="fa-solid fa-file-lines"></i> MRA Guide <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem"></i>
   </a>
 </header>
 
-<!-- KPI STRIP -->
-<div class="kpi-strip">
-  <div class="kpi">
-    <div class="kpi-label"><i class="fa-solid fa-arrow-down"></i> Net / mo</div>
-    <div class="kpi-value" id="kpi-net">—</div>
-    <div class="kpi-sub" id="kpi-mode">to owner</div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-label"><i class="fa-solid fa-wallet"></i> Cash-in / yr</div>
-    <div class="kpi-value green" id="kpi-cash">—</div>
-    <div class="kpi-sub">after tax</div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-label"><i class="fa-solid fa-percent"></i> Eff. rate</div>
-    <div class="kpi-value" id="kpi-rate">—</div>
-    <div class="kpi-sub">on rental</div>
-  </div>
-</div>
-
-<!-- PAGE BODY -->
-<div class="page-body">
-
-  <!-- Mobile tabs -->
-  <div class="tabs">
-    <button class="tab-btn active" id="tab-params" onclick="showTab('params')">
-      <i class="fa-solid fa-sliders"></i> Parameters
-    </button>
-    <button class="tab-btn" id="tab-results" onclick="showTab('results')">
-      <i class="fa-solid fa-chart-pie"></i> Results
-    </button>
-    <button class="tab-btn" id="tab-compare" onclick="showTab('compare')">
-      <i class="fa-solid fa-scale-balanced"></i> Compare
-    </button>
-  </div>
-
-  <!-- Desktop grid wrapper -->
+<div class="page">
   <div class="desktop-grid">
 
-    <!-- PARAMS PANEL -->
-    <div class="panel active" id="panel-params">
+    <!-- ── VIEW 1 : SIMULATOR ── -->
+    <div class="view active" id="view-sim">
       <div class="card">
-        <div class="card-title"><i class="fa-solid fa-sliders"></i> Lease parameters</div>
+        <div class="card-title"><i class="fa-solid fa-sliders"></i> Simulator</div>
 
         <div class="field">
           <div class="field-label"><i class="fa-solid fa-coins"></i> Monthly gross rent (MUR)</div>
@@ -510,7 +345,7 @@ const ogImage = `${url}/og.png`;
         <div class="field">
           <div class="field-label"><i class="fa-solid fa-briefcase"></i> Other annual income (MUR)</div>
           <input type="number" id="otherIncome" value="0" min="0" step="50000"/>
-          <div class="field-hint">Salary, business income — excluding this rental</div>
+          <div class="field-hint">Salary, business — excluding this rental</div>
         </div>
 
         <div class="field">
@@ -523,20 +358,22 @@ const ogImage = `${url}/og.png`;
               <i class="fa-solid fa-user-plus"></i> Cat. B <small style="font-size:0.68rem;opacity:0.6">Rs 500k+</small>
             </button>
           </div>
-          <div class="field-hint">Cat. A = single / no dependent · Cat. B = with dependents</div>
+          <div class="field-hint">Cat. A = single · Cat. B = with dependents (estimate)</div>
         </div>
-      </div>
 
-      <!-- On mobile, show a "See results" CTA -->
-      <div style="display:none" id="mobile-cta-results" class="mobile-cta">
-        <button onclick="showTab('results')" style="width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:var(--rs);font-family:inherit;font-size:0.9rem;font-weight:600;cursor:pointer;margin-top:4px;">
-          See Results <i class="fa-solid fa-arrow-right"></i>
+        <button class="calc-btn" onclick="showResults()">
+          <i class="fa-solid fa-chart-pie"></i> See Results
         </button>
       </div>
     </div>
 
-    <!-- RESULTS PANEL -->
-    <div class="panel" id="panel-results">
+    <!-- ── VIEW 2 : RESULTS ── -->
+    <div class="view" id="view-results">
+
+      <button class="back-btn" onclick="showSim()">
+        <i class="fa-solid fa-arrow-left"></i> Edit parameters
+      </button>
+
       <div class="card">
         <div class="card-title"><i class="fa-solid fa-chart-pie"></i> Results</div>
 
@@ -574,11 +411,9 @@ const ogImage = `${url}/og.png`;
           <div class="rrow strong"><span class="lbl">Net cash-in / yr</span><span class="val v-green" id="r-cashowner">—</span></div>
         </div>
       </div>
-    </div>
 
-    <!-- COMPARE PANEL -->
-    <div class="panel full" id="panel-compare">
-      <div class="card">
+      <!-- COMPARE -->
+      <div class="card full">
         <div class="card-title"><i class="fa-solid fa-scale-balanced"></i> Company vs Individual</div>
 
         <div class="compare-cols">
@@ -606,7 +441,7 @@ const ogImage = `${url}/og.png`;
           </div>
           <div class="rrow">
             <span class="lbl">Tenant gross cost</span>
-            <span class="val v-muted">Identical</span>
+            <span class="val v-muted">Identical — TDS is tax routing, not an extra charge</span>
           </div>
         </div>
 
@@ -616,10 +451,11 @@ const ogImage = `${url}/og.png`;
           Source: <a href="https://www.mra.mu/download/TDSGuide.pdf" target="_blank" rel="noopener">MRA TDS Guide 2025</a>.
         </p>
       </div>
-    </div>
+
+    </div><!-- /view-results -->
 
   </div><!-- /desktop-grid -->
-</div><!-- /page-body -->
+</div><!-- /page -->
 
 <footer class="footer">
   <span>Based on <a href="https://www.mra.mu" target="_blank" rel="noopener">MRA</a> data · For informational purposes only.</span>
@@ -631,17 +467,17 @@ const ogImage = `${url}/og.png`;
 <script>
 let mode = 'societe', ownerType = 'resident', taxCategory = 'A';
 
-function showTab(t) {
-  ['params','results','compare'].forEach(x => {
-    document.getElementById('tab-'+x).classList.toggle('active', t === x);
-    document.getElementById('panel-'+x).classList.toggle('active', t === x);
-  });
-  // Show "See Results" CTA on params panel only on mobile
-  const cta = document.getElementById('mobile-cta-results');
-  if (cta) cta.style.display = (t === 'params') ? 'block' : 'none';
+function showResults() {
+  update();
+  document.getElementById('view-sim').classList.remove('active');
+  document.getElementById('view-results').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-// Init mobile CTA
-document.getElementById('mobile-cta-results').style.display = 'block';
+function showSim() {
+  document.getElementById('view-results').classList.remove('active');
+  document.getElementById('view-sim').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
 function mauritiusTax(income, category) {
   if (income <= 0) return 0;
@@ -650,12 +486,10 @@ function mauritiusTax(income, category) {
   if (income > 3000000) tax += (income - 3000000) * 0.05;
   return Math.max(0, tax);
 }
-
 function setMode(m) {
   mode = m;
   ['societe','perso'].forEach(x =>
     document.getElementById('btn-'+x).classList.toggle('active', m === x));
-  update();
 }
 function setOwner(o) {
   ownerType = o;
@@ -664,13 +498,11 @@ function setOwner(o) {
     btn.classList.toggle('active', o === x);
     btn.classList.toggle('teal', o === x && x === 'nonresident');
   });
-  update();
 }
 function setCategory(c) {
   taxCategory = c;
   ['A','B'].forEach(x =>
     document.getElementById('btn-cat'+x).classList.toggle('active', c === x));
-  update();
 }
 
 function fmt(n, suffix='') {
@@ -695,9 +527,7 @@ function set(id, val, cls) {
   const el = document.getElementById(id);
   if (!el) return;
   el.textContent = val;
-  if (cls !== undefined) {
-    el.className = 'val' + (cls ? ' ' + cls : '');
-  }
+  if (cls !== undefined) el.className = 'val' + (cls ? ' ' + cls : '');
 }
 
 function update() {
@@ -709,19 +539,12 @@ function update() {
 
   document.getElementById('r-tds-rate').textContent = tpct + '%';
   const banner = document.getElementById('modeBanner');
-  const bannerText = document.getElementById('bannerText');
   banner.className = 'mode-banner ' + (hasTDS ? 'societe' : 'perso');
-  bannerText.textContent = hasTDS ? `Company lease — TDS ${tpct}%` : 'Individual lease — No TDS';
+  document.getElementById('bannerText').textContent =
+    hasTDS ? `Company lease — TDS ${tpct}%` : 'Individual lease — No TDS';
 
   const s = calcScenario(loyer, tdsRate, hasTDS, otherIncome, taxCategory);
 
-  // KPIs
-  set('kpi-net', fmt(s.netMonthly));
-  document.getElementById('kpi-mode').textContent = hasTDS ? `TDS ${tpct}%` : 'No TDS';
-  set('kpi-cash', fmt(s.annualCash, '\u00a0/ yr'));
-  document.getElementById('kpi-rate').textContent = pct(s.effRate * 100);
-
-  // Tenant
   set('r-brut', fmt(loyer));
   set('r-tds',    hasTDS ? '− ' + fmt(loyer * tdsRate) : 'Rs\u00a00', hasTDS ? 'v-red' : 'v-muted');
   set('r-remise', hasTDS ? fmt(loyer * tdsRate) : 'Rs\u00a00', hasTDS ? 'v-red' : 'v-muted');
@@ -729,19 +552,17 @@ function update() {
   ['row-tds','row-remise'].forEach(id =>
     document.getElementById(id).style.opacity = hasTDS ? '1' : '0.35');
 
-  // Owner annual
   set('r-rental-annual', fmt(s.annualRent, '\u00a0/ yr'));
   set('r-other-income',  fmt(otherIncome, '\u00a0/ yr'), 'v-muted');
   set('r-total-income',  fmt(otherIncome + s.annualRent, '\u00a0/ yr'));
   set('r-tax-total',     fmt(s.taxWith, '\u00a0/ yr'), 'v-red');
   set('r-tax-rental',    fmt(s.rentalTax, '\u00a0/ yr'), 'v-red');
-  set('r-credit',        hasTDS ? '+ ' + fmt(s.annualTDS, '\u00a0/ yr') : 'Rs\u00a00', hasTDS ? 'v-green' : 'v-muted');
+  set('r-credit',  hasTDS ? '+ ' + fmt(s.annualTDS, '\u00a0/ yr') : 'Rs\u00a00', hasTDS ? 'v-green' : 'v-muted');
   set('r-nettax',        fmt(s.netTax, '\u00a0/ yr'));
   set('r-effrate',       pct(s.effRate * 100) + ' on rental', 'v-muted');
   set('r-cashowner',     fmt(s.annualCash, '\u00a0/ yr'), 'v-green');
   document.getElementById('row-credit').style.opacity = hasTDS ? '1' : '0.35';
 
-  // Compare
   const sc = calcScenario(loyer, tdsRate, true,  otherIncome, taxCategory);
   const sp = calcScenario(loyer, tdsRate, false, otherIncome, taxCategory);
 
@@ -764,10 +585,6 @@ function update() {
     diffEl.className = 'val ' + (diff >= 0 ? 'v-green' : 'v-red');
   }
 }
-
-update();
-['loyer','otherIncome'].forEach(id =>
-  document.getElementById(id).addEventListener('input', update));
 </script>
 
 </body>
