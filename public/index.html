@@ -257,7 +257,45 @@
     }
     .note strong { color: var(--text-2); }
     .note a { color: var(--text-3); }
-    .note a:hover { color: var(--accent); }
+    .note a:hover { color: var(--mint); }
+
+    /* SCOPE NOTE */
+    .scope-note {
+      margin-top: 14px;
+      background: var(--mint-bg);
+      border: 1px solid var(--mint-bd);
+      border-radius: var(--rs);
+      padding: 14px 16px;
+    }
+    .scope-title {
+      font-size: 0.72rem; font-weight: 700; color: var(--mint);
+      text-transform: uppercase; letter-spacing: 0.07em;
+      margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+    }
+    .scope-list {
+      list-style: none; padding: 0; margin: 0;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .scope-list li {
+      display: flex; align-items: baseline; gap: 8px;
+      font-size: 0.78rem; color: var(--text-2); line-height: 1.45;
+    }
+    .scope-list li i {
+      font-size: 0.68rem; flex-shrink: 0; margin-top: 2px;
+    }
+    .scope-list li i.fa-check  { color: var(--green); }
+    .scope-list li i.fa-xmark  { color: var(--red); }
+    .scope-list li i.fa-ban    { color: var(--text-3); }
+    .scope-list li i.fa-percent,
+    .scope-list li i.fa-user   { color: var(--mint); }
+    .scope-list li strong      { color: var(--text); }
+    .scope-source {
+      margin-top: 10px; padding-top: 10px;
+      border-top: 1px solid var(--mint-bd);
+      font-size: 0.71rem; color: var(--text-3);
+    }
+    .scope-source a { color: var(--mint); text-decoration: none; font-weight: 500; }
+    .scope-source a:hover { color: var(--mint-deep); }
 
     /* FOOTER */
     .footer {
@@ -479,13 +517,17 @@
             <span class="val v-muted" style="align-self:flex-start;white-space:normal">Identical — TDS is tax routing, not extra charge</span>
           </div>
         </div>
-        <p class="note">
-          <strong>Scope:</strong> This calculator covers TDS on <strong>rental income only</strong> (MRA TDS Guide §5 — Rent).
-          Other TDS categories (interest, royalties, contractors, consultants…) are out of scope.
-          Rs 390k exemption (Cat. A) · Rs 500k (Cat. B, estimate) · 15% flat · +5% solidarity above Rs 3M.
-          TDS exempt if company turnover &lt; Rs 6M (exc. construction) or calculated TDS &lt; Rs 500.
-          Source: <a href="https://www.mra.mu/download/TDSGuide.pdf" target="_blank" rel="noopener">MRA TDS Guide 2025</a>.
-        </p>
+        <div class="scope-note">
+          <div class="scope-title"><i class="fa-solid fa-circle-info"></i> About this calculator</div>
+          <ul class="scope-list">
+            <li><i class="fa-solid fa-check"></i> <strong>Rental TDS only</strong> — covers MRA TDS Guide §5 (Rent)</li>
+            <li><i class="fa-solid fa-xmark"></i> Out of scope: interest, royalties, contractors, consultants</li>
+            <li><i class="fa-solid fa-percent"></i> 15% flat rate · +5% solidarity levy above Rs 3M</li>
+            <li><i class="fa-solid fa-user"></i> Cat. A: Rs 390k exemption · Cat. B: Rs 500k (estimate)</li>
+            <li><i class="fa-solid fa-ban"></i> TDS exempt if company turnover &lt; Rs 6M (exc. construction) or TDS &lt; Rs 500</li>
+          </ul>
+          <div class="scope-source">Source: <a href="https://www.mra.mu/download/TDSGuide.pdf" target="_blank" rel="noopener">MRA TDS Guide 2025 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem"></i></a></div>
+        </div>
       </div>
     </div>
 
