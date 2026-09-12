@@ -1,0 +1,7 @@
+services:
+  tds-simulator:
+    build: .
+    container_name: tds-simulator
+    restart: always
+    ports:
+      - "127.0.0.1:9300:80"
