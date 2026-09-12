@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Simulateur TDS — Location (Maurice)</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --border: #2a2d3e;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --warn: #ff6b6b;
+    --text: #e8eaf0;
+    --muted: #7c7f96;
+    --green: #2ecc71;
+    --yellow: #f39c12;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; padding: 24px 16px; }
+
+  .header { text-align: center; margin-bottom: 32px; }
+  .header h1 { font-size: 1.6rem; font-weight: 700; color: var(--text); }
+  .header p { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+  .badge { display: inline-block; background: var(--accent); color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 99px; margin-left: 8px; vertical-align: middle; }
+
+  .container { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 640px) { .container { grid-template-columns: 1fr; } }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .card h2 { font-size: 0.9rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 0.82rem; color: var(--muted); margin-bottom: 6px; }
+  .field input[type=number] {
+    width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text); font-size: 1.1rem; padding: 10px 14px; outline: none; transition: border 0.2s;
+  }
+  .field input[type=number]:focus { border-color: var(--accent); }
+
+  .toggle-group { display: flex; gap: 8px; }
+  .toggle-btn {
+    flex: 1; padding: 9px 12px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--muted); font-size: 0.82rem; cursor: pointer; transition: all 0.15s; text-align: center;
+  }
+  .toggle-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
+  .toggle-btn:hover:not(.active) { border-color: var(--accent); color: var(--text); }
+
+  .slider-wrap { display: flex; align-items: center; gap: 12px; }
+  .slider-wrap input[type=range] { flex: 1; accent-color: var(--accent); }
+  .slider-val { min-width: 40px; text-align: right; font-weight: 700; color: var(--accent); font-size: 0.95rem; }
+
+  /* Results */
+  .result-card { border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }
+  .result-card.tenant { background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.3); }
+  .result-card.owner { background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.3); }
+  .result-card.compare { background: rgba(243,156,18,0.1); border: 1px solid rgba(243,156,18,0.3); }
+  .result-card.info { background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.25); }
+
+  .result-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 0.85rem; }
+  .result-row + .result-row { border-top: 1px solid rgba(255,255,255,0.05); }
+  .result-row .label { color: var(--muted); }
+  .result-row .value { font-weight: 600; }
+  .result-row .value.green { color: var(--green); }
+  .result-row .value.red { color: var(--warn); }
+  .result-row .value.yellow { color: var(--yellow); }
+  .result-row .value.accent { color: var(--accent); }
+  .result-row .value.accent2 { color: var(--accent2); }
+
+  .sub-label { font-size: 0.72rem; color: var(--muted); }
+  .rc-title { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; }
+  .rc-title.tenant { color: var(--accent); }
+  .rc-title.owner { color: var(--accent2); }
+  .rc-title.compare { color: var(--yellow); }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+
+  .note { font-size: 0.75rem; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+  .note strong { color: var(--text); }
+
+  .full-width { grid-column: 1 / -1; }
+
+  /* Mode banner */
+  .mode-banner { 
+    text-align: center; padding: 10px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; margin-bottom: 16px;
+    transition: all 0.3s;
+  }
+  .mode-banner.societe { background: rgba(108,99,255,0.15); color: var(--accent); border: 1px solid rgba(108,99,255,0.3); }
+  .mode-banner.perso { background: rgba(0,212,170,0.15); color: var(--accent2); border: 1px solid rgba(0,212,170,0.3); }
+
+  .tag { display: inline-block; font-size: 0.7rem; padding: 2px 7px; border-radius: 99px; margin-left: 6px; vertical-align: middle; }
+  .tag.tds { background: var(--warn); color: #fff; }
+  .tag.notds { background: var(--green); color: #fff; }
+
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  h3.section { font-size: 0.82rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Simulateur TDS — Location<span class="badge">MRA 2025</span></h1>
+  <p>Tax Deduction at Source sur loyers — Société vs Particulier · Maurice</p>
+</div>
+
+<div class="container">
+
+  <!-- INPUTS -->
+  <div class="card">
+    <h2>⚙️ Paramètres</h2>
+
+    <div class="field">
+      <label>Loyer mensuel brut (MUR)</label>
+      <input type="number" id="loyer" value="125000" min="0" step="1000"/>
+    </div>
+
+    <div class="field">
+      <label>Mode — Qui paie le loyer ?</label>
+      <div class="toggle-group">
+        <button class="toggle-btn active" id="btn-societe" onclick="setMode('societe')">🏢 Société <span class="tag tds">TDS</span></button>
+        <button class="toggle-btn" id="btn-perso" onclick="setMode('perso')">👤 Particulier <span class="tag notds">Sans TDS</span></button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Propriétaire</label>
+      <div class="toggle-group">
+        <button class="toggle-btn active" id="btn-resident" onclick="setOwner('resident')">🇲🇺 Résident (7.5%)</button>
+        <button class="toggle-btn" id="btn-nonresident" onclick="setOwner('nonresident')">🌍 Non-résident (10%)</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Taux marginal d'imposition — Propriétaire</label>
+      <div class="slider-wrap">
+        <input type="range" id="taxRate" min="0" max="30" step="5" value="15" oninput="update()"/>
+        <span class="slider-val" id="taxRateVal">15%</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Durée simulation</label>
+      <div class="toggle-group">
+        <button class="toggle-btn active" id="btn-monthly" onclick="setPeriod('monthly')">Mensuel</button>
+        <button class="toggle-btn" id="btn-annual" onclick="setPeriod('annual')">Annuel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="card">
+    <h2>📊 Résultats</h2>
+    <div id="modeBanner" class="mode-banner societe">Mode : Bail Société — TDS applicable</div>
+
+    <div class="result-card tenant">
+      <div class="rc-title tenant">🏢 Côté Locataire (Société)</div>
+      <div class="result-row">
+        <span class="label">Loyer brut</span>
+        <span class="value accent" id="r-brut">—</span>
+      </div>
+      <div class="result-row" id="row-tds">
+        <span class="label">TDS retenu <span class="sub-label" id="r-tds-rate">(7.5%)</span></span>
+        <span class="value red" id="r-tds">—</span>
+      </div>
+      <div class="result-row" id="row-remise">
+        <span class="label">→ Remise à MRA (avant le 20)</span>
+        <span class="value red" id="r-remise">—</span>
+      </div>
+      <div class="result-row">
+        <span class="label">Net versé au propriétaire</span>
+        <span class="value green" id="r-net">—</span>
+      </div>
+    </div>
+
+    <div class="result-card owner">
+      <div class="rc-title owner">🏠 Côté Propriétaire</div>
+      <div class="result-row">
+        <span class="label">Revenu locatif brut</span>
+        <span class="value accent2" id="r-revenu">—</span>
+      </div>
+      <div class="result-row">
+        <span class="label">Impôt estimé <span class="sub-label" id="r-tax-label">(@15%)</span></span>
+        <span class="value red" id="r-impot">—</span>
+      </div>
+      <div class="result-row" id="row-credit">
+        <span class="label">Crédit TDS (avance MRA)</span>
+        <span class="value green" id="r-credit">—</span>
+      </div>
+      <div class="result-row" id="row-netimpot">
+        <span class="label">Impôt net à régler</span>
+        <span class="value yellow" id="r-netimpot">—</span>
+      </div>
+      <div class="result-row">
+        <span class="label">Cash net propriétaire</span>
+        <span class="value green" id="r-cashowner">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARAISON FULL WIDTH -->
+  <div class="card full-width">
+    <h2>⚖️ Comparaison Société vs Particulier</h2>
+    <div class="compare-grid">
+      <div class="result-card tenant">
+        <div class="rc-title tenant">🏢 Bail Société</div>
+        <div class="result-row"><span class="label">Versé au propriétaire</span><span class="value accent" id="c-net-soc">—</span></div>
+        <div class="result-row"><span class="label">TDS → MRA</span><span class="value red" id="c-tds-soc">—</span></div>
+        <div class="result-row"><span class="label">Impôt net propriétaire</span><span class="value yellow" id="c-tax-soc">—</span></div>
+        <div class="result-row"><span class="label">Cash in propriétaire</span><span class="value green" id="c-cash-soc">—</span></div>
+      </div>
+      <div class="result-card owner">
+        <div class="rc-title owner">👤 Bail Particulier</div>
+        <div class="result-row"><span class="label">Versé au propriétaire</span><span class="value accent2" id="c-net-per">—</span></div>
+        <div class="result-row"><span class="label">TDS → MRA</span><span class="value accent2" id="c-tds-per">—</span></div>
+        <div class="result-row"><span class="label">Impôt net propriétaire</span><span class="value yellow" id="c-tax-per">—</span></div>
+        <div class="result-row"><span class="label">Cash in propriétaire</span><span class="value green" id="c-cash-per">—</span></div>
+      </div>
+    </div>
+    <hr class="divider"/>
+    <div class="result-card compare">
+      <div class="rc-title compare">📈 Différentiel</div>
+      <div class="result-row">
+        <span class="label">Avantage flux propriétaire<br/><span class="sub-label">(TDS = avance, récupérable si impôt < crédit)</span></span>
+        <span class="value yellow" id="diff-owner">—</span>
+      </div>
+      <div class="result-row">
+        <span class="label">Avantage locataire</span>
+        <span class="value yellow" id="diff-tenant">—</span>
+      </div>
+    </div>
+    <p class="note">
+      <strong>Rappel :</strong> TDS = avance d'impôt. Le propriétaire reçoit un <strong>crédit imputable sur son impôt annuel</strong>. Si TDS > impôt dû → remboursement MRA. Le flux trésorerie est impacté en cours d'année, pas le coût final.
+      <br/>TDS non applicable si société locataire < Rs 6M de CA (sauf travaux de construction). TDS non applicable si impôt calculé < Rs 500.
+    </p>
+  </div>
+
+</div>
+
+<script>
+let mode = 'societe';
+let ownerType = 'resident';
+let period = 'monthly';
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('btn-societe').classList.toggle('active', m === 'societe');
+  document.getElementById('btn-perso').classList.toggle('active', m === 'perso');
+  update();
+}
+
+function setOwner(o) {
+  ownerType = o;
+  document.getElementById('btn-resident').classList.toggle('active', o === 'resident');
+  document.getElementById('btn-nonresident').classList.toggle('active', o === 'nonresident');
+  update();
+}
+
+function setPeriod(p) {
+  period = p;
+  document.getElementById('btn-monthly').classList.toggle('active', p === 'monthly');
+  document.getElementById('btn-annual').classList.toggle('active', p === 'annual');
+  update();
+}
+
+function fmt(n) {
+  if (n < 0) return '- Rs ' + Math.abs(Math.round(n)).toLocaleString('fr-FR');
+  return 'Rs ' + Math.round(n).toLocaleString('fr-FR');
+}
+
+function update() {
+  const loyer = parseFloat(document.getElementById('loyer').value) || 0;
+  const taxRate = parseFloat(document.getElementById('taxRate').value) / 100;
+  document.getElementById('taxRateVal').textContent = Math.round(taxRate * 100) + '%';
+  document.getElementById('r-tax-label').textContent = '(@' + Math.round(taxRate * 100) + '%)';
+
+  const mult = period === 'annual' ? 12 : 1;
+  const base = loyer * mult;
+
+  const tdsRate = ownerType === 'resident' ? 0.075 : 0.10;
+  document.getElementById('r-tds-rate').textContent = '(' + (tdsRate * 100) + '%)';
+
+  const banner = document.getElementById('modeBanner');
+  if (mode === 'societe') {
+    banner.className = 'mode-banner societe';
+    banner.textContent = 'Mode : Bail Société — TDS ' + (tdsRate * 100) + '% applicable';
+  } else {
+    banner.className = 'mode-banner perso';
+    banner.textContent = 'Mode : Bail Particulier — Pas de TDS';
+  }
+
+  // Current mode calcs
+  const hasTDS = mode === 'societe';
+  const tds = hasTDS ? base * tdsRate : 0;
+  const netToOwner = base - tds;
+  const impot = base * taxRate;
+  const credit = hasTDS ? tds : 0;
+  const netImpot = Math.max(0, impot - credit);
+  const cashOwner = netToOwner - netImpot;
+
+  document.getElementById('r-brut').textContent = fmt(base);
+  document.getElementById('r-tds').textContent = hasTDS ? '- ' + fmt(tds) : 'Rs 0';
+  document.getElementById('r-remise').textContent = hasTDS ? fmt(tds) : 'Rs 0';
+  document.getElementById('r-net').textContent = fmt(netToOwner);
+  document.getElementById('r-revenu').textContent = fmt(base);
+  document.getElementById('r-impot').textContent = '- ' + fmt(impot);
+  document.getElementById('r-credit').textContent = hasTDS ? '+ ' + fmt(credit) : 'Rs 0';
+  document.getElementById('r-netimpot').textContent = fmt(netImpot);
+  document.getElementById('r-cashowner').textContent = fmt(cashOwner);
+
+  // Toggle TDS rows visibility
+  document.getElementById('row-tds').style.opacity = hasTDS ? '1' : '0.4';
+  document.getElementById('row-remise').style.opacity = hasTDS ? '1' : '0.4';
+  document.getElementById('row-credit').style.opacity = hasTDS ? '1' : '0.4';
+
+  // Comparaison — always both
+  const tds_soc = base * tdsRate;
+  const net_soc = base - tds_soc;
+  const impot_soc = base * taxRate;
+  const credit_soc = tds_soc;
+  const netImpot_soc = Math.max(0, impot_soc - credit_soc);
+  const cash_soc = net_soc - netImpot_soc;
+
+  const tds_per = 0;
+  const net_per = base;
+  const impot_per = base * taxRate;
+  const credit_per = 0;
+  const netImpot_per = impot_per;
+  const cash_per = net_per - netImpot_per;
+
+  document.getElementById('c-net-soc').textContent = fmt(net_soc);
+  document.getElementById('c-tds-soc').textContent = fmt(tds_soc);
+  document.getElementById('c-tax-soc').textContent = fmt(netImpot_soc);
+  document.getElementById('c-cash-soc').textContent = fmt(cash_soc);
+
+  document.getElementById('c-net-per').textContent = fmt(net_per);
+  document.getElementById('c-tds-per').textContent = 'Rs 0';
+  document.getElementById('c-tax-per').textContent = fmt(netImpot_per);
+  document.getElementById('c-cash-per').textContent = fmt(cash_per);
+
+  const diffOwner = cash_soc - cash_per;
+  const diffTenant = 0; // same net cost to tenant (TDS is just a routing change)
+
+  const diffOwnerEl = document.getElementById('diff-owner');
+  diffOwnerEl.textContent = (diffOwner >= 0 ? '+' : '') + fmt(diffOwner) + ' (bail société)';
+  diffOwnerEl.className = 'value ' + (diffOwner >= 0 ? 'green' : 'red');
+
+  document.getElementById('diff-tenant').textContent = 'Coût brut identique — TDS est un routage d\'impôt, pas une charge supplémentaire';
+}
+
+// Init
+update();
+document.getElementById('loyer').addEventListener('input', update);
+</script>
+</body>
+</html>
