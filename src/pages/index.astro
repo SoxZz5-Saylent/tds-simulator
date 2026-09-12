@@ -181,9 +181,9 @@ const ogImage = `${url}/og.png`;
     }
 
     /* ── TOGGLE ── */
-    .toggle-group { display: flex; gap: 6px; }
+    .toggle-group { display: flex; gap: 6px; flex-wrap: wrap; }
     .toggle-btn {
-      flex: 1; min-height: 46px; padding: 8px 8px;
+      flex: 1; min-width: 0; min-height: 44px; padding: 8px 10px;
       border-radius: var(--rs); border: 1.5px solid var(--border-2);
       background: var(--bg); color: var(--text-2);
       font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 500;
@@ -191,7 +191,7 @@ const ogImage = `${url}/og.png`;
       transition: border-color 0.18s ease, background 0.18s ease,
                   color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
       display: flex; align-items: center; justify-content: center; gap: 5px;
-      position: relative; overflow: hidden;
+      white-space: nowrap;
     }
     .toggle-btn:hover:not(.active) {
       border-color: var(--accent); color: var(--accent); background: var(--accent-bg);
@@ -210,9 +210,10 @@ const ogImage = `${url}/og.png`;
       border-color: var(--teal);
       box-shadow: 0 2px 8px rgba(10,158,135,0.28);
     }
-    /* Keep pills readable on active white-text button */
-    .toggle-btn.active .pill-red   { background: rgba(255,255,255,0.2); color: #fff; }
-    .toggle-btn.active .pill-green { background: rgba(255,255,255,0.2); color: #fff; }
+    /* Fix small/opacity inside active button */
+    .toggle-btn.active small,
+    .toggle-btn.active .pill-red,
+    .toggle-btn.active .pill-green { color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.15); }
     .pill { font-size: 0.6rem; font-weight: 700; padding: 1px 6px; border-radius: 99px; }
     .pill-red   { background: rgba(208,64,79,0.1);  color: var(--red); }
     .pill-green { background: rgba(26,143,94,0.1);  color: var(--green); }
@@ -345,7 +346,7 @@ const ogImage = `${url}/og.png`;
               <i class="fa-solid fa-person"></i> Individual <span class="pill pill-green">No TDS</span>
             </button>
             <button class="toggle-btn" id="btn-mixte" onclick="setMode('mixte')">
-              <i class="fa-solid fa-shuffle"></i> Mixed
+              <i class="fa-solid fa-code-merge"></i> Mixed
             </button>
           </div>
         </div>
