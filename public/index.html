@@ -25,13 +25,14 @@
       --bg:        #f7f8fb;
       --surface:   #ffffff;
       --border:    #e3e6f0;
-      --border-2:  #cbd0e8;
-      --accent:    #5b51e8;
-      --accent-bg: rgba(91,81,232,0.07);
-      --accent-bd: rgba(91,81,232,0.2);
+      --border-2:  #b8e8e6;
+      --accent:    #00b6af;
+      --accent-bg: rgba(0,182,175,0.07);
+      --accent-bd: rgba(0,182,175,0.25);
       --mint:      #00b6af;
       --mint-bg:   rgba(0,182,175,0.07);
       --mint-bd:   rgba(0,182,175,0.25);
+      --mint-deep: #00847f;
       --red:       #d0404f;
       --green:     #1a8f5e;
       --text:      #1a1d2e;
@@ -54,28 +55,36 @@
 
     /* TOPBAR */
     .topbar {
-      background: var(--surface); border-bottom: 1px solid var(--border);
-      padding: 13px 20px; display: flex; align-items: center;
+      background: var(--surface);
+      border-bottom: 1px solid #d0f0ee;
+      padding: 12px 20px; display: flex; align-items: center;
       justify-content: space-between; gap: 12px;
       position: sticky; top: 0; z-index: 10;
     }
-    .topbar-brand { display: flex; align-items: center; gap: 9px; }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; }
     .topbar-icon {
-      width: 32px; height: 32px; background: var(--accent-bg);
-      border: 1px solid var(--accent-bd); border-radius: 8px;
+      width: 32px; height: 32px; background: var(--mint-bg);
+      border: 1px solid var(--mint-bd); border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      color: var(--accent); font-size: 0.8rem; flex-shrink: 0;
+      color: var(--mint); font-size: 0.8rem; flex-shrink: 0;
     }
     .topbar-title { font-size: 0.9rem; font-weight: 700; letter-spacing: -0.01em; }
-    .topbar-sub   { font-size: 0.67rem; color: var(--text-3); margin-top: 1px; }
+    .topbar-qontab {
+      font-size: 0.72rem; font-weight: 600;
+      color: var(--mint); margin-top: 1px;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .topbar-qontab a { color: inherit; text-decoration: none; }
+    .topbar-qontab a:hover { color: var(--mint-deep); }
+    .topbar-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
     .mra-btn {
       display: inline-flex; align-items: center; gap: 5px;
       font-size: 0.72rem; font-weight: 500; color: var(--text-2);
       text-decoration: none; background: var(--bg);
       border: 1px solid var(--border-2); border-radius: 7px;
-      padding: 7px 11px; transition: all 0.15s; white-space: nowrap; flex-shrink: 0;
+      padding: 7px 11px; transition: all 0.15s; white-space: nowrap;
     }
-    .mra-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .mra-btn:hover { border-color: var(--mint); color: var(--mint); }
 
     /* PAGE */
     .page { max-width: 840px; margin: 0 auto; padding: 24px 16px 48px; }
@@ -140,45 +149,51 @@
     }
 
     /* TOGGLES */
-    .toggle-group { display: flex; gap: 6px; flex-wrap: wrap; }
+    .toggle-group { display: flex; gap: 6px; }
     .toggle-btn {
-      flex: 1; min-width: 0; min-height: 44px; padding: 8px 10px;
+      flex: 1; min-width: 0; min-height: 44px; padding: 8px 6px;
       border-radius: var(--rs); border: 1.5px solid var(--border-2);
       background: var(--bg); color: var(--text-2);
       font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 500;
       cursor: pointer; outline: none;
       transition: border-color 0.15s, background 0.15s, color 0.15s, box-shadow 0.15s;
-      display: flex; align-items: center; justify-content: center; gap: 5px;
-      white-space: nowrap;
+      display: flex; align-items: center; justify-content: center; gap: 4px;
+      overflow: hidden;
     }
-    .toggle-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+    /* On very small screens — hide text labels in 3-button group, keep icons */
+    .toggle-group.three .toggle-btn .btn-label {
+      display: none;
+    }
+    .toggle-group.three .toggle-btn .pill { display: none; }
+    @media (min-width: 420px) {
+      .toggle-group.three .toggle-btn .btn-label { display: inline; }
+      .toggle-group.three .toggle-btn .pill { display: inline; }
+      .toggle-btn { padding: 8px 10px; gap: 5px; }
+    }
+    .toggle-btn:hover:not(.active) { border-color: var(--mint); color: var(--mint); background: var(--mint-bg); }
     .toggle-btn:active { transform: scale(0.97); }
     .toggle-btn.active {
-      background: var(--accent); color: #fff;
-      border-color: var(--accent); font-weight: 600;
-      box-shadow: 0 2px 8px rgba(91,81,232,0.28);
-    }
-    .toggle-btn.active.mint {
       background: var(--mint); color: #fff;
-      border-color: var(--mint);
-      box-shadow: 0 2px 8px rgba(0,182,175,0.28);
+      border-color: var(--mint); font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,182,175,0.3);
     }
-    .toggle-btn.active small { color: rgba(255,255,255,0.7); opacity: 1; }
+    .toggle-btn.active small { color: rgba(255,255,255,0.75); opacity: 1; }
+    .toggle-btn.active .pill-red,
+    .toggle-btn.active .pill-green { background: rgba(255,255,255,0.2); color: #fff; }
     .pill { font-size: 0.6rem; font-weight: 700; padding: 1px 6px; border-radius: 99px; }
     .pill-red   { background: rgba(208,64,79,0.1);  color: var(--red); }
     .pill-green { background: rgba(26,143,94,0.1);  color: var(--green); }
-    .toggle-btn.active .pill-red,
-    .toggle-btn.active .pill-green { background: rgba(255,255,255,0.2); color: #fff; }
 
     /* CALC BTN */
     .calc-btn {
-      width: 100%; padding: 14px; background: var(--accent); color: #fff;
+      width: 100%; padding: 14px; background: var(--mint); color: #fff;
       border: none; border-radius: var(--rs); font-family: 'Inter', sans-serif;
       font-size: 0.95rem; font-weight: 600; cursor: pointer; margin-top: 6px;
       display: flex; align-items: center; justify-content: center; gap: 8px;
       transition: background 0.15s;
+      box-shadow: 0 2px 8px rgba(0,182,175,0.28);
     }
-    .calc-btn:hover { background: #4a41cc; }
+    .calc-btn:hover { background: var(--mint-deep); }
 
     /* BANNERS */
     .banner {
@@ -274,13 +289,15 @@
     <span class="topbar-icon"><i class="fa-solid fa-landmark"></i></span>
     <div>
       <div class="topbar-title">TDS Simulator</div>
-      <div class="topbar-sub">Mauritius Rental Tax · MRA 2025</div>
+      <div class="topbar-qontab"><a href="https://qontab.com" target="_blank" rel="noopener"><i class="fa-solid fa-chart-column"></i> Qontab</a></div>
     </div>
   </div>
-  <a class="mra-btn" href="https://www.mra.mu/download/TDSGuide.pdf" target="_blank" rel="noopener">
-    <i class="fa-solid fa-file-lines"></i> MRA Guide
-    <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem"></i>
-  </a>
+  <div class="topbar-right">
+    <a class="mra-btn" href="https://www.mra.mu/download/TDSGuide.pdf" target="_blank" rel="noopener">
+      <i class="fa-solid fa-file-lines"></i> MRA Guide
+      <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem"></i>
+    </a>
+  </div>
 </header>
 
 <div class="page">
@@ -300,15 +317,15 @@
 
         <div class="field">
           <div class="field-label"><i class="fa-solid fa-building-user"></i> Tenant type</div>
-          <div class="toggle-group">
+          <div class="toggle-group three">
             <button class="toggle-btn active" id="btn-societe" onclick="setMode('societe')">
-              <i class="fa-solid fa-building"></i> Company <span class="pill pill-red">TDS</span>
+              <i class="fa-solid fa-building"></i> <span class="btn-label">Company</span> <span class="pill pill-red btn-label">TDS</span>
             </button>
             <button class="toggle-btn" id="btn-perso" onclick="setMode('perso')">
-              <i class="fa-solid fa-person"></i> Individual <span class="pill pill-green">No TDS</span>
+              <i class="fa-solid fa-person"></i> <span class="btn-label">Individual</span> <span class="pill pill-green btn-label">No TDS</span>
             </button>
             <button class="toggle-btn" id="btn-mixte" onclick="setMode('mixte')">
-              <i class="fa-solid fa-code-merge"></i> Mixed
+              <i class="fa-solid fa-code-merge"></i> <span class="btn-label">Mixed</span>
             </button>
           </div>
         </div>
