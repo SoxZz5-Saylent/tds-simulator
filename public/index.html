@@ -161,14 +161,20 @@
       overflow: hidden;
     }
     /* On very small screens — hide text labels in 3-button group, keep icons */
-    .toggle-group.three .toggle-btn .btn-label {
-      display: none;
+    .toggle-group.three {
+      flex-direction: column;
     }
-    .toggle-group.three .toggle-btn .pill { display: none; }
+    .toggle-group.three .toggle-btn {
+      justify-content: flex-start;
+      padding: 11px 14px;
+      gap: 10px;
+    }
+    .toggle-group.three .toggle-btn .btn-label { display: inline; }
+    .toggle-group.three .toggle-btn .pill { display: inline; }
     @media (min-width: 420px) {
-      .toggle-group.three .toggle-btn .btn-label { display: inline; }
-      .toggle-group.three .toggle-btn .pill { display: inline; }
+      .toggle-group.three { flex-direction: row; }
       .toggle-btn { padding: 8px 10px; gap: 5px; }
+      .toggle-group.three .toggle-btn { justify-content: center; padding: 8px 6px; }
     }
     .toggle-btn:hover:not(.active) { border-color: var(--mint); color: var(--mint); background: var(--mint-bg); }
     .toggle-btn:active { transform: scale(0.97); }
