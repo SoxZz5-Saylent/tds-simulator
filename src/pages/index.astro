@@ -187,12 +187,32 @@ const ogImage = `${url}/og.png`;
       border-radius: var(--rs); border: 1.5px solid var(--border-2);
       background: var(--bg); color: var(--text-2);
       font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 500;
-      cursor: pointer; transition: all 0.15s;
+      cursor: pointer;
+      transition: border-color 0.18s ease, background 0.18s ease,
+                  color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
       display: flex; align-items: center; justify-content: center; gap: 5px;
+      position: relative; overflow: hidden;
     }
-    .toggle-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
-    .toggle-btn.active { background: var(--accent-bg); color: var(--accent); border-color: var(--accent-bd); font-weight: 600; }
-    .toggle-btn.active.teal { background: var(--teal-bg); color: var(--teal); border-color: var(--teal-bd); }
+    .toggle-btn:hover:not(.active) {
+      border-color: var(--accent); color: var(--accent); background: var(--accent-bg);
+    }
+    .toggle-btn:active { transform: scale(0.97); }
+    .toggle-btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(91,81,232,0.28);
+    }
+    .toggle-btn.active.teal {
+      background: var(--teal);
+      color: #fff;
+      border-color: var(--teal);
+      box-shadow: 0 2px 8px rgba(10,158,135,0.28);
+    }
+    /* Keep pills readable on active white-text button */
+    .toggle-btn.active .pill-red   { background: rgba(255,255,255,0.2); color: #fff; }
+    .toggle-btn.active .pill-green { background: rgba(255,255,255,0.2); color: #fff; }
     .pill { font-size: 0.6rem; font-weight: 700; padding: 1px 6px; border-radius: 99px; }
     .pill-red   { background: rgba(208,64,79,0.1);  color: var(--red); }
     .pill-green { background: rgba(26,143,94,0.1);  color: var(--green); }
@@ -312,7 +332,7 @@ const ogImage = `${url}/og.png`;
 
         <div class="field">
           <div class="field-label"><i class="fa-solid fa-coins"></i> Monthly gross rent (MUR)</div>
-          <input type="number" id="loyer" value="125000" min="0" step="1000"/>
+          <input type="number" id="loyer" value="60000" min="0" step="1000"/>
         </div>
 
         <div class="field">
@@ -464,7 +484,7 @@ const ogImage = `${url}/og.png`;
   </a>
 </footer>
 
-<script>
+<script is:inline>
 let mode = 'societe', ownerType = 'resident', taxCategory = 'A';
 
 function showResults() {
