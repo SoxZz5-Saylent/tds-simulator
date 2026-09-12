@@ -780,6 +780,60 @@ function update() {
     diffEl.className = 'val ' + (diff >= 0 ? 'v-green' : 'v-red');
   }
 }
+
+// ── LocalStorage persistence — 8h TTL ──
+var LS_KEY_RENTAL = 'tds_rental_v1';
+var LS_TTL = 8 * 60 * 60 * 1000; // 8 hours
+
+function lsSave() {
+  try {
+    var state = {
+      ts: Date.now(),
+      loyer: document.getElementById('loyer').value,
+      otherIncome: document.getElementById('otherIncome').value,
+      turnover: document.getElementById('turnover').value,
+      mode: mode, ownerType: ownerType, taxCategory: taxCategory,
+      splitPct: document.getElementById('splitPct').value,
+    };
+    localStorage.setItem(LS_KEY_RENTAL, JSON.stringify(state));
+  } catch(e) {}
+}
+
+function lsLoad() {
+  try {
+    var raw = localStorage.getItem(LS_KEY_RENTAL);
+    if (!raw) return;
+    var s = JSON.parse(raw);
+    if (Date.now() - s.ts > LS_TTL) { localStorage.removeItem(LS_KEY_RENTAL); return; }
+
+    // Restore inputs
+    if (s.loyer)       { document.getElementById('loyer').value = s.loyer; }
+    if (s.otherIncome) { document.getElementById('otherIncome').value = s.otherIncome; }
+    if (s.turnover)    { document.getElementById('turnover').value = s.turnover; }
+    if (s.splitPct)    { document.getElementById('splitPct').value = s.splitPct; onSplitChange(); }
+
+    // Restore toggles
+    if (s.mode)        setMode(s.mode);
+    if (s.ownerType)   setOwner(s.ownerType);
+    if (s.taxCategory) setCategory(s.taxCategory);
+  } catch(e) {}
+}
+
+// Auto-save on any input change
+['loyer','otherIncome','turnover','splitPct'].forEach(function(id) {
+  var el = document.getElementById(id);
+  if (el) el.addEventListener('input', lsSave);
+  if (el) el.addEventListener('change', lsSave);
+});
+
+// Patch toggle functions to also save
+var _origSetMode = setMode, _origSetOwner = setOwner, _origSetCategory = setCategory;
+setMode = function(m) { _origSetMode(m); lsSave(); };
+setOwner = function(o) { _origSetOwner(o); lsSave(); };
+setCategory = function(c) { _origSetCategory(c); lsSave(); };
+
+// Load on init
+lsLoad();
 </script>
 </body>
 </html>

@@ -1160,7 +1160,73 @@ function genCSV() {
   document.getElementById('doc-notice').style.display = 'block';
 }
 
-// Update goTo to handle step 5 — already handled above, remove duplicate override
+// ── LocalStorage persistence — 8h TTL ──
+var LS_KEY_FULL = 'tds_full_v1';
+var LS_TTL_FULL = 8 * 60 * 60 * 1000;
+
+function lsSaveFull() {
+  try {
+    var amts = {};
+    CATS.forEach(function(c) {
+      var el = document.getElementById('amt-'+c.id);
+      if (el) amts[c.id] = el.value;
+    });
+    var state = {
+      ts: Date.now(),
+      role: role, entity: entity, residency: residency, period: period,
+      turnover: document.getElementById('ctx-turnover').value,
+      selected: selected,
+      amounts: amts,
+    };
+    localStorage.setItem(LS_KEY_FULL, JSON.stringify(state));
+  } catch(e) {}
+}
+
+function lsLoadFull() {
+  try {
+    var raw = localStorage.getItem(LS_KEY_FULL);
+    if (!raw) return;
+    var s = JSON.parse(raw);
+    if (Date.now() - s.ts > LS_TTL_FULL) { localStorage.removeItem(LS_KEY_FULL); return; }
+
+    if (s.turnover) document.getElementById('ctx-turnover').value = s.turnover;
+    if (s.selected) selected = s.selected;
+    if (s.role)     setRole(s.role);
+    if (s.entity)   setEntity(s.entity);
+    if (s.residency) setResidency(s.residency);
+    if (s.period)   setPeriod(s.period);
+    renderCats(); // re-render with restored selections
+
+    // Restore amounts after fields rendered (done lazily in renderAmtFields)
+    window._savedAmounts = s.amounts || {};
+  } catch(e) {}
+}
+
+// Patch renderAmtFields to restore saved amounts
+var _origRenderAmt = renderAmtFields;
+renderAmtFields = function() {
+  _origRenderAmt();
+  if (window._savedAmounts) {
+    Object.keys(window._savedAmounts).forEach(function(id) {
+      var el = document.getElementById('amt-'+id);
+      if (el) el.value = window._savedAmounts[id];
+    });
+  }
+};
+
+// Auto-save on context changes
+document.getElementById('ctx-turnover').addEventListener('input', lsSaveFull);
+var _origSetRole = setRole, _origSetEntity = setEntity, _origSetResidency = setResidency, _origSetPeriod = setPeriod;
+setRole      = function(r) { _origSetRole(r);      lsSaveFull(); };
+setEntity    = function(e) { _origSetEntity(e);    lsSaveFull(); };
+setResidency = function(r) { _origSetResidency(r); lsSaveFull(); };
+setPeriod    = function(p) { _origSetPeriod(p);    lsSaveFull(); };
+var _origToggleCat = toggleCat;
+toggleCat = function(id) { _origToggleCat(id); lsSaveFull(); };
+
+// Load on init
+lsLoadFull();
+
 // Init
 renderCats();
 initNumInputEl(document.getElementById('ctx-turnover'), 0);
