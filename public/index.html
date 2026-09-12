@@ -261,8 +261,8 @@
 
     /* FOOTER */
     .footer {
-      background: #060709;
-      border-top: 1px solid #1c2024;
+      background: var(--surface);
+      border-top: 1px solid #d0f0ee;
       padding: 28px 20px 32px;
       margin-top: 40px;
     }
@@ -271,18 +271,18 @@
       display: flex; align-items: center; justify-content: space-between;
       flex-wrap: wrap; gap: 14px;
     }
-    .footer-left { font-size: 0.75rem; color: #75716a; line-height: 1.6; }
-    .footer-left a { color: #a8a49e; text-decoration: none; transition: color 0.15s; }
-    .footer-left a:hover { color: #00b6af; }
+    .footer-left { font-size: 0.75rem; color: var(--text-3); line-height: 1.6; }
+    .footer-left a { color: var(--text-2); text-decoration: none; transition: color 0.15s; }
+    .footer-left a:hover { color: var(--mint); }
     .qontab-btn {
       display: inline-flex; align-items: center; gap: 9px;
-      background: #00b6af; color: #001615;
+      background: var(--mint); color: #001615;
       border: none; border-radius: 8px;
       padding: 11px 18px; font-family: 'Inter', sans-serif;
       font-size: 0.85rem; font-weight: 700; letter-spacing: -0.01em;
       text-decoration: none;
       transition: background 0.15s, transform 0.1s;
-      box-shadow: 0 2px 12px rgba(0,182,175,0.35);
+      box-shadow: 0 2px 12px rgba(0,182,175,0.25);
     }
     .qontab-btn:hover { background: #00dad1; transform: translateY(-1px); }
     .qontab-btn i { font-size: 0.85rem; }
