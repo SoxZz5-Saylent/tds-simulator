@@ -130,7 +130,7 @@
     .field-label i { color: var(--text-3); font-size: 0.72rem; }
     .field-hint { font-size: 0.68rem; color: var(--text-3); margin-top: 5px; line-height: 1.5; }
 
-    input[type=number] {
+    input[type=number], input.num-input {
       width: 100%; background: var(--bg);
       border: 1.5px solid var(--border-2); border-radius: var(--rs);
       color: var(--text); font-family: 'Inter', sans-serif;
@@ -139,7 +139,7 @@
       -moz-appearance: textfield; min-height: 50px;
     }
     input[type=number]::-webkit-inner-spin-button { display: none; }
-    input[type=number]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
+    input[type=number]:focus, input.num-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
 
     .section-sep { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
     .section-label {
@@ -316,9 +316,8 @@
 
         <div class="field">
           <div class="field-label"><i class="fa-solid fa-coins"></i> Monthly gross rent (MUR)</div>
-          <input type="number" id="loyer" value="60000" min="0" step="1000"
-            onfocus="if(this.value==='60000'){this.value='';}"
-            onblur="if(this.value===''){this.value='60000'}"/>
+          <input type="text" inputmode="numeric" id="loyer" value="60 000"
+            class="num-input" autocomplete="off" spellcheck="false"/>
         </div>
 
         <div class="field">
@@ -353,7 +352,8 @@
 
         <div class="field" id="field-turnover">
           <div class="field-label"><i class="fa-solid fa-chart-bar"></i> Company tenant turnover / yr (MUR)</div>
-          <input type="number" id="turnover" value="0" min="0" step="500000"/>
+          <input type="text" inputmode="numeric" id="turnover" value="0"
+            class="num-input" autocomplete="off" spellcheck="false"/>
           <div class="field-hint">TDS exempt if &lt; Rs 6M — leave 0 if unknown (MRA §2.6)</div>
         </div>
 
@@ -374,7 +374,8 @@
 
         <div class="field">
           <div class="field-label"><i class="fa-solid fa-briefcase"></i> Other annual income (MUR)</div>
-          <input type="number" id="otherIncome" value="0" min="0" step="50000"/>
+          <input type="text" inputmode="numeric" id="otherIncome" value="0"
+            class="num-input" autocomplete="off" spellcheck="false"/>
           <div class="field-hint">Salary, business — excluding this rental</div>
         </div>
 
@@ -502,6 +503,39 @@
 </footer>
 
 <script>
+// ── Formatted number inputs ──
+function parseNum(id) {
+  var el = document.getElementById(id);
+  return el ? (parseFloat(el.value.replace(/\s/g, '').replace(/,/g, '')) || 0) : 0;
+}
+function fmtInput(n) {
+  if (!n) return '0';
+  return Math.round(n).toLocaleString('fr-FR');
+}
+function initNumInput(id, defaultVal) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var isDefault = true;
+  el.value = fmtInput(defaultVal); isDefault = true;
+  el.addEventListener('focus', function() {
+    if (isDefault) { this.value = ''; isDefault = false; }
+    else { this.value = this.value.replace(/\s/g, '').replace(/\u202f/g, ''); }
+    this.select();
+  });
+  el.addEventListener('input', function() {
+    this.value = this.value.replace(/[^0-9]/g, '');
+    isDefault = false;
+  });
+  el.addEventListener('blur', function() {
+    var n = parseFloat(this.value) || 0;
+    if (!n && id === 'loyer') { this.value = fmtInput(defaultVal); isDefault = true; }
+    else { this.value = fmtInput(n); isDefault = false; }
+  });
+}
+initNumInput('loyer', 60000);
+initNumInput('otherIncome', 0);
+initNumInput('turnover', 0);
+
 var mode = 'societe', ownerType = 'resident', taxCategory = 'A';
 
 function showResults() {
@@ -585,9 +619,9 @@ function set(id, val, cls) {
 }
 
 function update() {
-  var loyer       = parseFloat(document.getElementById('loyer').value) || 0;
-  var otherIncome = parseFloat(document.getElementById('otherIncome').value) || 0;
-  var turnover    = parseFloat(document.getElementById('turnover').value) || 0;
+  var loyer       = parseNum('loyer');
+  var otherIncome = parseNum('otherIncome');
+  var turnover    = parseNum('turnover');
   var splitPct    = parseInt(document.getElementById('splitPct').value) || 50;
   var tdsRate     = ownerType === 'resident' ? 0.075 : 0.10;
   var tpct        = tdsRate * 100;
