@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TDS Simulator — Mauritius Rental Tax Calculator</title>
-  <meta name="description" content="Calculate Tax Deduction at Source (TDS) on rental income in Mauritius. Compare company vs individual lease — owner fiscal impact, MRA credit, net cash flow. Free, instant, based on MRA TDS Guide 2025."/>
+  <title>Mauritius Rental TDS Calculator — MRA 2025</title>
+  <meta name="description" content="Estimate Tax Deduction at Source (TDS) on rental income in Mauritius. Company vs individual tenant, owner fiscal impact, MRA credit. Based on MRA TDS Guide 2025 — rental section only."/>
   <meta name="keywords" content="TDS Mauritius, Tax Deduction at Source, MRA, rental tax Mauritius, simulateur TDS Maurice, bail société Maurice, impôt loyer île Maurice"/>
   <link rel="canonical" href="https://tds.qontab.com"/>
   <meta property="og:type" content="website"/>
@@ -294,7 +294,7 @@
   <div class="topbar-brand">
     <span class="topbar-icon"><i class="fa-solid fa-landmark"></i></span>
     <div>
-      <div class="topbar-title">TDS Simulator</div>
+      <div class="topbar-title">Rental TDS Calculator</div>
       <div class="topbar-qontab"><a href="https://qontab.com" target="_blank" rel="noopener"><i class="fa-solid fa-chart-column"></i> Qontab</a></div>
     </div>
   </div>
@@ -312,7 +312,7 @@
     <!-- SIMULATOR -->
     <div class="view active" id="view-sim">
       <div class="card">
-        <div class="card-title"><i class="fa-solid fa-sliders"></i> Simulator</div>
+        <div class="card-title"><i class="fa-solid fa-sliders"></i> Rental parameters</div>
 
         <div class="field">
           <div class="field-label"><i class="fa-solid fa-coins"></i> Monthly gross rent (MUR)</div>
@@ -472,15 +472,17 @@
           <div class="block-title c-amber"><i class="fa-solid fa-arrow-right-arrow-left"></i> Differential</div>
           <div class="rrow" style="flex-direction:column;gap:4px">
             <span class="lbl">Annual cash-in advantage<span class="sub">TDS = tax advance · recoverable if TDS &gt; tax due</span></span>
-            <span class="val" id="diff-owner" style="align-self:flex-start">—</span>
+            <span class="val" id="diff-owner" style="align-self:flex-start;white-space:normal">—</span>
           </div>
           <div class="rrow" style="flex-direction:column;gap:4px">
             <span class="lbl">Tenant gross cost</span>
-            <span class="val v-muted" style="align-self:flex-start">Identical — TDS is tax routing, not extra charge</span>
+            <span class="val v-muted" style="align-self:flex-start;white-space:normal">Identical — TDS is tax routing, not extra charge</span>
           </div>
         </div>
         <p class="note">
-          <strong>Model:</strong> Rs 390k exemption (Cat. A) · Rs 500k (Cat. B, estimate) · 15% flat · +5% solidarity above Rs 3M.
+          <strong>Scope:</strong> This calculator covers TDS on <strong>rental income only</strong> (MRA TDS Guide §5 — Rent).
+          Other TDS categories (interest, royalties, contractors, consultants…) are out of scope.
+          Rs 390k exemption (Cat. A) · Rs 500k (Cat. B, estimate) · 15% flat · +5% solidarity above Rs 3M.
           TDS exempt if company turnover &lt; Rs 6M (exc. construction) or calculated TDS &lt; Rs 500.
           Source: <a href="https://www.mra.mu/download/TDSGuide.pdf" target="_blank" rel="noopener">MRA TDS Guide 2025</a>.
         </p>
