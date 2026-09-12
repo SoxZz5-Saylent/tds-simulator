@@ -332,7 +332,7 @@ const ogImage = `${url}/og.png`;
 
         <div class="field">
           <div class="field-label"><i class="fa-solid fa-coins"></i> Monthly gross rent (MUR)</div>
-          <input type="number" id="loyer" value="60000" min="0" step="1000"/>
+          <input type="number" id="loyer" value="60000" min="0" step="1000" onfocus="if(this.value==='60000'){this.value='';this.select()}" onblur="if(this.value===''){this.value='60000'}"/>
         </div>
 
         <div class="field">
