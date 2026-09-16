@@ -22,296 +22,259 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-
   <style>
     :root {
-      --bg:       #f7f8fb;
-      --surface:  #ffffff;
-      --border:   #e3e6f0;
-      --mint:     #00b6af;
-      --mint-bg:  rgba(0,182,175,0.07);
-      --mint-bd:  rgba(0,182,175,0.25);
-      --mint-deep:#00847f;
-      --text:     #1a1d2e;
-      --text-2:   #52577a;
-      --text-3:   #9097b8;
-      --r:        14px;
-      --sh:       0 1px 3px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.05);
+      --bg:#f7f8fb; --surface:#fff; --border:#e3e6f0;
+      --mint:#00b6af; --mint-bg:rgba(0,182,175,.07); --mint-bd:rgba(0,182,175,.25); --mint-deep:#00847f;
+      --text:#1a1d2e; --text-2:#52577a; --text-3:#9097b8;
+      --r:14px; --sh:0 1px 3px rgba(0,0,0,.06),0 4px 20px rgba(0,0,0,.05);
+      --max:820px;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 16px; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:16px;scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;
+      min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    main{flex:1}
+    a{color:inherit}
 
-    /* FOOTER ALWAYS AT BOTTOM */
-    body {
-      background: var(--bg); color: var(--text);
-      font-family: 'Inter', system-ui, sans-serif;
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
+    /* ── TOPBAR ── */
+    .topbar{
+      background:var(--surface);border-bottom:1px solid #d0f0ee;
+      padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+      position:sticky;top:0;z-index:20;height:56px;
     }
-    main { flex: 1; }
+    .topbar-left{display:flex;align-items:center;gap:10px;flex-shrink:0}
+    .topbar-icon{
+      width:30px;height:30px;background:var(--mint-bg);border:1px solid var(--mint-bd);border-radius:8px;
+      display:flex;align-items:center;justify-content:center;color:var(--mint);font-size:.8rem;flex-shrink:0
+    }
+    .topbar-title{font-size:.9rem;font-weight:700;letter-spacing:-.01em}
+    .topbar-sub{font-size:.68rem;font-weight:600;color:var(--mint);margin-top:1px}
+    .topbar-sub a{color:inherit;text-decoration:none}
 
-    /* TOPBAR */
-    .topbar {
-      background: var(--surface); border-bottom: 1px solid #d0f0ee;
-      padding: 13px 24px; display: flex; align-items: center;
-      justify-content: space-between; gap: 12px;
-      position: sticky; top: 0; z-index: 10;
+    /* NAV LINKS */
+    .topbar-nav{display:flex;align-items:center;gap:2px;flex:1;justify-content:center}
+    .topbar-nav a{
+      font-size:.78rem;font-weight:500;color:var(--text-2);text-decoration:none;
+      padding:6px 12px;border-radius:7px;transition:background .15s,color .15s;white-space:nowrap
     }
-    .topbar-brand { display: flex; align-items: center; gap: 10px; }
-    .topbar-icon {
-      width: 32px; height: 32px; background: var(--mint-bg);
-      border: 1px solid var(--mint-bd); border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--mint); font-size: 0.8rem; flex-shrink: 0;
-    }
-    .topbar-title { font-size: 0.9rem; font-weight: 700; letter-spacing: -0.01em; }
-    .topbar-qontab { font-size: 0.72rem; font-weight: 600; color: var(--mint); margin-top: 1px; }
-    .topbar-qontab a { color: inherit; text-decoration: none; }
-    .mra-btn {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 0.72rem; font-weight: 500; color: var(--text-2);
-      text-decoration: none; background: var(--bg);
-      border: 1px solid var(--border); border-radius: 7px;
-      padding: 7px 11px; transition: all 0.15s; white-space: nowrap;
-    }
-    .mra-btn:hover { border-color: var(--mint); color: var(--mint); }
+    .topbar-nav a:hover{background:var(--mint-bg);color:var(--mint)}
+    @media(max-width:600px){.topbar-nav{display:none}}
 
-    /* HERO */
-    .hero {
-      max-width: 760px; margin: 0 auto;
-      padding: 64px 24px 0;
-      text-align: center;
+    .topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .mra-btn{
+      display:inline-flex;align-items:center;gap:5px;
+      font-size:.72rem;font-weight:500;color:var(--text-2);text-decoration:none;
+      background:var(--bg);border:1px solid var(--border);border-radius:7px;
+      padding:6px 10px;transition:all .15s;white-space:nowrap
     }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--mint-bg); border: 1px solid var(--mint-bd);
-      color: var(--mint); border-radius: 99px;
-      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.08em; padding: 4px 12px; margin-bottom: 20px;
-    }
-    .hero h1 {
-      font-size: clamp(1.8rem, 5vw, 2.6rem);
-      font-weight: 700; letter-spacing: -0.03em; line-height: 1.15;
-      color: var(--text); margin-bottom: 14px;
-    }
-    .hero h1 span { color: var(--mint); }
-    .hero p {
-      font-size: 1rem; color: var(--text-2); line-height: 1.65;
-      max-width: 520px; margin: 0 auto 48px;
-    }
+    .mra-btn:hover{border-color:var(--mint);color:var(--mint)}
 
-    /* INTRO STRIP */
-    .intro {
-      max-width: 760px; margin: 0 auto;
-      padding: 0 24px 48px;
+    /* ── HERO (compact) ── */
+    .hero{max-width:var(--max);margin:0 auto;padding:44px 24px 32px;text-align:center}
+    .hero-badge{
+      display:inline-flex;align-items:center;gap:6px;
+      background:var(--mint-bg);border:1px solid var(--mint-bd);color:var(--mint);
+      border-radius:99px;font-size:.7rem;font-weight:700;text-transform:uppercase;
+      letter-spacing:.08em;padding:4px 12px;margin-bottom:16px
     }
-    .intro-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    .hero h1{
+      font-size:clamp(1.7rem,4.5vw,2.4rem);font-weight:700;letter-spacing:-.03em;line-height:1.18;
+      color:var(--text);margin-bottom:12px
     }
-    @media (max-width: 580px) { .intro-grid { grid-template-columns: 1fr; } }
-    .intro-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 18px 16px;
-      box-shadow: var(--sh);
-    }
-    .intro-card-icon {
-      width: 36px; height: 36px; border-radius: 9px;
-      background: var(--mint-bg); border: 1px solid var(--mint-bd);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--mint); font-size: 0.9rem; margin-bottom: 12px;
-    }
-    .intro-card h3 { font-size: 0.88rem; font-weight: 700; margin-bottom: 6px; }
-    .intro-card p { font-size: 0.78rem; color: var(--text-2); line-height: 1.6; }
+    .hero h1 span{color:var(--mint)}
+    .hero p{font-size:.95rem;color:var(--text-2);line-height:1.65;max-width:480px;margin:0 auto}
 
-    /* CARDS */
-    .cards-section { max-width: 760px; margin: 0 auto; padding: 0 24px 64px; }
-    .section-title {
-      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.09em; color: var(--text-3); margin-bottom: 14px;
+    /* ── TOOL CARDS ── */
+    .cards-section{max-width:var(--max);margin:0 auto;padding:32px 24px 16px}
+    .section-label{
+      font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+      color:var(--text-3);margin-bottom:14px;display:flex;align-items:center;gap:6px
     }
-    .cards {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media(max-width:580px){.cards{grid-template-columns:1fr}}
+    .choice-card{
+      background:var(--surface);border:2px solid var(--border);border-radius:var(--r);padding:26px 22px;
+      box-shadow:var(--sh);text-decoration:none;color:inherit;
+      transition:border-color .18s,box-shadow .18s,transform .15s;
+      display:flex;flex-direction:column;gap:11px;cursor:pointer
     }
-    @media (max-width: 580px) { .cards { grid-template-columns: 1fr; } }
+    .choice-card:hover{border-color:var(--mint);box-shadow:0 4px 24px rgba(0,182,175,.15);transform:translateY(-2px)}
+    .card-icon{
+      width:42px;height:42px;border-radius:10px;
+      background:var(--mint-bg);border:1px solid var(--mint-bd);
+      display:flex;align-items:center;justify-content:center;color:var(--mint);font-size:1rem
+    }
+    .card-label{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--text-3)}
+    .card-title{font-size:1.1rem;font-weight:700;letter-spacing:-.02em;color:var(--text);line-height:1.25}
+    .card-desc{font-size:.81rem;color:var(--text-2);line-height:1.55;flex:1}
+    .card-pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
+    .pill{
+      font-size:.67rem;font-weight:500;background:var(--bg);
+      border:1px solid var(--border);color:var(--text-3);border-radius:6px;padding:3px 7px
+    }
+    .card-who{
+      margin-top:2px;padding:9px 11px;background:var(--mint-bg);
+      border:1px solid var(--mint-bd);border-radius:7px;
+      font-size:.73rem;color:var(--text-2);line-height:1.55
+    }
+    .card-who strong{color:var(--mint)}
+    .card-cta{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:.81rem;font-weight:600;color:var(--text-3);margin-top:4px;transition:color .15s
+    }
+    .choice-card:hover .card-cta{color:var(--mint)}
 
-    .choice-card {
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: var(--r); padding: 28px 24px;
-      box-shadow: var(--sh);
-      text-decoration: none; color: inherit;
-      transition: border-color 0.18s, box-shadow 0.18s, transform 0.15s;
-      display: flex; flex-direction: column; gap: 12px;
-      cursor: pointer;
+    /* ── DISCLAIMER ── */
+    .disclaimer-section{max-width:var(--max);margin:0 auto;padding:40px 24px 0}
+    .disclaimer-box{
+      background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+      box-shadow:var(--sh);overflow:hidden
     }
-    .choice-card:hover {
-      border-color: var(--mint);
-      box-shadow: 0 4px 24px rgba(0,182,175,0.15);
-      transform: translateY(-2px);
+    .disclaimer-header{
+      background:var(--mint-bg);border-bottom:1px solid var(--mint-bd);
+      padding:16px 20px;display:flex;align-items:center;gap:10px
     }
-    .card-icon {
-      width: 44px; height: 44px; border-radius: 10px;
-      background: var(--mint-bg); border: 1px solid var(--mint-bd);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--mint); font-size: 1.1rem;
+    .disclaimer-header-icon{
+      width:34px;height:34px;background:var(--mint);border-radius:9px;
+      display:flex;align-items:center;justify-content:center;color:#fff;font-size:.85rem;flex-shrink:0
     }
-    .card-label {
-      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.09em; color: var(--text-3);
+    .disclaimer-header h2{font-size:.92rem;font-weight:700;color:var(--text)}
+    .disclaimer-header p{font-size:.74rem;color:var(--text-2);margin-top:2px}
+    .disclaimer-body{padding:20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+    @media(max-width:640px){.disclaimer-body{grid-template-columns:1fr}}
+    .disc-item{display:flex;flex-direction:column;gap:7px}
+    .disc-item-icon{color:var(--mint);font-size:.9rem}
+    .disc-item h4{font-size:.82rem;font-weight:700;color:var(--text)}
+    .disc-item p{font-size:.76rem;color:var(--text-2);line-height:1.6}
+    .disclaimer-footer{
+      border-top:1px solid var(--border);padding:12px 20px;
+      font-size:.72rem;color:var(--text-3);display:flex;align-items:center;gap:8px
     }
-    .card-title {
-      font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em;
-      color: var(--text); line-height: 1.25;
-    }
-    .card-desc {
-      font-size: 0.82rem; color: var(--text-2); line-height: 1.55; flex: 1;
-    }
-    .card-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-    .pill {
-      font-size: 0.68rem; font-weight: 500;
-      background: var(--bg); border: 1px solid var(--border);
-      color: var(--text-3); border-radius: 6px; padding: 3px 8px;
-    }
-    .card-cta {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 0.82rem; font-weight: 600; color: var(--text-3);
-      margin-top: 6px; transition: color 0.15s;
-    }
-    .choice-card:hover .card-cta { color: var(--mint); }
-    .card-who {
-      margin-top: 4px; padding: 10px 12px;
-      background: var(--mint-bg); border: 1px solid var(--mint-bd);
-      border-radius: 7px; font-size: 0.74rem; color: var(--text-2); line-height: 1.55;
-    }
-    .card-who strong { color: var(--mint); }
+    .disclaimer-footer a{color:var(--mint);text-decoration:none}
 
-    /* FAQ */
-    .faq-section {
-      max-width: 760px; margin: 0 auto;
-      padding: 0 24px 80px;
+    /* ── HOW IT WORKS ── */
+    .how-section{max-width:var(--max);margin:0 auto;padding:48px 24px 0}
+    .how-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+    @media(max-width:640px){.how-steps{grid-template-columns:1fr 1fr}}
+    @media(max-width:380px){.how-steps{grid-template-columns:1fr}}
+    .how-step{
+      background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+      padding:18px 14px;box-shadow:var(--sh);position:relative
     }
-    .faq-section .section-title { margin-bottom: 16px; }
-    .faq-item {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; margin-bottom: 8px; overflow: hidden;
-      box-shadow: var(--sh);
+    .how-num{
+      width:26px;height:26px;background:var(--mint);color:#fff;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      font-size:.72rem;font-weight:700;margin-bottom:10px
     }
-    .faq-q {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 12px; padding: 16px 18px;
-      font-size: 0.88rem; font-weight: 600; cursor: pointer;
-      user-select: none; transition: color 0.15s;
-    }
-    .faq-q:hover { color: var(--mint); }
-    .faq-q .faq-icon { color: var(--mint); font-size: 0.75rem; transition: transform 0.2s; flex-shrink: 0; }
-    .faq-item.open .faq-icon { transform: rotate(180deg); }
-    .faq-a {
-      display: none; padding: 0 18px 16px;
-      font-size: 0.82rem; color: var(--text-2); line-height: 1.7;
-      border-top: 1px solid var(--border);
-    }
-    .faq-item.open .faq-a { display: block; padding-top: 14px; }
-    .faq-a strong { color: var(--text); }
-    .faq-a a { color: var(--mint); text-decoration: none; }
+    .how-step h4{font-size:.82rem;font-weight:700;margin-bottom:5px;color:var(--text)}
+    .how-step p{font-size:.74rem;color:var(--text-2);line-height:1.6}
 
-    /* FOOTER */
-    .footer {
-      background: var(--surface); border-top: 1px solid #d0f0ee;
-      padding: 20px 24px;
+    /* ── FAQ ── */
+    .faq-section{max-width:var(--max);margin:0 auto;padding:48px 24px 80px}
+    .faq-item{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:10px;margin-bottom:8px;overflow:hidden;box-shadow:var(--sh)
     }
-    .footer-inner {
-      max-width: 760px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 10px;
-      font-size: 0.72rem; color: var(--text-3);
+    .faq-q{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      padding:15px 18px;font-size:.87rem;font-weight:600;cursor:pointer;
+      user-select:none;transition:color .15s
     }
-    .footer-inner a { color: var(--text-3); text-decoration: none; }
-    .footer-inner a:hover { color: var(--mint); }
+    .faq-q:hover{color:var(--mint)}
+    .faq-q .faq-icon{color:var(--mint);font-size:.72rem;transition:transform .2s;flex-shrink:0}
+    .faq-item.open .faq-icon{transform:rotate(180deg)}
+    .faq-a{
+      display:none;padding:0 18px 15px;
+      font-size:.81rem;color:var(--text-2);line-height:1.72;
+      border-top:1px solid var(--border)
+    }
+    .faq-item.open .faq-a{display:block;padding-top:13px}
+    .faq-a strong{color:var(--text)}
+    .faq-a a{color:var(--mint);text-decoration:none}
+
+    /* ── FOOTER ── */
+    .footer{background:var(--surface);border-top:1px solid #d0f0ee;padding:18px 24px}
+    .footer-inner{
+      max-width:var(--max);margin:0 auto;
+      display:flex;align-items:center;justify-content:space-between;
+      flex-wrap:wrap;gap:10px;font-size:.7rem;color:var(--text-3)
+    }
+    .footer-inner a{color:var(--text-3);text-decoration:none}
+    .footer-inner a:hover{color:var(--mint)}
   </style>
 </head>
 <body>
 
 <header class="topbar">
-  <div class="topbar-brand">
+  <div class="topbar-left">
     <span class="topbar-icon"><i class="fa-solid fa-landmark"></i></span>
     <div>
       <div class="topbar-title">TDS Calculator</div>
-      <div class="topbar-qontab"><a href="https://qontab.com" target="_blank" rel="noopener"><i class="fa-solid fa-chart-column"></i> Qontab</a></div>
+      <div class="topbar-sub"><a href="https://qontab.com" target="_blank" rel="noopener"><i class="fa-solid fa-chart-column"></i> Qontab</a></div>
     </div>
   </div>
-  <a class="mra-btn" href="https://www.mra.mu/download/TDSGuide.pdf" target="_blank" rel="noopener">
-    <i class="fa-solid fa-file-lines"></i> MRA Guide
-    <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem"></i>
-  </a>
+
+  <nav class="topbar-nav">
+    <a href="#calculators"><i class="fa-solid fa-calculator"></i> Calculators</a>
+    <a href="#how-it-works"><i class="fa-solid fa-circle-info"></i> How it works</a>
+    <a href="#disclaimer"><i class="fa-solid fa-shield-halved"></i> Why TDS?</a>
+    <a href="#faq"><i class="fa-solid fa-circle-question"></i> FAQ</a>
+  </nav>
+
+  <div class="topbar-right">
+    <a class="mra-btn" href="https://www.mra.mu/download/TDSGuide.pdf" target="_blank" rel="noopener">
+      <i class="fa-solid fa-file-lines"></i> MRA Guide
+      <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:.6rem"></i>
+    </a>
+  </div>
 </header>
 
 <main>
 
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-badge"><i class="fa-solid fa-landmark"></i> Mauritius · MRA 2025</div>
-    <h1>Understand your <span>TDS obligations</span><br/>in Mauritius</h1>
-    <p>Free calculators based on the MRA TDS Guide 2025. Whether you pay rent or manage multiple payment categories — find your numbers in minutes.</p>
-  </section>
-
-  <!-- INTRO CARDS -->
-  <section class="intro">
-    <div class="intro-grid">
-      <div class="intro-card">
-        <div class="intro-card-icon"><i class="fa-solid fa-circle-question"></i></div>
-        <h3>What is TDS?</h3>
-        <p>Tax Deduction at Source is an advance payment of income tax. The company making a qualifying payment retains a percentage and remits it directly to the MRA on behalf of the recipient.</p>
-      </div>
-      <div class="intro-card">
-        <div class="intro-card-icon"><i class="fa-solid fa-building"></i></div>
-        <h3>Who must deduct?</h3>
-        <p>Any company or société with annual turnover <strong>above Rs 6 million</strong> that makes payments for rent, contractors, consultants, management fees or commissions must apply TDS.</p>
-      </div>
-      <div class="intro-card">
-        <div class="intro-card-icon"><i class="fa-solid fa-calendar-check"></i></div>
-        <h3>When to remit?</h3>
-        <p>Monthly TDS returns are due by the <strong>20th of the following month</strong>. An annual statement must be sent to the payee and filed with the MRA before <strong>15 August</strong> each year.</p>
-      </div>
-    </div>
+    <div class="hero-badge"><i class="fa-solid fa-landmark"></i> Mauritius · MRA 2025 · Simulator</div>
+    <h1>Your <span>TDS obligations</span><br/>calculated instantly</h1>
+    <p>Free simulators based on the official MRA TDS Guide 2025. Not a filing tool — for estimation and understanding only.</p>
   </section>
 
   <!-- TOOL CARDS -->
-  <section class="cards-section">
-    <div class="section-title"><i class="fa-solid fa-calculator"></i> &nbsp;Choose your calculator</div>
+  <section class="cards-section" id="calculators">
+    <div class="section-label"><i class="fa-solid fa-calculator"></i> Choose your simulator</div>
     <div class="cards">
 
       <a class="choice-card" href="/rental.html">
         <div class="card-icon"><i class="fa-solid fa-house"></i></div>
         <div class="card-label">Rental income · MRA §5</div>
         <div class="card-title">Rental TDS Calculator</div>
-        <div class="card-desc">You own or rent a property. Calculate TDS on rental income — company vs individual tenant, owner fiscal impact, exemptions (§2.6.ii).</div>
+        <div class="card-desc">Calculate TDS on rental income — company vs individual tenant, owner fiscal impact, exemptions (§2.6.ii). Estimate Annex 1 output.</div>
         <div class="card-pills">
           <span class="pill">7.5% resident</span>
           <span class="pill">10% non-resident</span>
+          <span class="pill">§2.6.ii exempt</span>
           <span class="pill">Annex 1 PDF</span>
         </div>
         <div class="card-who">
-          <strong><i class="fa-solid fa-circle-info"></i> Who?</strong> A company paying rent to a landlord — or a landlord wanting to understand their net income after TDS.
+          <strong><i class="fa-solid fa-circle-info"></i> Who?</strong> A company paying rent to a landlord, or a landlord wanting to understand their net income after TDS.
         </div>
-        <div class="card-cta">Open calculator <i class="fa-solid fa-arrow-right"></i></div>
+        <div class="card-cta">Open simulator <i class="fa-solid fa-arrow-right"></i></div>
       </a>
 
       <a class="choice-card" href="/full.html">
         <div class="card-icon"><i class="fa-solid fa-table-list"></i></div>
         <div class="card-label">All obligations · MRA §3–10</div>
         <div class="card-title">Full TDS Assessment</div>
-        <div class="card-desc">You are a company making payments across multiple categories. Identify which payments trigger TDS, calculate amounts to remit, and generate official Annex 1 &amp; 2 documents.</div>
+        <div class="card-desc">Identify which of your payments trigger TDS across all categories, calculate amounts to remit, and generate official Annex 1 &amp; 2 documents.</div>
         <div class="card-pills">
-          <span class="pill"><i class="fa-solid fa-house" style="font-size:0.55rem"></i> Rent</span>
-          <span class="pill"><i class="fa-solid fa-helmet-safety" style="font-size:0.55rem"></i> Contractors</span>
-          <span class="pill"><i class="fa-solid fa-magnifying-glass-chart" style="font-size:0.55rem"></i> Consultants</span>
-          <span class="pill"><i class="fa-solid fa-sitemap" style="font-size:0.55rem"></i> Mgmt fees</span>
+          <span class="pill">Rent</span>
+          <span class="pill">Contractors</span>
+          <span class="pill">Consultants</span>
+          <span class="pill">Mgmt fees</span>
           <span class="pill">+6 more</span>
         </div>
         <div class="card-who">
-          <strong><i class="fa-solid fa-circle-info"></i> Who?</strong> Any company (CA ≥ Rs 6M) that pays rent, hires contractors, consultants, security or cleaning services, or pays management fees.
+          <strong><i class="fa-solid fa-circle-info"></i> Who?</strong> Any company (CA ≥ Rs 6M) paying rent, hiring contractors, consultants, security/cleaning services, or paying management fees.
         </div>
         <div class="card-cta">Start questionnaire <i class="fa-solid fa-arrow-right"></i></div>
       </a>
@@ -319,13 +282,74 @@
     </div>
   </section>
 
+  <!-- DISCLAIMER — WHY TDS -->
+  <section class="disclaimer-section" id="disclaimer">
+    <div class="disclaimer-box">
+      <div class="disclaimer-header">
+        <div class="disclaimer-header-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div>
+          <h2>Why does the MRA use TDS?</h2>
+          <p>Understanding the purpose behind the system</p>
+        </div>
+      </div>
+      <div class="disclaimer-body">
+        <div class="disc-item">
+          <div class="disc-item-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+          <h4>Automatic tax tracing</h4>
+          <p>By capturing tax <em>at the moment of payment</em>, the MRA creates an automatic paper trail for every qualifying transaction. Each TDS return filed by the payer acts as a declaration that the payment exists — making it much harder for income to go unrecorded.</p>
+        </div>
+        <div class="disc-item">
+          <div class="disc-item-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <h4>Fraud prevention</h4>
+          <p>Without TDS, a landlord or service provider could receive payment without ever declaring it as income. TDS closes this gap: the tax is collected upfront by the payer and remitted to the MRA — the payee cannot opt out. It is a structural anti-avoidance mechanism, not a penalty.</p>
+        </div>
+        <div class="disc-item">
+          <div class="disc-item-icon"><i class="fa-solid fa-rotate"></i></div>
+          <h4>Not an extra tax</h4>
+          <p>TDS is an <strong>advance payment</strong> of the recipient's own income tax liability. The payee recovers any excess via their annual return. The MRA ensures tax is paid when income is earned — not months later when a return is due — which improves cash flow for the government and reduces default risk.</p>
+        </div>
+      </div>
+      <div class="disclaimer-footer">
+        <i class="fa-solid fa-circle-info" style="color:var(--mint)"></i>
+        This tool is a <strong>simulator only</strong> — not a filing platform, not legal advice. Always verify with a qualified tax adviser or directly with the <a href="https://www.mra.mu" target="_blank" rel="noopener">MRA</a> before taking any tax position.
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section" id="how-it-works">
+    <div class="section-label"><i class="fa-solid fa-circle-info"></i> How TDS works — step by step</div>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="how-num">1</div>
+        <h4>Payment due</h4>
+        <p>A company (payer) owes rent, contractor fees, or another qualifying amount to a recipient (payee).</p>
+      </div>
+      <div class="how-step">
+        <div class="how-num">2</div>
+        <h4>TDS deducted</h4>
+        <p>The payer withholds the applicable TDS rate (e.g. 7.5% on rent to a resident) before paying the balance to the payee.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-num">3</div>
+        <h4>Remitted to MRA</h4>
+        <p>The withheld amount is remitted to the MRA electronically by the 20th of the following month, with a monthly TDS return.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-num">4</div>
+        <h4>Credited to payee</h4>
+        <p>The payee receives a statement (Annex 1) by 15 August. The TDS paid is credited against their annual income tax — any excess is refunded.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- FAQ -->
-  <section class="faq-section">
-    <div class="section-title"><i class="fa-solid fa-circle-question"></i> &nbsp;Frequently asked questions</div>
+  <section class="faq-section" id="faq">
+    <div class="section-label"><i class="fa-solid fa-circle-question"></i> Frequently asked questions</div>
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggle(this)">
-        Is TDS an extra tax I have to pay on top of my rent?
+        Is TDS an extra tax on top of my rent?
         <i class="fa-solid fa-chevron-down faq-icon"></i>
       </div>
       <div class="faq-a">
@@ -339,7 +363,7 @@
         <i class="fa-solid fa-chevron-down faq-icon"></i>
       </div>
       <div class="faq-a">
-        <strong>No.</strong> Under Section 111A of the Income Tax Act, a company with annual turnover not exceeding Rs 6 million is not defined as a "payer" and therefore has <em>no obligation to deduct TDS</em>. You pay the full rent to the landlord. The only exception is if you award construction contracts — TDS then applies regardless of turnover.
+        <strong>No.</strong> Under Section 111A of the Income Tax Act, a company with annual turnover not exceeding Rs 6 million is not defined as a "payer" and has <em>no obligation to deduct TDS</em>. You pay the full rent to the landlord. The only exception is construction contracts — TDS applies regardless of turnover.
       </div>
     </div>
 
@@ -349,7 +373,7 @@
         <i class="fa-solid fa-chevron-down faq-icon"></i>
       </div>
       <div class="faq-a">
-        The <strong>tenant (payer)</strong> is legally responsible for deducting TDS and remitting it to the MRA. The landlord receives the net amount. The MRA's own FAQ states: <em>"All persons other than individuals should deduct tax at source"</em> — meaning any company or société making the payment must withhold.
+        The <strong>tenant (payer)</strong> is legally responsible for deducting and remitting TDS to the MRA. The landlord receives the net amount. The MRA states: <em>"All persons other than individuals should deduct tax at source"</em> — meaning any company making a qualifying payment must withhold.
       </div>
     </div>
 
@@ -360,7 +384,7 @@
       </div>
       <div class="faq-a">
         Per the MRA Third Schedule:<br/><br/>
-        • <strong>7.5%</strong> if the landlord (payee) is <strong>resident in Mauritius</strong><br/>
+        • <strong>7.5%</strong> if the landlord is <strong>resident in Mauritius</strong><br/>
         • <strong>10%</strong> if the landlord is <strong>non-resident</strong><br/><br/>
         The rate applies to the gross monthly rent before any deductions.
       </div>
@@ -368,12 +392,12 @@
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggle(this)">
-        When do I remit TDS to the MRA and what documents are required?
+        When do I remit TDS and what documents are required?
         <i class="fa-solid fa-chevron-down faq-icon"></i>
       </div>
       <div class="faq-a">
-        • <strong>Monthly TDS return</strong> — file electronically by the <strong>20th of the following month</strong> (or end of month if filing and payment are both electronic).<br/>
-        • <strong>Statement to payee (Annex 1)</strong> — issued to the landlord by <strong>15 August</strong> each year, showing total paid and TDS deducted.<br/>
+        • <strong>Monthly TDS return</strong> — file electronically by the <strong>20th of the following month</strong>.<br/>
+        • <strong>Statement to payee (Annex 1)</strong> — issued to the landlord by <strong>15 August</strong> each year.<br/>
         • <strong>Annual TDS return (Annex 2)</strong> — filed with the MRA by <strong>15 August</strong> each year.<br/><br/>
         Late payment carries a <strong>10% penalty</strong> plus <strong>1% interest per month</strong> on unpaid amounts (§2.8–2.10).
       </div>
@@ -381,31 +405,31 @@
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggle(this)">
-        Can the landlord be exempt from TDS?
+        Can the landlord obtain an exemption from TDS?
         <i class="fa-solid fa-chevron-down faq-icon"></i>
       </div>
       <div class="faq-a">
-        Yes — under <strong>§2.6.i</strong>, a landlord (payee) who can prove to the Director-General of the MRA that they are not chargeable to income tax for a given year may obtain a written directive instructing the tenant not to deduct TDS. This is a formal application process, separate from the tenant's own exemption.
+        Yes — under <strong>§2.6.i</strong>, a landlord who can prove to the MRA Director-General that they are not chargeable to income tax may obtain a written directive exempting the tenant from deducting TDS. This is a formal application and is separate from the tenant's own Rs 6M turnover exemption.
       </div>
     </div>
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggle(this)">
-        Is there a minimum TDS amount below which I don't deduct?
+        Is there a minimum threshold below which TDS is not deducted?
         <i class="fa-solid fa-chevron-down faq-icon"></i>
       </div>
       <div class="faq-a">
-        Yes. If the calculated TDS for a payment is <strong>less than Rs 500</strong>, no deduction is required. This threshold applies per payment, not annually.
+        Yes. If the calculated TDS for a payment is <strong>less than Rs 500</strong>, no deduction is required. This threshold applies per payment.
       </div>
     </div>
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggle(this)">
-        Does TDS apply if I pay rent to an individual landlord?
+        Does TDS apply when an individual pays rent to a landlord?
         <i class="fa-solid fa-chevron-down faq-icon"></i>
       </div>
       <div class="faq-a">
-        The MRA guide defines rent as subject to TDS when payable by <em>"any person, other than an individual"</em>. So if the <strong>tenant is an individual</strong> (not a company or société), no TDS applies regardless of the landlord's status. TDS on rent is only triggered when a <strong>company or société</strong> is the one paying the rent.
+        <strong>No.</strong> TDS on rent only applies when the <em>payer is a company or société</em>. If an individual pays rent directly to a landlord, TDS does not apply regardless of the landlord's status.
       </div>
     </div>
 
@@ -415,15 +439,14 @@
 
 <footer class="footer">
   <div class="footer-inner">
-    <span>Based on <a href="https://www.mra.mu/download/TDSGuide.pdf" target="_blank" rel="noopener">MRA TDS Guide 2025</a> · For informational purposes only · Not legal or tax advice</span>
+    <span><i class="fa-solid fa-triangle-exclamation" style="color:var(--mint)"></i> Simulator only — not a filing tool. Based on <a href="https://www.mra.mu/download/TDSGuide.pdf" target="_blank" rel="noopener">MRA TDS Guide 2025</a>. Not legal or tax advice.</span>
     <span>by <a href="https://qontab.com" target="_blank" rel="noopener" style="color:var(--mint);font-weight:600">Qontab</a></span>
   </div>
 </footer>
 
 <script>
 function toggle(el) {
-  var item = el.closest('.faq-item');
-  item.classList.toggle('open');
+  el.closest('.faq-item').classList.toggle('open');
 }
 </script>
 </body>
